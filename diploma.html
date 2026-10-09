@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diploma – Flitsvingers</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%233a5bff'/%3E%3Cpath d='M36 8 16 36h14l-4 20 22-30H34z' fill='%23ffc93c'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>
+:root{--bg:#fff7ec;--ink:#18203a;--muted:#5f6888;--blue:#3a5bff;--blue-d:#2740c8;--yellow:#ffc93c;--gold:#d99a1e;--mint:#16b277;--line:#f0e2cc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;font-weight:500;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 60px}
+.bar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:var(--ink);text-decoration:none}
+.logo{width:34px;height:34px;border-radius:11px;background:var(--blue);display:grid;place-items:center;color:var(--yellow);box-shadow:0 3px 0 var(--blue-d)}
+.logo svg{width:19px;height:19px;fill:currentColor}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:14px;padding:11px 18px;font:inherit;font-size:15px;font-weight:800;background:var(--blue);color:#fff;box-shadow:0 4px 0 var(--blue-d);cursor:pointer;text-decoration:none}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid #e6d6bd;box-shadow:0 3px 0 #e6d6bd}
+.status{border-radius:16px;padding:12px 16px;font-weight:800;margin-bottom:16px;display:flex;gap:10px;align-items:center}
+.status.ok{background:#e1f7ec;color:#0e8f5e}
+.status.warn{background:#fff1c9;color:#7a5200}
+.status.bad{background:#ffe0e1;color:#b3262b}
+/* het diploma */
+.dip{position:relative;aspect-ratio:297/210;background:#fffdf8;border-radius:10px;box-shadow:0 20px 60px rgba(120,86,30,.18);overflow:hidden}
+.dip .frame{position:absolute;inset:3.2%;border:3px solid var(--gold);border-radius:8px}
+.dip .frame::after{content:'';position:absolute;inset:7px;border:1.5px solid rgba(217,154,30,.5);border-radius:5px}
+.dip .inner{position:absolute;inset:7%;display:grid;grid-template-columns:1fr 24%;gap:3%}
+.dip .kicker{font-family:'Fredoka',sans-serif;font-weight:700;color:var(--blue);letter-spacing:.18em;text-transform:uppercase;font-size:clamp(9px,1.4vw,14px)}
+.dip h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(26px,5.6vw,58px);margin:.15em 0 .1em;line-height:1}
+.dip .name{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(22px,4.8vw,50px);color:var(--ink);border-bottom:2px solid var(--line);padding-bottom:.1em;margin:.35em 0 .25em;display:inline-block;min-width:60%}
+.dip p{margin:.2em 0;font-size:clamp(10px,1.7vw,17px);color:#3c4560;line-height:1.45}
+.dip .stats{display:flex;gap:4%;margin-top:3%}
+.dip .stats div{background:#f7f1e4;border-radius:10px;padding:2% 3%;min-width:22%}
+.dip .stats b{display:block;font-family:'Fredoka',sans-serif;font-size:clamp(14px,2.6vw,28px);color:var(--ink)}
+.dip .stats span{font-size:clamp(8px,1.2vw,12px);color:var(--muted);font-weight:700}
+.dip .sign{position:absolute;left:0;bottom:0;display:flex;gap:6%;align-items:flex-end;width:74%}
+.dip .sign div{border-top:1.5px solid #c9b896;padding-top:.3em;font-size:clamp(8px,1.2vw,12px);color:var(--muted);font-weight:700;min-width:36%}
+.dip .sign b{display:block;font-family:'Fredoka',sans-serif;color:var(--ink);font-size:clamp(11px,1.7vw,17px)}
+.dip .side{display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center}
+.dip .side img{width:100%;max-width:200px}
+.dip .seal{width:62%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe08a,#e2a52b 70%,#b8801a);display:grid;place-items:center;color:#5a3a00;font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(8px,1.3vw,13px);box-shadow:0 4px 0 #a06d12;text-align:center;line-height:1.1;padding:6%}
+.dip .qr{width:62%;background:#fff;padding:4%;border-radius:8px;border:1px solid var(--line)}
+.dip .qr svg{width:100%;height:auto;display:block}
+.dip .qid{font-size:clamp(7px,1vw,11px);color:var(--muted);font-weight:700;margin-top:.3em;word-break:break-all}
+.note{font-size:14px;color:var(--muted);margin-top:14px}
+@media print{
+  @page{size:A4 landscape;margin:0}
+  body{background:#fff}
+  .bar,.status,.note{display:none!important}
+  .wrap{max-width:none;padding:0}
+  .dip{box-shadow:none;border-radius:0;width:297mm;height:210mm;aspect-ratio:auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="logo"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Flitsvingers</a>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="print">Printen of opslaan als PDF</button>
+      <button class="btn ghost" id="share">Link kopiëren</button>
+    </div>
+  </div>
+  <div class="status warn" id="status">Diploma laden...</div>
+  <div class="dip" id="dip" hidden>
+    <div class="frame"></div>
+    <div class="inner">
+      <div style="position:relative">
+        <div class="kicker">Flitsvingers · typecursus</div>
+        <h1>Diploma blind typen</h1>
+        <p>Hierbij verklaren wij dat</p>
+        <div class="name" id="d-name"></div>
+        <p>met succes het examen blind typen met tien vingers heeft afgelegd.</p>
+        <div class="stats">
+          <div><b id="d-apm"></b><span>aanslagen per minuut</span></div>
+          <div><b id="d-fout"></b><span>fouten</span></div>
+          <div><b id="d-date"></b><span>datum examen</span></div>
+        </div>
+        <p id="d-norm" style="margin-top:2%;font-size:clamp(8px,1.2vw,12px)"></p>
+        <div class="sign">
+          <div><b>Tim Kappers</b>Flitsvingers</div>
+          <div><b>Flits</b>coach en jachtluipaard</div>
+        </div>
+      </div>
+      <div class="side">
+        <img src="assets/img/flits_diploma.webp" alt="Flits met een diploma">
+        <div class="qr" id="d-qr"></div>
+        <div class="qid" id="d-id"></div>
+      </div>
+    </div>
+  </div>
+  <p class="note" id="note"></p>
+</div>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/qrcode.min.js"></script>
+<script>
+(function () {
+  var CFG = window.FV_CFG || {};
+  var qs = new URLSearchParams(location.search);
+  var $ = function (s) { return document.querySelector(s); };
+  function fmtDate(d) {
+    try { var p = d.split('-'); var m = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december']; return parseInt(p[2], 10) + ' ' + m[parseInt(p[1], 10) - 1] + ' ' + p[0]; } catch (e) { return d; }
+  }
+  function render(d, verified, url) {
+    $('#d-name').textContent = d.name || 'Flitsvingers-typist';
+    $('#d-apm').textContent = d.apm;
+    $('#d-fout').textContent = String(d.fout).replace('.', ',') + '%';
+    $('#d-date').textContent = fmtDate(d.date);
+    $('#d-norm').textContent = 'Eis: ' + (d.dys ? '75' : '100') + ' aanslagen per minuut met maximaal 3% fouten, 5 minuten typen' + (d.dys ? ' (dyslexie-norm)' : '') + '. In Nederland bestaat geen officieel typediploma; de eis van Flitsvingers is openbaar.';
+    var qr = qrcode(0, 'M'); qr.addData(url); qr.make();
+    $('#d-qr').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+    $('#d-id').textContent = d.id ? 'Controleer: ' + d.id : 'Niet online geregistreerd';
+    $('#dip').hidden = false;
+    var st = $('#status');
+    if (verified) { st.className = 'status ok'; st.textContent = 'Echt diploma: gecontroleerd in de administratie van Flitsvingers.'; }
+    else { st.className = 'status warn'; st.textContent = 'Dit diploma is op dit apparaat gemaakt en (nog) niet online geregistreerd. Log als ouder in om het online te laten controleren.'; }
+    document.title = 'Diploma van ' + (d.name || 'Flitsvingers') + ' – Flitsvingers';
+  }
+  function fail(msg) { var st = $('#status'); st.className = 'status bad'; st.textContent = msg; }
+  var id = qs.get('id');
+  if (id) {
+    if (!CFG.API_URL) { fail('Dit diploma kan op dit moment niet worden gecontroleerd. Probeer het later opnieuw.'); }
+    else {
+      fetch(CFG.API_URL + '?action=verify&id=' + encodeURIComponent(id)).then(function (r) { return r.json(); }).then(function (j) {
+        if (j.ok && j.diploma) { j.diploma.id = id; render(j.diploma, true, location.href); }
+        else fail('Dit diploma is niet gevonden. Controleer de code of neem contact op met Flitsvingers.');
+      }).catch(function () { fail('Controleren lukte niet. Controleer je internetverbinding en probeer het opnieuw.'); });
+    }
+  } else if (qs.get('l')) {
+    try {
+      var o = JSON.parse(decodeURIComponent(escape(atob(qs.get('l')))));
+      render({ name: o.n, apm: o.a, fout: o.f, date: o.d, dys: !!o.y }, false, location.href);
+    } catch (e) { fail('Deze diplomalink is niet geldig.'); }
+  } else { fail('Geen diploma gevonden.'); }
+  $('#print').onclick = function () { window.print(); };
+  $('#share').onclick = function () {
+    try { navigator.clipboard.writeText(location.href).then(function () { $('#share').textContent = 'Link gekopieerd!'; }); } catch (e) { prompt('Kopieer deze link:', location.href); }
+  };
+  $('#note').textContent = 'Tip: kies bij printen "Opslaan als PDF" om het diploma te bewaren of te mailen naar opa en oma.';
+})();
+</script>
+</body>
+</html>

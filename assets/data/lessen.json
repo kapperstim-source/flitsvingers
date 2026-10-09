@@ -1,0 +1,1032 @@
+{
+ "zones": [
+  {
+   "id": "dorp",
+   "naam": "Het Thuisrij-dorp",
+   "van": 1,
+   "tot": 8
+  },
+  {
+   "id": "strand",
+   "naam": "Het Onderrij-strand",
+   "van": 9,
+   "tot": 14
+  },
+  {
+   "id": "bergen",
+   "naam": "De Hoofdletterbergen",
+   "van": 15,
+   "tot": 20
+  },
+  {
+   "id": "kasteel",
+   "naam": "Het Flitskasteel",
+   "van": 21,
+   "tot": 30
+  }
+ ],
+ "lessen": [
+  {
+   "id": 1,
+   "titel": "De thuisbasis: F en J",
+   "nieuw": [
+    "f",
+    "j"
+   ],
+   "intro": "Les één: de thuisbasis. Leg je wijsvingers op de F en de J. Voel je die kleine bobbeltjes? Daarmee vind je altijd zonder kijken je plek terug. Je andere vingers liggen ernaast, en je duimen rusten op de spatiebalk. Klaar? Druk op de spatiebalk om te beginnen!",
+   "oefeningen": [
+    {
+     "soort": "vast",
+     "label": "Eerst rustig",
+     "tekst": "fff jjj fff jjj"
+    },
+    {
+     "soort": "vast",
+     "label": "Afwisselen",
+     "tekst": "fj fj jf jf ff jj fj"
+    },
+    {
+     "soort": "vast",
+     "label": "Met spaties",
+     "tekst": "f j fj jf fjf jfj ff jj"
+    },
+    {
+     "soort": "vast",
+     "label": "Blind-rondje",
+     "tekst": "fj jf jjf ffj fj jf",
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "titel": "Erbij: D en K",
+   "nieuw": [
+    "d",
+    "k"
+   ],
+   "intro": "Les twee: erbij komen de D en de K. Nu gaan je middelvingers aan het werk. Je linker middelvinger ligt op de D, je rechter middelvinger op de K. Je wijsvingers blijven gewoon op hun bobbeltjes liggen. Druk op de spatiebalk als je klaar bent!",
+   "oefeningen": [
+    {
+     "soort": "vast",
+     "label": "Nieuwe toetsen",
+     "tekst": "ddd kkk ddd kkk"
+    },
+    {
+     "soort": "vast",
+     "label": "Afwisselen",
+     "tekst": "dk kd dd kk dkd kdk"
+    },
+    {
+     "soort": "vast",
+     "label": "Samen met F en J",
+     "tekst": "fd jk df kj fdk jkd"
+    },
+    {
+     "soort": "vast",
+     "label": "Blind-rondje",
+     "tekst": "dfjk kjfd fjdk dkfj",
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "titel": "De hele thuisrij en je eerste woorden",
+   "nieuw": [
+    "s",
+    "l",
+    "a"
+   ],
+   "intro": "Les drie: de hele thuisrij! Je ringvingers liggen op de S en de L, en je linker pink op de A. Met deze letters kun je al echte woorden typen, zoals jas en kaas. Probeer het maar!",
+   "oefeningen": [
+    {
+     "soort": "vast",
+     "label": "Nieuwe toetsen",
+     "tekst": "sss lll aaa sl ls as"
+    },
+    {
+     "soort": "vast",
+     "label": "Korte woordjes",
+     "tekst": "al ja as aas las sla"
+    },
+    {
+     "soort": "vast",
+     "label": "Echte woorden",
+     "tekst": "jas das kas dak lak"
+    },
+    {
+     "soort": "vast",
+     "label": "Langere woorden",
+     "tekst": "kaas slak salsa alfa"
+    },
+    {
+     "soort": "vast",
+     "label": "Blind-rondje",
+     "tekst": "jas kaas dak sla",
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "titel": "Omhoog: E en I",
+   "nieuw": [
+    "e",
+    "i"
+   ],
+   "intro": "Les vier: we gaan voor het eerst omhoog! Je linker middelvinger reikt van de D naar de E, en je rechter middelvinger van de K naar de I. Na elke letter ga je meteen terug naar je thuisrij. Zo blijf je altijd de weg weten.",
+   "oefeningen": [
+    {
+     "soort": "drill",
+     "label": "Nieuwe toetsen"
+    },
+    {
+     "soort": "combi",
+     "label": "Samen met de thuisrij"
+    },
+    {
+     "soort": "woorden",
+     "label": "Woorden met E en I",
+     "aantal": 7
+    },
+    {
+     "soort": "woorden",
+     "label": "Nog meer woorden",
+     "aantal": 8
+    },
+    {
+     "soort": "woorden",
+     "label": "Blind-rondje",
+     "aantal": 6,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "titel": "Omhoog: R en U",
+   "nieuw": [
+    "r",
+    "u"
+   ],
+   "intro": "Les vijf: de R en de U. Je linker wijsvinger reikt van de F naar de R, en je rechter wijsvinger van de J naar de U. Kleine beweging, en dan snel weer terug naar de bobbeltjes.",
+   "oefeningen": [
+    {
+     "soort": "drill",
+     "label": "Nieuwe toetsen"
+    },
+    {
+     "soort": "combi",
+     "label": "Samen met de thuisrij"
+    },
+    {
+     "soort": "woorden",
+     "label": "Woorden met R en U",
+     "aantal": 7
+    },
+    {
+     "soort": "woorden",
+     "label": "Nog meer woorden",
+     "aantal": 8
+    },
+    {
+     "soort": "woorden",
+     "label": "Blind-rondje",
+     "aantal": 6,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "titel": "Omhoog: T en O",
+   "nieuw": [
+    "t",
+    "o"
+   ],
+   "intro": "Les zes: de T en de O. De T doe je ook met je linker wijsvinger: schuin omhoog, een stapje verder dan de R. De O doe je met je rechter ringvinger, recht boven de L. Nu kun je al heel veel woorden maken!",
+   "oefeningen": [
+    {
+     "soort": "drill",
+     "label": "Nieuwe toetsen"
+    },
+    {
+     "soort": "combi",
+     "label": "Samen met de thuisrij"
+    },
+    {
+     "soort": "woorden",
+     "label": "Woorden met T en O",
+     "aantal": 7
+    },
+    {
+     "soort": "woorden",
+     "label": "Nog meer woorden",
+     "aantal": 8
+    },
+    {
+     "soort": "woorden",
+     "label": "Blind-rondje",
+     "aantal": 6,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "titel": "Opzij: G en H",
+   "nieuw": [
+    "g",
+    "h"
+   ],
+   "intro": "Les zeven: de G en de H liggen in het midden. Je linker wijsvinger schuift van de F een stapje naar rechts naar de G, en je rechter wijsvinger schuift van de J naar links naar de H. Daarna weer terug naar huis!",
+   "oefeningen": [
+    {
+     "soort": "drill",
+     "label": "Nieuwe toetsen"
+    },
+    {
+     "soort": "combi",
+     "label": "Samen met de thuisrij"
+    },
+    {
+     "soort": "woorden",
+     "label": "Woorden met G en H",
+     "aantal": 7
+    },
+    {
+     "soort": "woorden",
+     "label": "Nog meer woorden",
+     "aantal": 8
+    },
+    {
+     "soort": "woorden",
+     "label": "Blind-rondje",
+     "aantal": 6,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "titel": "Herhaling en de eerste race",
+   "nieuw": [],
+   "intro": "Les acht: herhaling! Je kent nu al vijftien letters. Vandaag typ je je eerste zinnetjes. En aan het eind daag ik je uit voor een race. Kun jij mij bijhouden?",
+   "oefeningen": [
+    {
+     "soort": "woorden",
+     "label": "Opwarmen",
+     "aantal": 8
+    },
+    {
+     "soort": "zinnen",
+     "label": "Je eerste zinnetjes",
+     "aantal": 2
+    },
+    {
+     "soort": "zinnen",
+     "label": "Nog een paar zinnetjes",
+     "aantal": 2
+    },
+    {
+     "soort": "race",
+     "label": "Race tegen Flits",
+     "aantal": 7,
+     "tempo": 40
+    },
+    {
+     "soort": "woorden",
+     "label": "Blind-rondje",
+     "aantal": 7,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "titel": "Omlaag: N en M",
+   "nieuw": [
+    "n",
+    "m"
+   ],
+   "intro": "Les negen: we gaan voor het eerst omlaag, naar de onderste rij. De N en de M doe je allebei met je rechter wijsvinger. Vanaf de J schuif je een stapje naar beneden. De N een beetje naar links, de M recht eronder.",
+   "oefeningen": [
+    {
+     "soort": "drill",
+     "label": "Nieuwe toetsen"
+    },
+    {
+     "soort": "combi",
+     "label": "Samen met de thuisrij"
+    },
+    {
+     "soort": "woorden",
+     "label": "Woorden met N en M",
+     "aantal": 7
+    },
+    {
+     "soort": "woorden",
+     "label": "Nog meer woorden",
+     "aantal": 8
+    },
+    {
+     "soort": "woorden",
+     "label": "Blind-rondje",
+     "aantal": 6,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "titel": "Hoog bereik: W en P",
+   "nieuw": [
+    "w",
+    "p"
+   ],
+   "intro": "Les tien: de W en de P. De W doe je met je linker ringvinger, boven de S. De P doe je met je rechter pink, helemaal rechts op de bovenste rij. Pinken zijn klein, maar ze kunnen het best!",
+   "oefeningen": [
+    {
+     "soort": "drill",
+     "label": "Nieuwe toetsen"
+    },
+    {
+     "soort": "combi",
+     "label": "Samen met de thuisrij"
+    },
+    {
+     "soort": "woorden",
+     "label": "Woorden met W en P",
+     "aantal": 7
+    },
+    {
+     "soort": "woorden",
+     "label": "Nog meer woorden",
+     "aantal": 8
+    },
+    {
+     "soort": "woorden",
+     "label": "Blind-rondje",
+     "aantal": 6,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "titel": "Omlaag: C en V",
+   "nieuw": [
+    "c",
+    "v"
+   ],
+   "intro": "Les elf: de C en de V op de onderste rij. De C doe je met je linker middelvinger, onder de D. De V doe je met je linker wijsvinger, onder de F. Niet kijken, gewoon voelen!",
+   "oefeningen": [
+    {
+     "soort": "drill",
+     "label": "Nieuwe toetsen"
+    },
+    {
+     "soort": "combi",
+     "label": "Samen met de thuisrij"
+    },
+    {
+     "soort": "woorden",
+     "label": "Woorden met C en V",
+     "aantal": 7
+    },
+    {
+     "soort": "woorden",
+     "label": "Nog meer woorden",
+     "aantal": 8
+    },
+    {
+     "soort": "woorden",
+     "label": "Blind-rondje",
+     "aantal": 6,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "titel": "De B en de komma",
+   "nieuw": [
+    "b",
+    ","
+   ],
+   "intro": "Les twaalf: de B en de komma. De B doe je met je linker wijsvinger, schuin onder de G. De komma doe je met je rechter middelvinger, onder de K. Met een komma maak je je zinnen nog mooier.",
+   "oefeningen": [
+    {
+     "soort": "drill",
+     "label": "Nieuwe toetsen"
+    },
+    {
+     "soort": "combi",
+     "label": "Samen met de thuisrij"
+    },
+    {
+     "soort": "woorden",
+     "label": "Woorden met B",
+     "aantal": 8
+    },
+    {
+     "soort": "zinnen",
+     "label": "Zinnen met een komma",
+     "aantal": 2
+    },
+    {
+     "soort": "woorden",
+     "label": "Blind-rondje",
+     "aantal": 6,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "titel": "Herhaling: bijna alle letters",
+   "nieuw": [],
+   "intro": "Les dertien: herhaling! Je kent nu bijna alle letters. We typen zinnen, en natuurlijk is er weer een race. Ik ben deze keer wel een stukje sneller. Durf jij het aan?",
+   "oefeningen": [
+    {
+     "soort": "woorden",
+     "label": "Opwarmen",
+     "aantal": 9
+    },
+    {
+     "soort": "zinnen",
+     "label": "Zinnen",
+     "aantal": 2
+    },
+    {
+     "soort": "zinnen",
+     "label": "Nog meer zinnen",
+     "aantal": 2
+    },
+    {
+     "soort": "race",
+     "label": "Race tegen Flits",
+     "aantal": 8,
+     "tempo": 55
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind-rondje",
+     "aantal": 2,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "titel": "De laatste letters: Q, Z, X en Y",
+   "nieuw": [
+    "q",
+    "z",
+    "x",
+    "y"
+   ],
+   "intro": "Les veertien: de laatste vier letters! De Z doe je met je linker pink en de X met je linker ringvinger, allebei op de onderste rij. De Q doe je met je linker pink boven de A, en de Y met je rechter wijsvinger, naast de U. Nu ken je het hele alfabet!",
+   "oefeningen": [
+    {
+     "soort": "drill",
+     "label": "Nieuwe toetsen"
+    },
+    {
+     "soort": "combi",
+     "label": "Samen met de thuisrij"
+    },
+    {
+     "soort": "woorden",
+     "label": "Woorden met Z en X",
+     "aantal": 7
+    },
+    {
+     "soort": "woorden",
+     "label": "Alle letters door elkaar",
+     "aantal": 9
+    },
+    {
+     "soort": "woorden",
+     "label": "Blind-rondje",
+     "aantal": 7,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "titel": "Hoofdletters en de punt",
+   "nieuw": [
+    "SHIFT",
+    "."
+   ],
+   "intro": "Les vijftien: hoofdletters! Voor een hoofdletter houd je de Shift-toets vast met de pink van je andere hand. Een hoofdletter A? Dan houd je rechts Shift vast. Een hoofdletter J? Dan houd je links Shift vast. En de punt doe je met je rechter ringvinger, onder de L.",
+   "oefeningen": [
+    {
+     "soort": "vast",
+     "label": "Hoofdletters links",
+     "tekst": "Aa Ss Dd Ff Gg Ee Rr Tt"
+    },
+    {
+     "soort": "vast",
+     "label": "Hoofdletters rechts",
+     "tekst": "Jj Kk Ll Hh Ii Oo Uu Nn Mm"
+    },
+    {
+     "soort": "namen",
+     "label": "Namen",
+     "aantal": 7
+    },
+    {
+     "soort": "zinnen",
+     "label": "Zinnen met een punt",
+     "aantal": 2
+    },
+    {
+     "soort": "namen",
+     "label": "Blind-rondje",
+     "aantal": 6,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "titel": "Hoofdletters oefenen",
+   "nieuw": [],
+   "intro": "Les zestien: we oefenen de hoofdletters. Elke zin begint met een hoofdletter en eindigt met een punt. Denk eraan: Shift met je andere hand. Rustig aan, nauwkeurig is belangrijker dan snel.",
+   "oefeningen": [
+    {
+     "soort": "namen",
+     "label": "Namen en plaatsen",
+     "aantal": 8
+    },
+    {
+     "soort": "zinnen",
+     "label": "Zinnen",
+     "aantal": 2
+    },
+    {
+     "soort": "zinnen",
+     "label": "Nog meer zinnen",
+     "aantal": 2
+    },
+    {
+     "soort": "zinnen",
+     "label": "Langere zinnen",
+     "aantal": 3
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind-rondje",
+     "aantal": 2,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 17,
+   "titel": "Het vraagteken en het uitroepteken",
+   "nieuw": [
+    "?",
+    "!"
+   ],
+   "intro": "Les zeventien: vragen en uitroepen! Het vraagteken zit rechts onderaan, op dezelfde toets als het schuine streepje. Houd links Shift vast en tik met je rechter pink. Het uitroepteken zit op de toets van de 1: houd rechts Shift vast en tik met je linker pink. Wauw!",
+   "oefeningen": [
+    {
+     "soort": "vast",
+     "label": "Nieuwe tekens",
+     "tekst": "Ja? Nee! Ja? Nee! Wat? Wauw!"
+    },
+    {
+     "soort": "zinnen",
+     "label": "Vragen",
+     "aantal": 2
+    },
+    {
+     "soort": "zinnen",
+     "label": "Uitroepen",
+     "aantal": 2
+    },
+    {
+     "soort": "zinnen",
+     "label": "Alles door elkaar",
+     "aantal": 3
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind-rondje",
+     "aantal": 2,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "titel": "Streepje, dubbele punt en apostrof",
+   "nieuw": [
+    "-",
+    ":",
+    "'"
+   ],
+   "intro": "Les achttien: drie handige tekens. Het streepje zit rechts op de bovenste rij, naast de nul: daar gebruik je je rechter pink voor. De dubbele punt is Shift met de puntkomma, ook met je rechter pink. En de apostrof, voor woorden als auto's, zit naast de puntkomma.",
+   "oefeningen": [
+    {
+     "soort": "vast",
+     "label": "Nieuwe tekens",
+     "tekst": "e-mail auto's foto's: ja-nee"
+    },
+    {
+     "soort": "vast",
+     "label": "Woorden met tekens",
+     "tekst": "baby's menu's oma's opa's zee-egel"
+    },
+    {
+     "soort": "zinnen",
+     "label": "Zinnen",
+     "aantal": 2
+    },
+    {
+     "soort": "zinnen",
+     "label": "Nog meer zinnen",
+     "aantal": 2
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind-rondje",
+     "aantal": 2,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "titel": "Cijfers: 1 tot en met 5",
+   "nieuw": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+   ],
+   "intro": "Les negentien: cijfers! Die staan op de bovenste rij. De 1 doe je met je linker pink, de 2 met je ringvinger, de 3 met je middelvinger en de 4 en de 5 met je linker wijsvinger. Dat is een flink stuk reiken, maar je kunt het.",
+   "oefeningen": [
+    {
+     "soort": "vast",
+     "label": "Nieuwe cijfers",
+     "tekst": "11 22 33 44 55 12 34 45 51"
+    },
+    {
+     "soort": "vast",
+     "label": "Getallen",
+     "tekst": "12 23 34 45 135 241 352 413"
+    },
+    {
+     "soort": "zinnen",
+     "label": "Zinnen met cijfers",
+     "aantal": 2
+    },
+    {
+     "soort": "vast",
+     "label": "Rekensommen",
+     "tekst": "1 en 2 is 3. 2 en 3 is 5. 4 en 1 is 5."
+    },
+    {
+     "soort": "vast",
+     "label": "Blind-rondje",
+     "tekst": "12 21 34 43 51 15 23 32",
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 20,
+   "titel": "Cijfers: 6 tot en met 0",
+   "nieuw": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "0"
+   ],
+   "intro": "Les twintig: de laatste cijfers. De 6 en de 7 doe je met je rechter wijsvinger, de 8 met je middelvinger, de 9 met je ringvinger en de 0 met je rechter pink. Nu ken je echt alle toetsen die je nodig hebt!",
+   "oefeningen": [
+    {
+     "soort": "vast",
+     "label": "Nieuwe cijfers",
+     "tekst": "66 77 88 99 00 67 89 90 06"
+    },
+    {
+     "soort": "vast",
+     "label": "Getallen",
+     "tekst": "10 20 30 40 50 60 70 80 90 100"
+    },
+    {
+     "soort": "zinnen",
+     "label": "Zinnen met cijfers",
+     "aantal": 2
+    },
+    {
+     "soort": "vast",
+     "label": "Jaartallen",
+     "tekst": "1999 2007 2016 2026 2030 1850"
+    },
+    {
+     "soort": "vast",
+     "label": "Blind-rondje",
+     "tekst": "68 79 80 96 07 86 97 60",
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 21,
+   "titel": "Typen over dieren",
+   "nieuw": [],
+   "intro": "Les eenentwintig: welkom in het Flitskasteel! Vanaf nu typ je echte teksten. Vandaag gaat alles over dieren. Wist je dat ik, een jachtluipaard, het snelste landdier ben? Nu jij nog op het toetsenbord!",
+   "oefeningen": [
+    {
+     "soort": "zinnen",
+     "label": "Opwarmen",
+     "aantal": 2,
+     "thema": "dieren"
+    },
+    {
+     "soort": "zinnen",
+     "label": "Dierenzinnen",
+     "aantal": 3,
+     "thema": "dieren"
+    },
+    {
+     "soort": "tekst",
+     "label": "Een tekst over dieren",
+     "thema": "dieren"
+    },
+    {
+     "soort": "race",
+     "label": "Race tegen Flits",
+     "aantal": 9,
+     "tempo": 70
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind-rondje",
+     "aantal": 2,
+     "blind": true,
+     "thema": "dieren"
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "titel": "Typen over sport",
+   "nieuw": [],
+   "intro": "Les tweeëntwintig: vandaag typen we over sport. Voetbal, zwemmen, hockey: alles komt voorbij. Probeer in een rustig, gelijk tempo te typen, net als een hardloper die zijn adem goed verdeelt.",
+   "oefeningen": [
+    {
+     "soort": "zinnen",
+     "label": "Opwarmen",
+     "aantal": 2,
+     "thema": "sport"
+    },
+    {
+     "soort": "zinnen",
+     "label": "Sportzinnen",
+     "aantal": 3,
+     "thema": "sport"
+    },
+    {
+     "soort": "tekst",
+     "label": "Een tekst over sport",
+     "thema": "sport"
+    },
+    {
+     "soort": "snelheid",
+     "label": "Snelheidsronde (1 minuut)",
+     "seconden": 60
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind-rondje",
+     "aantal": 2,
+     "blind": true,
+     "thema": "sport"
+    }
+   ]
+  },
+  {
+   "id": 23,
+   "titel": "Typen over eten",
+   "nieuw": [],
+   "intro": "Les drieëntwintig: vandaag typen we over eten. Pannenkoeken, pizza, appeltaart... krijg je al trek? Let goed op de hoofdletters en de punten.",
+   "oefeningen": [
+    {
+     "soort": "zinnen",
+     "label": "Opwarmen",
+     "aantal": 2,
+     "thema": "eten"
+    },
+    {
+     "soort": "zinnen",
+     "label": "Etenszinnen",
+     "aantal": 3,
+     "thema": "eten"
+    },
+    {
+     "soort": "tekst",
+     "label": "Een tekst over eten",
+     "thema": "eten"
+    },
+    {
+     "soort": "race",
+     "label": "Race tegen Flits",
+     "aantal": 10,
+     "tempo": 80
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind-rondje",
+     "aantal": 2,
+     "blind": true,
+     "thema": "eten"
+    }
+   ]
+  },
+  {
+   "id": 24,
+   "titel": "Typen over school en vrienden",
+   "nieuw": [],
+   "intro": "Les vierentwintig: school en vrienden. Dit soort zinnen typ je later echt, bijvoorbeeld voor een werkstuk of een berichtje. Hoe sneller je blind typt, hoe meer tijd je overhoudt!",
+   "oefeningen": [
+    {
+     "soort": "zinnen",
+     "label": "Opwarmen",
+     "aantal": 2,
+     "thema": "school"
+    },
+    {
+     "soort": "zinnen",
+     "label": "Schoolzinnen",
+     "aantal": 3,
+     "thema": "school"
+    },
+    {
+     "soort": "tekst",
+     "label": "Een tekst over school",
+     "thema": "school"
+    },
+    {
+     "soort": "snelheid",
+     "label": "Snelheidsronde (1 minuut)",
+     "seconden": 60
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind-rondje",
+     "aantal": 2,
+     "blind": true,
+     "thema": "school"
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "titel": "Verhaal: het geheim van het kasteel",
+   "nieuw": [],
+   "intro": "Les vijfentwintig: een echt verhaal! Vandaag typ je het begin van een avontuur. En goed nieuws: vanaf nu mag je ook het proefexamen proberen, zo vaak als je wilt.",
+   "oefeningen": [
+    {
+     "soort": "tekst",
+     "label": "Verhaal deel 1",
+     "thema": "verhaal1"
+    },
+    {
+     "soort": "tekst",
+     "label": "Verhaal deel 2",
+     "thema": "verhaal2"
+    },
+    {
+     "soort": "snelheid",
+     "label": "Snelheidsronde (1 minuut)",
+     "seconden": 60
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind-rondje",
+     "aantal": 3,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 26,
+   "titel": "Verhaal: de gouden toets",
+   "nieuw": [],
+   "intro": "Les zesentwintig: het verhaal gaat verder. Typ in een vast ritme, zonder te haasten. En daarna... de grote race. Ik ga nu echt hard!",
+   "oefeningen": [
+    {
+     "soort": "tekst",
+     "label": "Verhaal deel 3",
+     "thema": "verhaal3"
+    },
+    {
+     "soort": "tekst",
+     "label": "Verhaal deel 4",
+     "thema": "verhaal4"
+    },
+    {
+     "soort": "race",
+     "label": "De grote race",
+     "aantal": 12,
+     "tempo": 95
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind-rondje",
+     "aantal": 3,
+     "blind": true
+    }
+   ]
+  },
+  {
+   "id": 27,
+   "titel": "Blind-uitdaging",
+   "nieuw": [],
+   "intro": "Les zevenentwintig: de blind-uitdaging! In bijna alle oefeningen van vandaag is het toetsenbord op het scherm weg. Doe maar een theedoek over je handen. Ik geloof in je!",
+   "oefeningen": [
+    {
+     "soort": "zinnen",
+     "label": "Blind: zinnen",
+     "aantal": 3,
+     "blind": true
+    },
+    {
+     "soort": "tekst",
+     "label": "Blind: een tekst",
+     "thema": "natuur",
+     "blind": true
+    },
+    {
+     "soort": "snelheid",
+     "label": "Blind: snelheidsronde",
+     "seconden": 60,
+     "blind": true
+    },
+    {
+     "soort": "zinnen",
+     "label": "Blind: cijfers en tekens",
+     "aantal": 3,
+     "blind": true,
+     "thema": "tekens"
+    }
+   ]
+  },
+  {
+   "id": 28,
+   "titel": "Snelheid en ritme",
+   "nieuw": [],
+   "intro": "Les achtentwintig: snelheid en ritme. Je hoeft niet te haasten. Typ in een gelijk tempo, tik tik tik, en je snelheid komt vanzelf. Na deze les ben je klaar voor het proefexamen.",
+   "oefeningen": [
+    {
+     "soort": "tekst",
+     "label": "Ritme-tekst",
+     "thema": "natuur"
+    },
+    {
+     "soort": "snelheid",
+     "label": "Snelheidsronde 1",
+     "seconden": 60
+    },
+    {
+     "soort": "snelheid",
+     "label": "Snelheidsronde 2",
+     "seconden": 60
+    },
+    {
+     "soort": "race",
+     "label": "Laatste race tegen Flits",
+     "aantal": 12,
+     "tempo": 105
+    }
+   ]
+  },
+  {
+   "id": 29,
+   "titel": "Proefexamen",
+   "nieuw": [],
+   "soort": "proef",
+   "intro": "Les negenentwintig: het proefexamen. Je typt drie minuten lang een tekst. Daarna zie je hoeveel aanslagen per minuut je haalt en hoeveel fouten je maakt. Je mag het proefexamen zo vaak doen als je wilt.",
+   "oefeningen": []
+  },
+  {
+   "id": 30,
+   "titel": "Het examen",
+   "nieuw": [],
+   "soort": "examen",
+   "intro": "Les dertig: het examen! Je typt vijf minuten lang een tekst. Haal je honderd aanslagen per minuut met maximaal drie procent fouten, dan krijg je je Flitsvingers-diploma. Een ouder kijkt mee. Adem rustig in en uit. Je kunt dit!",
+   "oefeningen": []
+  }
+ ]
+}
