@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flitsvingers – blind leren typen voor kinderen, voor €49</title>
+<meta name="description" content="Online typecursus voor kinderen uit groep 6 t/m 8. 10 tot 15 minuten per dag, fouten maken mag, voorlezen en dyslexie-modus inbegrepen. Eenmalig €49, geen abonnement.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%233a5bff'/%3E%3Cpath d='M36 8 16 36h14l-4 20 22-30H34z' fill='%23ffc93c'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>
+:root{
+  --bg:#fff7ec;--bg2:#fff0dc;--card:#ffffff;--line:#f0e2cc;--line2:#e6d6bd;
+  --ink:#18203a;--muted:#5f6888;--blue:#3a5bff;--blue-d:#2740c8;--blue-l:#eef1ff;
+  --yellow:#ffc93c;--yellow-d:#e0a400;--orange:#f4a23a;--mint:#16b277;--coral:#ff5a5f;
+  --f-pink:#ff6fa8;--f-ring:#ff9f43;--f-middle:#24bf80;--f-index:#3ba7ff;
+  --head:'Fredoka',system-ui,sans-serif;--ui:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --shadow:0 1px 0 rgba(24,32,58,.04),0 14px 40px rgba(120,86,30,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-weight:500;-webkit-font-smoothing:antialiased;line-height:1.55}
+a{color:inherit}
+img{display:block;max-width:100%;height:auto}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+svg.i.fill{fill:currentColor;stroke:none}
+h1,h2,h3{font-family:var(--head);font-weight:700;margin:0;letter-spacing:-.01em;line-height:1.1}
+p{margin:0;color:var(--muted)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(255,247,236,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:18px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--head);font-weight:700;font-size:24px;text-decoration:none}
+.logo{width:38px;height:38px;border-radius:12px;background:var(--blue);display:grid;place-items:center;color:var(--yellow);box-shadow:0 3px 0 var(--blue-d)}
+.logo svg{width:21px;height:21px}
+.spacer{flex:1}
+.navlink{color:var(--muted);text-decoration:none;font-weight:800;font-size:15px}
+.navlink:hover{color:var(--ink)}
+@media (max-width:820px){.navlink{display:none}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:16px;padding:15px 24px;font:inherit;font-size:17px;font-weight:800;cursor:pointer;
+  background:var(--blue);color:#fff;box-shadow:0 5px 0 var(--blue-d);text-decoration:none;transition:transform .08s,box-shadow .08s,filter .15s}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--blue-d)}
+.btn.yellow{background:var(--yellow);color:#3a2a00;box-shadow:0 5px 0 var(--yellow-d)}
+.btn.yellow:active{box-shadow:0 1px 0 var(--yellow-d)}
+.btn.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line2);box-shadow:0 4px 0 var(--line2)}
+.btn.small{padding:10px 16px;font-size:15px;box-shadow:0 4px 0 var(--blue-d)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 1.05fr;gap:44px;align-items:center;padding:56px 0 30px}
+@media (max-width:920px){.hero{grid-template-columns:1fr;padding-top:34px;gap:28px}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);background:var(--blue-l);padding:7px 13px;border-radius:99px}
+.hero h1{font-size:clamp(38px,5.6vw,64px);margin:18px 0 18px}
+.hero h1 .hl{color:var(--blue);position:relative;white-space:nowrap}
+.hero h1 .hl::after{content:'';position:absolute;left:-2%;right:-2%;bottom:.04em;height:.28em;background:var(--yellow);z-index:-1;border-radius:6px}
+.hero p.lead{font-size:clamp(18px,2vw,21px);max-width:560px}
+.hero .row{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
+.ticks{display:flex;gap:10px 20px;flex-wrap:wrap;margin-top:26px;font-size:15px;color:var(--ink);font-weight:800}
+.ticks span{display:flex;align-items:center;gap:7px}
+.ticks svg{width:20px;height:20px;color:var(--mint)}
+.heroimg{position:relative}
+.heroimg .frame{border-radius:30px;overflow:hidden;box-shadow:var(--shadow);border:6px solid #fff;transform:rotate(1.2deg)}
+.badge{position:absolute;background:#fff;border-radius:18px;padding:12px 16px;box-shadow:var(--shadow);font-weight:800;font-size:14px;display:flex;align-items:center;gap:10px}
+.badge b{font-family:var(--head);font-size:22px;color:var(--blue)}
+.badge.b1{left:-18px;bottom:-18px}
+.badge.b2{right:-12px;top:-16px}
+.badge .dot{width:12px;height:12px;border-radius:50%;background:var(--mint)}
+@media (max-width:560px){.badge.b1{left:6px}.badge.b2{right:6px}}
+
+/* sections */
+section{padding:64px 0}
+.kicker{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange)}
+.sec-h{font-size:clamp(30px,3.8vw,44px);margin:10px 0 14px}
+.sec-p{max-width:680px;font-size:18px}
+.center{text-align:center}.center .sec-p{margin:0 auto}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+@media (max-width:920px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:var(--shadow)}
+.card .ic{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;margin-bottom:16px}
+.card h3{font-size:21px;margin-bottom:8px}
+.card p{font-size:16px}
+.card .was{display:block;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line2);font-size:13px;font-weight:700;color:#b5652e}
+.ic.c1{background:#eef1ff;color:var(--blue)}.ic.c2{background:#e5f8ef;color:var(--mint)}.ic.c3{background:#fff1d6;color:#c77a00}
+.ic.c4{background:#ffe9f2;color:#d63b7d}.ic.c5{background:#efe9ff;color:#7b4dff}.ic.c6{background:#e6f5ff;color:#1f8ad6}
+
+/* meet flits */
+.meet{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:center}
+@media (max-width:860px){.meet{grid-template-columns:1fr}}
+.poses{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pose{background:linear-gradient(180deg,#eef1ff,#fff);border:1px solid var(--line);border-radius:22px;padding:14px 10px 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;overflow:hidden}
+.pose img{width:100%;max-width:130px}
+.pose span{font-size:13px;font-weight:800;color:var(--muted);padding-bottom:10px;order:-1}
+.list{display:grid;gap:12px;margin-top:20px}
+.list div{display:flex;gap:12px;align-items:flex-start;font-weight:700}
+.list svg{color:var(--mint);margin-top:2px}
+
+/* price */
+.compare{display:grid;grid-template-columns:1fr 1.15fr;gap:18px;margin-top:34px;align-items:stretch}
+@media (max-width:760px){.compare{grid-template-columns:1fr}}
+.pbox{border-radius:26px;padding:30px;border:1px solid var(--line);background:var(--card)}
+.pbox.them{background:#f6efe3;box-shadow:none}
+.pbox.us{position:relative;border:3px solid var(--blue);box-shadow:var(--shadow);overflow:hidden}
+.pbox.us img{position:absolute;right:10px;bottom:0;width:150px}
+@media (max-width:520px){.pbox.us img{width:100px;opacity:.9}}
+.pbox .amt{font-family:var(--head);font-size:52px;font-weight:700;margin:6px 0}
+.pbox .lbl{font-weight:800;color:var(--muted)}
+.pbox ul{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:10px;font-size:16px;font-weight:700;max-width:420px}
+.pbox li{display:flex;gap:10px;align-items:flex-start}
+.pbox li svg{width:20px;height:20px;margin-top:2px}
+.pbox.us li svg{color:var(--mint)}
+.pbox.them li svg{color:#b8a98f}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+@media (max-width:820px){.steps{grid-template-columns:1fr}}
+.step{position:relative;overflow:hidden;padding-bottom:0;display:flex;flex-direction:column}
+.step .n{width:42px;height:42px;border-radius:50%;background:var(--yellow);color:#3a2a00;display:grid;place-items:center;font-family:var(--head);font-weight:700;font-size:20px;margin-bottom:14px;box-shadow:0 3px 0 var(--yellow-d)}
+.step img{width:150px;margin:14px auto 0;align-self:center}
+
+/* split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
+@media (max-width:820px){.split{grid-template-columns:1fr}}
+.norm{font-family:var(--mono);font-size:15px;background:var(--bg);border-radius:14px;padding:16px;margin-top:16px;color:var(--ink);line-height:1.7}
+.withimg{display:grid;grid-template-columns:1fr 130px;gap:14px;align-items:end}
+.withimg img{width:130px}
+.norm{overflow-wrap:anywhere}
+@media (max-width:520px){.withimg{grid-template-columns:1fr}.withimg img{display:none}.card{padding:20px}.norm{font-size:13px}}
+@media (max-width:420px){nav .wrap{gap:10px}.brand{font-size:20px}.logo{width:32px;height:32px}.btn.small{padding:9px 12px;font-size:14px}.hero h1 .hl{white-space:normal}}
+
+/* pre-order */
+.pre{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center;background:linear-gradient(135deg,#3a5bff,#5a78ff);border-radius:34px;padding:40px;color:#fff;position:relative;overflow:hidden}
+.pre::after{content:'';position:absolute;right:-80px;top:-80px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.08)}
+@media (max-width:860px){.pre{grid-template-columns:1fr;padding:28px}}
+.pre p{color:rgba(255,255,255,.88)}
+.pre .kicker{color:var(--yellow)}
+.pre h2{color:#fff}
+.pre .card{color:var(--ink);text-align:center;position:relative;z-index:1}
+.pre .card p{color:var(--muted)}
+.price{display:flex;align-items:baseline;justify-content:center;gap:12px;margin:6px 0}
+.price b{font-family:var(--head);font-size:64px;color:var(--blue)}
+.price s{color:var(--muted);font-size:24px;font-weight:700}
+.fine{font-size:14px;margin-top:14px}
+.pre .juich{position:absolute;left:-10px;bottom:-14px;width:150px;display:none}
+
+/* faq */
+.faq{max-width:820px;margin:0 auto}
+details{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 22px;margin-top:12px}
+summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'+';color:var(--blue);font-family:var(--head);font-size:26px;line-height:1}
+details[open] summary::after{content:'–'}
+details p{margin-top:10px;font-size:16px}
+
+footer{border-top:1px solid var(--line);padding:30px 0 50px;font-size:14px;color:var(--muted);font-weight:700}
+footer .wrap{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
+
+.modal{position:fixed;inset:0;z-index:50;background:rgba(24,32,58,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+.modal[hidden]{display:none}
+.sheet{width:min(460px,100%);background:var(--card);border-radius:28px;padding:28px;text-align:center}
+.sheet img{width:130px;margin:0 auto 8px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="logo"><svg viewBox="0 0 24 24" class="i fill"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Flitsvingers</a>
+    <div class="spacer"></div>
+    <a class="navlink" href="#anders">Wat is anders</a>
+    <a class="navlink" href="#flits">Maak kennis met Flits</a>
+    <a class="navlink" href="#prijs">Prijs</a>
+    <a class="navlink" href="#faq">Vragen</a>
+    <a class="btn small" href="proefles.html">Gratis proefles</a>
+  </div>
+</nav>
+
+<main id="top">
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <span class="eyebrow">Groep 6 t/m 8 · online</span>
+      <h1>Blind leren typen met <span class="hl">10 vingers</span>. Voor €49.</h1>
+      <p class="lead">Een typecursus die voelt als een spel, met Flits als coach. 10 tot 15 minuten per dag, en dan is de dag echt af. Fouten maken mag: je kind hoeft nooit opnieuw te beginnen.</p>
+      <div class="row">
+        <a class="btn" href="proefles.html">Speel gratis les 1 tot 3</a>
+        <a class="btn ghost" href="#voorinschrijven">Voorinschrijven voor €29</a>
+      </div>
+      <div class="ticks">
+        <span><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Geen abonnement</span>
+        <span><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Werkt op Chromebook</span>
+        <span><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Dyslexie-modus inbegrepen</span>
+      </div>
+    </div>
+    <div class="heroimg">
+      <div class="frame"><img src="assets/img/hero.webp" alt="Een kind typt op een laptop terwijl Flits de jachtluipaard een duim omhoog geeft" width="1600" height="893"></div>
+      <div class="badge b1"><span class="dot"></span><div><b>12 min</b><br>per dag, dan is het af</div></div>
+      <div class="badge b2"><b>97%</b> nauwkeurig</div>
+    </div>
+  </div>
+</div>
+
+<section id="anders">
+  <div class="wrap">
+    <div class="center">
+      <div class="kicker">Gemaakt na het lezen van honderden ouderreviews</div>
+      <h2 class="sec-h">Zes dingen die we anders doen</h2>
+      <p class="sec-p">We lazen honderden reviews van ouders over typecursussen. Steeds kwamen dezelfde ergernissen terug. Die hebben we er vanaf het begin uit gehaald.</p>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="ic c1"><svg viewBox="0 0 24 24" class="i"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></div>
+        <h3>Fouten maken mag</h3><p>Nooit de hele oefening opnieuw. Je kind typt gewoon door, daarna komen alleen de lastige letters kort terug. Geen piepjes bij een fout.</p>
+        <span class="was">Veelgehoorde klacht: "5 fouten = alles opnieuw"</span></div>
+      <div class="card"><div class="ic c2"><svg viewBox="0 0 24 24" class="i"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h3>Echt 10 tot 15 minuten</h3><p>Een les duurt ongeveer 10 minuten. Na 12 minuten per dag is de dag af. De hele cursus: 30 lessen, ongeveer 8 tot 12 weken.</p>
+        <span class="was">Veelgehoorde klacht: "de dagtaak kost een uur"</span></div>
+      <div class="card"><div class="ic c3"><svg viewBox="0 0 24 24" class="i"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <h3>Werkt op elk apparaat</h3><p>Laptop, Chromebook, Mac, Windows of tablet met los toetsenbord. Gewoon in de browser, niets installeren, ook op oudere computers.</p>
+        <span class="was">Veelgehoorde klacht: "haperen en foutmeldingen op iPad of Mac"</span></div>
+      <div class="card"><div class="ic c4"><svg viewBox="0 0 24 24" class="i"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>
+        <h3>Flits leest voor</h3><p>Flits legt alles hardop uit. Dyslexie-modus, rustige modus en losse geluidsknoppen zitten er standaard in, zonder meerprijs.</p>
+        <span class="was">Veelgehoorde klacht: "uitleg wordt niet voorgelezen"</span></div>
+      <div class="card"><div class="ic c5"><svg viewBox="0 0 24 24" class="i"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div>
+        <h3>Echt blind leren typen</h3><p>Elke les eindigt met een blind-rondje: het toetsenbord op het scherm verdwijnt. Zo leert je kind echt zonder kijken, niet alleen voor het diploma.</p>
+        <span class="was">Veelgehoorde klacht: "diploma gehaald, maar kijkt nog steeds"</span></div>
+      <div class="card"><div class="ic c6"><svg viewBox="0 0 24 24" class="i"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Rust voor ouders</h3><p>Eén vriendelijke weekmail met de voortgang. Geen dagelijkse herinneringen, geen "je loopt achter". Wel punten, sterren en reeksen voor je kind.</p>
+        <span class="was">Veelgehoorde klacht: "dagelijkse mails geven thuis ruzie"</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="flits" style="background:linear-gradient(180deg,transparent,#fff0dc 30%,#fff0dc 70%,transparent)">
+  <div class="wrap meet">
+    <div>
+      <div class="kicker">Maak kennis met Flits</div>
+      <h2 class="sec-h">Een coach die nooit boos wordt</h2>
+      <p class="sec-p">Flits is de snelste jachtluipaard van het toetsenbord. Hij legt elke nieuwe letter uit, juicht bij goede oefeningen en zegt "rustig aan" als het even niet lukt. Kinderen oefenen liever met een maatje dan met een stopwatch.</p>
+      <div class="list">
+        <div><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Legt elke nieuwe letter en vinger hardop uit</div>
+        <div><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Moedigt aan in plaats van te straffen</div>
+        <div><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Doet een blinddoek om bij het blind-rondje</div>
+      </div>
+    </div>
+    <div class="poses">
+      <div class="pose"><img src="assets/img/flits_wijs.webp" alt="" loading="lazy" width="447" height="640"><span>legt uit</span></div>
+      <div class="pose"><img src="assets/img/flits_typen.webp" alt="" loading="lazy" width="517" height="640"><span>typt mee</span></div>
+      <div class="pose"><img src="assets/img/flits_blind.webp" alt="" loading="lazy" width="391" height="640"><span>blind-rondje</span></div>
+      <div class="pose"><img src="assets/img/flits_rustig.webp" alt="" loading="lazy" width="433" height="640"><span>rustig aan</span></div>
+      <div class="pose"><img src="assets/img/flits_juich.webp" alt="" loading="lazy" width="497" height="640"><span>juicht</span></div>
+      <div class="pose"><img src="assets/img/flits_rust.webp" alt="" loading="lazy" width="344" height="640"><span>dag is af</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="prijs">
+  <div class="wrap">
+    <div class="center">
+      <div class="kicker">Eerlijke prijs</div>
+      <h2 class="sec-h">Eén keer €49. Dat is alles.</h2>
+      <p class="sec-p">Online typecursussen voor kinderen kosten nu meestal €95 tot €180, vaak met "tijdelijke acties" en voorwaarden waar je doorheen moet lezen. Wij houden het simpel.</p>
+    </div>
+    <div class="compare">
+      <div class="pbox them">
+        <div class="lbl">Gangbare typecursus</div>
+        <div class="amt">€95 – €180</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" class="i"><line x1="5" y1="12" x2="19" y2="12"/></svg>Vaak 20 minuten per dag of meer</li>
+          <li><svg viewBox="0 0 24 24" class="i"><line x1="5" y1="12" x2="19" y2="12"/></svg>Garantie met voorwaarden, bijvoorbeeld elke dag oefenen</li>
+          <li><svg viewBox="0 0 24 24" class="i"><line x1="5" y1="12" x2="19" y2="12"/></svg>Soms alleen Windows of Mac</li>
+        </ul>
+      </div>
+      <div class="pbox us">
+        <div class="lbl" style="color:var(--blue)">Flitsvingers</div>
+        <div class="amt">€49</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>30 lessen, proefexamens en diploma</li>
+          <li><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Niet tevreden? Binnen 30 dagen geld terug, zonder voorwaarden</li>
+          <li><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Dyslexie-modus en voorlezen inbegrepen</li>
+          <li><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Een jaar toegang, ook na het diploma</li>
+        </ul>
+        <img src="assets/img/flits_duim.webp" alt="" loading="lazy" width="397" height="640">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="center">
+      <div class="kicker">Zo werkt het</div>
+      <h2 class="sec-h">In drie stappen naar het diploma</h2>
+    </div>
+    <div class="steps">
+      <div class="card step"><div class="n">1</div><h3>Probeer gratis</h3><p>Speel les 1 tot 3 zonder account. Je kind merkt meteen of het leuk is.</p><img src="assets/img/flits_zwaai.webp" alt="" loading="lazy" width="432" height="640"></div>
+      <div class="card step"><div class="n">2</div><h3>Elke dag een korte les</h3><p>Ongeveer 10 minuten. Nieuwe letters komen pas als de vorige goed zitten.</p><img src="assets/img/flits_typen.webp" alt="" loading="lazy" width="517" height="640"></div>
+      <div class="card step"><div class="n">3</div><h3>Examen en diploma</h3><p>Na de proefexamens doet je kind thuis het examen. Een ouder kijkt mee en bevestigt.</p><img src="assets/img/flits_diploma.webp" alt="" loading="lazy" width="472" height="640"></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:20px">
+  <div class="wrap">
+    <div class="split">
+      <div class="card">
+        <div class="kicker">Diploma</div>
+        <h3 style="font-size:26px;margin:8px 0 10px">Een diploma met een openbare eis</h3>
+        <p>In Nederland bestaat geen officieel typediploma. Daarom maken wij onze eis gewoon openbaar, zodat je weet wat het diploma betekent. Elk diploma heeft een QR-code waarmee je het kunt controleren.</p>
+        <div class="norm">Eis: 100 aanslagen per minuut<br>met maximaal 3% fouten<br>Dyslexie-modus: 75 aanslagen per minuut</div>
+      </div>
+      <div class="card withimg">
+        <div>
+          <div class="kicker">Garantie</div>
+          <h3 style="font-size:26px;margin:8px 0 10px">Garantie in één zin</h3>
+          <p>Niet tevreden? Mail ons binnen 30 dagen en je krijgt je geld terug. Geen voorwaarden over hoe vaak je kind geoefend heeft, geen kleine lettertjes.</p>
+          <p style="margin-top:12px">We beantwoorden mail binnen één werkdag, en we geven nooit je kind de schuld.</p>
+        </div>
+        <img src="assets/img/flits_duim.webp" alt="" loading="lazy" width="397" height="640">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="voorinschrijven">
+  <div class="wrap">
+    <div class="pre">
+      <div style="position:relative;z-index:1">
+        <div class="kicker">Voorinschrijving</div>
+        <h2 class="sec-h" style="margin-bottom:10px">Schrijf je nu in voor €29</h2>
+        <p style="font-size:18px">De volledige cursus start in <b id="startdatum" style="color:#fff">januari 2027</b>. Wie zich nu inschrijft, betaalt €29 in plaats van €49. Ook leuk als cadeau voor Sinterklaas of kerst.</p>
+        <p class="fine">Start de cursus niet uiterlijk 31 januari 2027, dan krijg je je geld volledig terug. Tot de start kun je kosteloos annuleren, en binnen 30 dagen na de start kun je altijd nog je geld terugvragen.</p>
+      </div>
+      <div class="card">
+        <img src="assets/img/flits_juich.webp" alt="" loading="lazy" width="497" height="640" style="width:120px;margin:-8px auto 6px">
+        <div class="price"><b>€29</b><s>€49</s></div>
+        <p style="margin-bottom:18px;font-weight:700">Eenmalig · per kind · inclusief diploma</p>
+        <button class="btn yellow" id="preorder" style="width:100%">Voorinschrijven</button>
+        <a class="btn ghost" href="proefles.html" style="width:100%;margin-top:12px">Eerst de gratis proefles</a>
+        <p style="font-size:13px;margin-top:14px">Je betaalt veilig via Stripe met iDEAL | Wero, Bancontact, kaart of Klarna. Door te betalen ga je akkoord met de <a href="voorwaarden.html" style="color:var(--blue)">algemene voorwaarden</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap faq">
+    <div class="center">
+      <div class="kicker">Vragen</div>
+      <h2 class="sec-h">Veelgestelde vragen</h2>
+    </div>
+    <details><summary>Vanaf welke leeftijd?</summary><p>Vanaf groep 6, ongeveer 9 jaar. Je kind moet goed kunnen lezen en de handen moeten groot genoeg zijn om de thuisrij te bereiken. De meeste kinderen beginnen in groep 6, 7 of 8.</p></details>
+    <details><summary>Welke apparaten werken?</summary><p>Alles met een browser en een echt toetsenbord: laptop, Chromebook, Windows, Mac of een tablet met los toetsenbord. Op een telefoon werkt het niet, omdat je kind daar geen 10 vingers kan gebruiken.</p></details>
+    <details><summary>Hoe lang duurt de cursus?</summary><p>30 lessen van ongeveer 10 minuten. Met 5 dagen per week ben je in ongeveer 8 tot 12 weken klaar. Een week overslaan is geen probleem: de cursus loopt niet weg.</p></details>
+    <details><summary>Mijn kind heeft dyslexie of ADHD. Werkt het dan ook?</summary><p>Ja. De dyslexie-modus (rustiger lettertype, meer ruimte, geen tempo in beeld), voorlezen en de rustige modus zitten er standaard in. Bij dyslexie geldt een lagere snelheidseis voor het diploma: 75 in plaats van 100 aanslagen per minuut.</p></details>
+    <details><summary>Wat gebeurt er met de gegevens van mijn kind?</summary><p>Zo weinig mogelijk. Jij maakt het account aan als ouder, je kind gebruikt een bijnaam. We bewaren alleen de voortgang en verkopen nooit gegevens.</p></details>
+    <details><summary>En als mijn kind het diploma niet haalt?</summary><p>Dan oefent je kind gewoon verder: je houdt een jaar toegang en kunt het examen zo vaak opnieuw doen als nodig. En binnen 30 dagen kun je altijd je geld terugvragen.</p></details>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Flitsvingers is een handelsnaam van Tim's digital services · Transvaalkade 31, 1092 JM Amsterdam · KvK 42129603 · <a href="mailto:kapperstim@gmail.com">kapperstim@gmail.com</a></span>
+    <span><a href="voorwaarden.html">Algemene voorwaarden</a> · <a href="privacy.html">Privacy</a></span>
+  </div>
+</footer>
+
+<div class="modal" id="modal" hidden><div class="sheet" role="dialog" aria-modal="true">
+  <img src="assets/img/flits_wijs.webp" alt="">
+  <h2 style="font-size:24px">Bijna klaar!</h2>
+  <p style="margin:10px 0 18px">De voorinschrijving gaat binnenkort open. Speel in de tussentijd de gratis proefles.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><a class="btn" href="proefles.html">Naar de proefles</a><button class="btn ghost" id="modal-close">Sluiten</button></div>
+</div></div>
+
+<script>
+/* Instellingen: plak hier de betaallink (€29) zodra die er is. */
+const VOORINSCHRIJF_URL = 'https://buy.stripe.com/5kQ14m9nI11majVb6d1wY00';
+const STARTDATUM = 'januari 2027';
+
+document.getElementById('startdatum').textContent = STARTDATUM;
+document.getElementById('preorder').addEventListener('click', () => {
+  if (VOORINSCHRIJF_URL) { location.href = VOORINSCHRIJF_URL; return; }
+  document.getElementById('modal').hidden = false;
+});
+document.getElementById('modal-close').addEventListener('click', () => { document.getElementById('modal').hidden = true; });
+document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') e.target.hidden = true; });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modal').hidden = true; });
+</script>
+</body>
+</html>
