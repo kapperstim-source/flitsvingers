@@ -11,8 +11,7 @@ const CFG = {
   DAY_GOAL: 12 * 60,
   PROEF_SEC: 180, EXAM_SEC: 300,
   NORM: 100, NORM_DYS: 75, MAX_FOUT: 3,
-  PROEF_FROM: 25,
-  START: '31 januari 2027'
+  PROEF_FROM: 25
 };
 const VOICE_DIR = 'assets/audio/stem/';
 const IMG = p => 'assets/img/flits_' + p + '.webp';
@@ -439,7 +438,7 @@ function renderMap() {
   } else {
     $('#cta-title').textContent = 'Vond je het leuk?';
     $('#cta-text').textContent = 'De volledige cursus: 30 lessen, races, proefexamens en een echt diploma. Eenmalig €49, geen abonnement.';
-    const b = $('#cta-btn'); b.textContent = 'Bekijk de cursus'; b.href = 'index.html#voorinschrijven'; b.onclick = null;
+    const b = $('#cta-btn'); b.textContent = 'Bekijk de cursus'; b.href = 'index.html#prijs'; b.onclick = null;
   }
   cta.hidden = false;
 }
@@ -906,8 +905,8 @@ $('#modal').addEventListener('click', e => { if (e.target.id === 'modal' && !$('
 function lockedModal(id) {
   openModal('<img class="welcomeimg" src="' + IMG('wijs') + '" alt="">' +
     '<h2 style="text-align:center">Les ' + id + ' zit in de volledige cursus</h2>' +
-    '<p style="text-align:center;margin:8px 0 18px">De volledige cursus heeft 30 lessen, races, proefexamens en een diploma. Hij start uiterlijk ' + CFG.START + '. Heb je al een toegangscode? Log dan in als ouder.</p>' +
-    '<div class="row" style="justify-content:center"><button class="btn" id="lk-login">Inloggen als ouder</button><a class="btn yellow" href="index.html#voorinschrijven">Bekijk de cursus</a></div>');
+    '<p style="text-align:center;margin:8px 0 18px">De volledige cursus heeft 30 lessen, races, proefexamens en een diploma. Eenmalig €49, geen abonnement. Heb je al een toegangscode? Log dan in als ouder.</p>' +
+    '<div class="row" style="justify-content:center"><button class="btn" id="lk-login">Inloggen als ouder</button><a class="btn yellow" href="index.html#prijs">Bekijk de cursus</a></div>');
   $('#lk-login').onclick = openParents;
 }
 
@@ -1000,7 +999,7 @@ function openParents() {
     '<label class="fl" for="lg-code">Toegangscode</label><input class="field" id="lg-code" autocomplete="off" placeholder="FLITS-XXXX-XXXX" style="text-transform:uppercase">' +
     '<div class="err" id="lg-err"></div>' +
     '<button class="btn" id="lg-go" style="width:100%">Inloggen</button>' +
-    '<p style="font-size:13px;margin-top:12px">Nog geen code? Die krijg je per mail na je aankoop. De volledige cursus start uiterlijk ' + CFG.START + '.</p>' +
+    '<p style="font-size:13px;margin-top:12px">Nog geen code? Die krijg je per mail na je aankoop. <a href="index.html#prijs">Bekijk de cursus</a>.</p>' +
     (S ? '<h3 style="font-size:17px;margin-top:20px">Zo ziet de wekelijkse mail eruit</h3>' + weekMailHTML(S) : ''));
   const params = new URLSearchParams(location.search);
   if (params.get('email')) $('#lg-mail').value = params.get('email');
@@ -1016,7 +1015,7 @@ async function doLogin() {
   const err = $('#lg-err');
   if (await isTestCode(code)) { DB.testUnlock = true; persist(); closeModal(); toast('Testmodus aan: alle lessen zijn open.'); renderMap(); return; }
   if (!email || !code) { err.textContent = 'Vul je e-mailadres en je toegangscode in.'; return; }
-  if (!CFG.API_URL) { err.textContent = 'Inloggen kan vanaf de start van de cursus (uiterlijk ' + CFG.START + ').'; return; }
+  if (!CFG.API_URL) { err.textContent = 'Inloggen lukt nu even niet. Probeer het later nog eens, of mail ons.'; return; }
   const btn = $('#lg-go'); btn.disabled = true; btn.textContent = 'Even geduld...';
   try {
     const r = await api('login', { email, code });
