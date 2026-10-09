@@ -5,7 +5,7 @@
 /* ================= instellingen ================= */
 const CFG = {
   API_URL: (window.FV_CFG && window.FV_CFG.API_URL) || '',   // Google Apps Script-webapp (assets/js/config.js)
-  SITE_URL: (window.FV_CFG && window.FV_CFG.SITE_URL) || 'https://kapperstim-source.github.io/flitsvingers/',
+  SITE_URL: (window.FV_CFG && window.FV_CFG.SITE_URL) || 'https://flitsvingers.nl/',
   FREE: 3,                           // gratis proeflessen
   TEST_HASH: 'fd100fe306a2c9538c203a2bbc4e30ae40698f4cfa53bdeb0b650ff09bc2cb95',  // sha-256 van de testcode van Tim (vóór de lancering verwijderen)
   DAY_GOAL: 12 * 60,
@@ -955,7 +955,7 @@ function openWelcome(first) {
   $('#nick-go').onclick = go;
   $('#nick').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); go(); } });
   const ha = $('#has-acc'); if (ha) ha.onclick = e => { e.preventDefault(); openParents(); };
-  setTimeout(() => $('#nick').focus(), 50);
+  setTimeout(() => { const n = $('#nick'); if (n) n.focus(); }, 50);
   if (first) play('welkom', true);
 }
 function openPlayers() {
@@ -1027,7 +1027,9 @@ async function doLogin() {
       await api('saveKid', { token: DB.session.token, kid: S });
     }
     if (S) DB.current = S.id;
-    persist(); closeModal(); applySettings(); renderMap(); show('map');
+    persist();
+    if (!S) { openWelcome(true); toast('Ingelogd! Kies nu een bijnaam voor je kind.'); return; }
+    closeModal(); applySettings(); renderMap(); show('map');
     toast('Ingelogd! Alle lessen zijn open.');
   } catch (e) {
     err.textContent = e.message === 'onbekend' ? 'Dit e-mailadres en deze code horen niet bij elkaar.' : 'Inloggen lukte niet. Controleer je gegevens of probeer het later opnieuw.';
