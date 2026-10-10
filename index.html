@@ -204,6 +204,9 @@ footer a:hover{color:var(--blue)}
 footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
 .legal{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
+.phone-only,.phone-note{display:none}
+.phone-note{font-size:14.5px;color:var(--muted);margin-top:12px;font-weight:700}
+@media (pointer:coarse) and (max-width:820px){.phone-only{display:inline-flex}.phone-note{display:block}.desk-only{display:none!important}}
 .sticky{position:fixed;left:12px;right:12px;bottom:12px;z-index:30;display:none}
 .sticky .btn{width:100%;box-shadow:0 10px 30px rgba(21,26,48,.25)}
 @media (max-width:700px){.sticky.on{display:flex}body{padding-bottom:74px}}
@@ -229,7 +232,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
     </div>
     <div class="spacer"></div>
     <a class="login" href="cursus.html?login=1">Inloggen</a>
-    <a class="btn small" href="cursus.html">Gratis proefles</a>
+    <a class="btn small desk-only" href="cursus.html">Gratis proefles</a><a class="btn small phone-only" href="#prijs">Prijs</a>
   </div>
 </nav>
 
@@ -241,9 +244,11 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
       <h1>Leer je kind blind typen met tien vingers.</h1>
       <p class="lead">Een online typecursus die voelt als een spel. Korte lessen van tien minuten, een coach die alles voorleest, en aan het eind een diploma met een openbare eis.</p>
       <div class="row">
-        <a class="btn" href="cursus.html">Start de gratis proefles</a>
+        <a class="btn desk-only" href="cursus.html">Start de gratis proefles</a>
+        <button class="btn phone-only" type="button" data-share>Stuur de link naar je laptop</button>
         <a class="arrow" href="#prijs">Bekijk de prijs <span aria-hidden="true">→</span></a>
       </div>
+      <p class="phone-note">De gratis proefles speel je op een laptop, Chromebook of computer: je kind heeft een echt toetsenbord nodig.</p>
       <div class="meta">
         <span><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Eenmalig €49</span>
         <span><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Geen abonnement</span>
@@ -409,6 +414,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
     <div>
       <details><summary>Vanaf welke leeftijd?</summary><p>Vanaf groep 6, ongeveer 9 jaar. Je kind moet goed kunnen lezen en de handen moeten groot genoeg zijn om de thuisrij te bereiken. De meeste kinderen beginnen in groep 6, 7 of 8.</p></details>
       <details><summary>Welke apparaten werken?</summary><p>Alles met een browser en een echt toetsenbord: laptop, Chromebook, Windows, Mac of een tablet met los toetsenbord. Op een telefoon werkt het niet, omdat je kind daar niet met tien vingers kan typen.</p></details>
+      <details><summary>Werkt het met een Belgisch toetsenbord (AZERTY)?</summary><p>Nog niet. De cursus is gemaakt voor het toetsenbord dat in Nederland op bijna elke laptop en Chromebook zit (QWERTY). Op een Belgisch AZERTY-toetsenbord staan letters op andere plekken. Twijfel je? Kijk of de bovenste letterrij begint met Q W E R T Y, of speel eerst de gratis proefles.</p></details>
       <details><summary>Hoe lang duurt de cursus?</summary><p>30 lessen van ongeveer tien minuten. Wie vijf dagen per week oefent, is in ongeveer 8 tot 12 weken klaar. Je hebt een jaar toegang, dus er is geen haast.</p></details>
       <details><summary>Mijn kind heeft dyslexie of ADHD. Werkt het dan ook?</summary><p>Ja. De dyslexie-modus, het voorlezen en de rustige modus zitten er standaard in. Bij dyslexie geldt een lagere snelheidseis voor het diploma: 75 in plaats van 100 aanslagen per minuut.</p></details>
       <details><summary>Hoe krijg ik toegang na het betalen?</summary><p>Je krijgt een mail met een inlogcode. In de cursus klik je op Ouders en log je in met je e-mailadres en die code. Daarna staan alle lessen open.</p></details>
@@ -425,7 +431,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
       <div class="t">
         <h2>Begin vandaag met les 1</h2>
         <p>Gratis, zonder account en in een paar minuten gespeeld.</p>
-        <a class="btn white" href="cursus.html">Start de gratis proefles</a>
+        <a class="btn white desk-only" href="cursus.html">Start de gratis proefles</a><button class="btn white phone-only" type="button" data-share>Stuur de link naar je laptop</button>
       </div>
       <img src="assets/img/flits_juich.webp" alt="" width="497" height="640" loading="lazy">
     </div>
@@ -450,7 +456,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
       </div>
       <div>
         <h4>Contact</h4>
-        <ul><li><a href="mailto:kapperstim@gmail.com">kapperstim@gmail.com</a></li><li style="color:var(--muted)">Transvaalkade 31<br>1092 JM Amsterdam</li></ul>
+        <ul><li><a href="mailto:kapperstim@gmail.com">kapperstim@gmail.com</a></li><li style="color:var(--muted)">Transvaalkade 31-1<br>1092 JM Amsterdam</li></ul>
       </div>
     </div>
     <div class="legal">
@@ -460,7 +466,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
   </div>
 </footer>
 
-<div class="sticky" id="sticky"><a class="btn" href="cursus.html">Start de gratis proefles</a></div>
+<div class="sticky" id="sticky"><a class="btn desk-only" href="cursus.html">Start de gratis proefles</a><button class="btn phone-only" type="button" data-share>Stuur de link naar je laptop</button></div>
 
 <div class="modal" id="modal" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modal-h">
   <img src="assets/img/flits_wijs.webp" alt="">
@@ -481,6 +487,14 @@ document.getElementById('koop').addEventListener('click', () => {
 document.getElementById('modal-close').addEventListener('click', () => { modal.hidden = true; });
 modal.addEventListener('click', e => { if (e.target === modal) modal.hidden = true; });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.hidden = true; });
+
+/* op een telefoon: link doorsturen naar de laptop */
+document.querySelectorAll('[data-share]').forEach(b => b.addEventListener('click', async () => {
+  const url = 'https://flitsvingers.nl/cursus.html';
+  const text = 'Gratis proefles blind typen met Flitsvingers. Open deze link op de laptop of Chromebook:';
+  if (navigator.share) { try { await navigator.share({ title: 'Flitsvingers: gratis proefles', text, url }); } catch (e) {} return; }
+  location.href = 'mailto:?subject=' + encodeURIComponent('Flitsvingers: gratis proefles') + '&body=' + encodeURIComponent(text + ' ' + url);
+}));
 
 /* vaste knop op mobiel, pas na de bovenkant */
 const sticky = document.getElementById('sticky');
@@ -534,6 +548,7 @@ window.addEventListener('scroll', onScroll, { passive: true });
 {"@type":"Question","name":"Vanaf welke leeftijd?","acceptedAnswer":{"@type":"Answer","text":"Vanaf groep 6, ongeveer 9 jaar. Je kind moet goed kunnen lezen."}},
 {"@type":"Question","name":"Welke apparaten werken?","acceptedAnswer":{"@type":"Answer","text":"Alles met een browser en een echt toetsenbord: laptop, Chromebook, Windows, Mac of tablet met los toetsenbord."}},
 {"@type":"Question","name":"Hoe lang duurt de cursus?","acceptedAnswer":{"@type":"Answer","text":"30 lessen van ongeveer tien minuten, in ongeveer 8 tot 12 weken."}},
+{"@type":"Question","name":"Werkt het met een Belgisch toetsenbord (AZERTY)?","acceptedAnswer":{"@type":"Answer","text":"Nog niet. De cursus is gemaakt voor het Nederlandse QWERTY-toetsenbord."}},
 {"@type":"Question","name":"Werkt het bij dyslexie of ADHD?","acceptedAnswer":{"@type":"Answer","text":"Ja. Dyslexie-modus, voorlezen en een rustige modus zitten er standaard in. Bij dyslexie geldt een eis van 75 aanslagen per minuut."}},
 {"@type":"Question","name":"Kan ik de cursus eerst proberen?","acceptedAnswer":{"@type":"Answer","text":"Ja. Les 1 tot en met 3 zijn gratis en werken zonder account."}}
 ]}
