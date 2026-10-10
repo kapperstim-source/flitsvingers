@@ -939,7 +939,7 @@ function openWelcome(first) {
     '<h2 style="text-align:center">' + (first ? 'Hoi! Ik ben Flits.' : 'Nieuwe speler') + '</h2>' +
     '<p style="margin:6px 0 16px;text-align:center">' + (first ? 'Samen leren we typen met tien vingers, zonder te kijken. ' : '') + 'Hoe heet je? Je voornaam of een bijnaam is prima.</p>' +
     '<input class="field" id="nick" maxlength="14" placeholder="Bijvoorbeeld: Sam" autocomplete="off">' +
-    '<div class="muted" style="font-size:14px;margin-top:14px;font-weight:800">Kies je kleur</div>' +
+    '<div class="muted" style="font-size:14px;margin-top:14px;font-weight:800">Kies je kleur. Zo herken je jezelf in de race tegen Flits.</div>' +
     '<div class="swatches">' + COLORS.map((c, i) => '<button type="button" data-c="' + c + '" style="background:' + c + '"' + (i === 0 ? ' class="on"' : '') + ' aria-label="kleur"></button>').join('') + '</div>' +
     (first ? '<p style="font-size:13px;margin:12px 0 0">Je hebt een toetsenbord nodig: laptop, Chromebook, computer of tablet met los toetsenbord.</p>' : '') +
     '<button class="btn" id="nick-go" style="width:100%;margin-top:16px">' + (first ? 'Start' : 'Maak speler') + '</button>' +
