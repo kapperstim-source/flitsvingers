@@ -937,8 +937,8 @@ const COLORS = ['#3a5bff', '#ff6fa8', '#16b277', '#ff9f43', '#9b6bff', '#18203a'
 function openWelcome(first) {
   openModal('<img class="welcomeimg" src="' + IMG('zwaai') + '" alt="Flits zwaait">' +
     '<h2 style="text-align:center">' + (first ? 'Hoi! Ik ben Flits.' : 'Nieuwe speler') + '</h2>' +
-    '<p style="margin:6px 0 16px;text-align:center">' + (first ? 'Samen leren we typen met tien vingers, zonder te kijken. ' : '') + 'Hoe wil je heten? Gebruik een bijnaam, niet je echte naam.</p>' +
-    '<input class="field" id="nick" maxlength="14" placeholder="Bijvoorbeeld: Raket" autocomplete="off">' +
+    '<p style="margin:6px 0 16px;text-align:center">' + (first ? 'Samen leren we typen met tien vingers, zonder te kijken. ' : '') + 'Hoe heet je? Je voornaam of een bijnaam is prima.</p>' +
+    '<input class="field" id="nick" maxlength="14" placeholder="Bijvoorbeeld: Sam" autocomplete="off">' +
     '<div class="muted" style="font-size:14px;margin-top:14px;font-weight:800">Kies je kleur</div>' +
     '<div class="swatches">' + COLORS.map((c, i) => '<button type="button" data-c="' + c + '" style="background:' + c + '"' + (i === 0 ? ' class="on"' : '') + ' aria-label="kleur"></button>').join('') + '</div>' +
     (first ? '<p style="font-size:13px;margin:12px 0 0">Je hebt een toetsenbord nodig: laptop, Chromebook, computer of tablet met los toetsenbord.</p>' : '') +
@@ -1028,7 +1028,7 @@ async function doLogin() {
     }
     if (S) DB.current = S.id;
     persist();
-    if (!S) { openWelcome(true); toast('Ingelogd! Kies nu een bijnaam voor je kind.'); return; }
+    if (!S) { openWelcome(true); toast('Ingelogd! Vul nu de naam van je kind in.'); return; }
     closeModal(); applySettings(); renderMap(); show('map');
     toast('Ingelogd! Alle lessen zijn open.');
   } catch (e) {
