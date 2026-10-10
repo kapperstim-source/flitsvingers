@@ -11,7 +11,7 @@ const CFG = {
   DAY_GOAL: 12 * 60,
   PROEF_SEC: 180, EXAM_SEC: 300,
   NORM: 100, NORM_DYS: 75, MAX_FOUT: 3,
-  PROEF_FROM: 25
+  PROEF_FROM: 24 /* proefexamen open na les 24: les 25 zegt "vanaf nu mag je het proefexamen proberen" */
 };
 const VOICE_DIR = 'assets/audio/stem/';
 const IMG = p => 'assets/img/flits_' + p + '.webp';
@@ -438,7 +438,7 @@ function renderMap() {
     b.onclick = e => { e.preventDefault(); S.diploma ? openDiploma() : openBadges(); };
   } else {
     $('#cta-title').textContent = 'Vond je het leuk?';
-    $('#cta-text').textContent = 'De volledige cursus: 30 lessen, races, proefexamens en een echt diploma. Eenmalig €49, geen abonnement.';
+    $('#cta-text').textContent = 'De volledige cursus: 30 lessen, races, proefexamens en een diploma. Eenmalig €49, geen abonnement.';
     const b = $('#cta-btn'); b.textContent = 'Bekijk de cursus'; b.href = 'index.html#prijs'; b.onclick = null;
   }
   cta.hidden = false;
@@ -628,7 +628,8 @@ function updateHint(big) {
   setNextKeys($('#kbd-ex'), keys);
   setFingers($('#hands-ex'), fingers);
 }
-const accOf = (len, errors) => len ? Math.round(len / (len + errors) * 100) : 100;
+/* 100% alleen zonder fouten: met één fout is het hooguit 99% (anders rondt 299/300 af naar 100) */
+const accOf = (len, errors) => !errors ? 100 : Math.min(99, Math.round(len / (len + errors) * 100));
 function elapsedMin() { return R.t0 ? (performance.now() - R.t0) / 60000 : 0; }
 function updateStats() {
   $('#st-acc').textContent = accOf(R.pos, R.errors) + '%';
@@ -723,17 +724,27 @@ function finishExercise() {
   if (won) award('race');
   save();
   const last = R.drill || R.idx >= R.lesson.oefeningen.length - 1;
-  let msg, pose, clip;
-  if (ex.kind === 'race') { msg = won ? 'Je was sneller dan Flits!' : 'Flits was net iets sneller.'; pose = won ? 'juich' : 'duim'; clip = won ? 'race_win' : 'race_lose'; }
-  else if (ex.kind === 'speed') { msg = apm + ' aanslagen per minuut!'; pose = 'juich'; clip = acc >= 95 ? 'top_2' : 'goed'; }
+  /* tekst en stem moeten kloppen met wat het kind deed (stemteksten: top_1 "Superstrak!", top_2 "Wauw, bijna foutloos!",
+     top_3 "Dit gaat heel goed!", goed "Goed bezig! Nauwkeurig is belangrijker dan snel.", rustig "... De volgende oefening is wat korter.",
+     race_lose "Ik was net iets sneller. Volgende keer pak je me!") */
+  const perfect = !R.errors && correct > 0;
+  let msg, pose, clip, sub = '';
+  if (ex.kind === 'race') {
+    const close = elapsedMin() <= R.text.length / ex.tempo * 1.15;   // hooguit 15% langzamer dan Flits = "net iets"
+    if (won) { msg = 'Je was sneller dan Flits!'; pose = 'juich'; clip = 'race_win'; }
+    else if (close) { msg = 'Flits was net iets sneller.'; sub = 'Volgende keer pak je hem!'; pose = 'duim'; clip = 'race_lose'; }
+    else { msg = 'Flits was deze keer sneller.'; sub = 'Goed bezig! Nauwkeurig is belangrijker dan snel.'; pose = 'duim'; clip = 'goed'; }
+  }
+  else if (ex.kind === 'speed' && !S.settings.dys) { msg = apm + ' aanslagen per minuut!'; pose = 'juich'; clip = perfect ? 'top_1' : acc >= 95 ? 'top_2' : 'goed'; }
+  else if (perfect) { const n = Math.random() < .5 ? 1 : 3; msg = n === 1 ? 'Superstrak, helemaal foutloos!' : 'Foutloos! Dit gaat heel goed!'; pose = 'juich'; clip = 'top_' + n; }
   else if (acc >= 95) { const n = 1 + Math.floor(Math.random() * 3); msg = ['Superstrak!', 'Wauw, bijna foutloos!', 'Dit gaat heel goed!'][n - 1]; pose = 'juich'; clip = 'top_' + n; }
-  else if (acc >= 85) { msg = 'Goed bezig! Nauwkeurig is belangrijker dan snel.'; pose = 'duim'; clip = 'goed'; }
-  else { msg = 'Rustig aan, dat is helemaal oké.' + (last ? '' : ' De volgende oefening is wat korter.'); pose = 'rustig'; clip = 'rustig'; if (!last) R.shortenNext = true; }
+  else if (acc >= 85 || last) { msg = 'Goed bezig! Nauwkeurig is belangrijker dan snel.'; pose = acc >= 85 ? 'duim' : 'rustig'; clip = 'goed'; }
+  else { msg = 'Rustig aan, dat is helemaal oké. De volgende oefening is wat korter.'; pose = 'rustig'; clip = 'rustig'; R.shortenNext = true; }
   const p = $('#ex-panel');
   p.innerHTML = '<img src="' + IMG(pose) + '" alt="">' +
     '<div>' + starsHTML(stars) + '<h3>' + (R.drill ? 'Herhaal-rondje klaar!' : H(msg)) + '</h3>' +
     '<div class="muted" style="font-weight:700">' + acc + '% nauwkeurig' + (S.settings.dys ? '' : ' · ' + apm + ' aanslagen per minuut') + '</div>' +
-    (ex.kind === 'race' && !won ? '<div style="font-weight:700;margin-top:4px">Volgende keer pak je hem!</div>' : '') +
+    (sub ? '<div style="font-weight:700;margin-top:4px">' + H(sub) + '</div>' : '') +
     '<button class="btn" id="ex-next">' + (last ? 'Bekijk resultaat' : 'Volgende oefening') + ' <span class="kbdhint">Enter</span></button></div>';
   p.classList.add('on');
   $('#ex-next').onclick = nextStep;
@@ -809,6 +820,7 @@ function showResult(res) {
 function showExamResult({ apm, fout, acc, kind }) {
   const norm = R.dys ? CFG.NORM_DYS : CFG.NORM;
   const pass = apm >= norm && fout <= CFG.MAX_FOUT;
+  const close = !pass && apm >= norm * 0.9 && fout <= CFG.MAX_FOUT + 1;   // "bijna" alleen als het ook echt bijna was
   const L = R.lesson;
   if (kind === 'proef') {
     S.proef.push({ apm, fout, date: today(), pass });
@@ -827,8 +839,8 @@ function showExamResult({ apm, fout, acc, kind }) {
   if (fout > CFG.MAX_FOUT) tips.push('Je had ' + String(fout).replace('.', ',') + '% fouten. Typ iets rustiger: nauwkeurig gaat voor snel.');
   $('#result').innerHTML =
     '<img src="' + IMG(pass ? (kind === 'examen' ? 'diploma' : 'juich') : 'rustig') + '" alt="">' +
-    '<div><h1>' + (kind === 'examen' ? (pass ? 'Geslaagd!' : 'Bijna!') : (pass ? 'Proefexamen gehaald!' : 'Proefexamen klaar')) + '</h1>' +
-    '<div class="verdict ' + (pass ? 'ok' : 'no') + '">' + (pass ? ICON.check + 'Je haalt de eis' : 'Je haalt de eis nog net niet') + '</div>' +
+    '<div><h1>' + (kind === 'examen' ? (pass ? 'Geslaagd!' : close ? 'Bijna!' : 'Nog even oefenen') : (pass ? 'Proefexamen gehaald!' : 'Proefexamen klaar')) + '</h1>' +
+    '<div class="verdict ' + (pass ? 'ok' : 'no') + '">' + (pass ? ICON.check + 'Je haalt de eis' : close ? 'Je haalt de eis nog net niet' : 'Je haalt de eis nog niet') + '</div>' +
     '<div class="grid4" style="grid-template-columns:repeat(3,1fr)">' +
       '<div class="stat"><b>' + apm + '</b><span>aanslagen per minuut (eis ' + norm + ')</span></div>' +
       '<div class="stat"><b>' + String(fout).replace('.', ',') + '%</b><span>fouten (max 3%)</span></div>' +
@@ -842,7 +854,10 @@ function showExamResult({ apm, fout, acc, kind }) {
     '</div></div>';
   show('result');
   if (pass) { sfx('win'); confetti(); }
-  play(pass ? (kind === 'examen' ? 'geslaagd' : 'top_2') : 'bijna');
+  /* stem: "bijna" adviseert races en snelheidsrondes, dus alleen bij net te langzaam; bij te veel fouten "nauwkeurig is belangrijker" */
+  const clip = pass ? (kind === 'examen' ? 'geslaagd' : fout === 0 ? 'top_1' : fout <= 1 ? 'top_2' : 'top_3')
+    : fout > CFG.MAX_FOUT ? 'goed' : close ? 'bijna' : null;
+  if (clip) play(clip);
   const g = $('#res-diploma'); if (g) g.onclick = () => issueDiploma({ apm, fout, name: R.dipName || S.nick, dys: R.dys });
   const e = $('#res-exam'); if (e) e.onclick = () => openLesson(30);
   $('#res-again').onclick = () => openLesson(L.id);
@@ -979,7 +994,7 @@ function weekMailHTML(p) {
   return '<div class="mail"><h4>Week-update van ' + H(p.nick) + '</h4><div class="muted" style="font-weight:700">Eén keer per week, nooit vaker.</div>' +
     '<ul><li>Deze week ' + wk + ' minuten geoefend</li><li>' + done.length + ' van de 30 lessen gehaald</li>' +
     '<li>Gemiddeld ' + (avg != null ? avg + '%' : '–') + ' nauwkeurig' + (p.best && p.best.apm ? ', record ' + p.best.apm + ' aanslagen per minuut' : '') + '</li>' +
-    (hard.length ? '<li>Lastigste toetsen: ' + H(hard.join(', ')) + ' (komen vanzelf vaker terug)</li>' : '') +
+    (hard.length ? '<li>Lastigste toetsen: ' + H(hard.join(', ')) + '. Na een les met fouten kan je kind die extra oefenen met het herhaal-rondje.</li>' : '') +
     '</ul>Tip: een compliment werkt beter dan een herinnering. 10 tot 15 minuten per dag is genoeg.</div>';
 }
 function openParents() {
@@ -1074,7 +1089,7 @@ document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', 
 /* ================= start ================= */
 async function boot() {
   try {
-    const [les, tx] = await Promise.all([fetch('assets/data/lessen.json').then(r => r.json()), fetch('assets/data/teksten.json').then(r => r.json())]);
+    const [les, tx] = await Promise.all([fetch('assets/data/lessen.json?v=3').then(r => r.json()), fetch('assets/data/teksten.json?v=3').then(r => r.json())]);
     LES = les.lessen; ZONES = les.zones;
     WORDS = [...new Set(tx.woorden.split(/\s+/).filter(Boolean))];
     NAMES = tx.namen.split(/\s+/).filter(Boolean);

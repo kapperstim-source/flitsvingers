@@ -310,7 +310,7 @@
     "n",
     "m"
    ],
-   "intro": "Les negen: we gaan voor het eerst omlaag, naar de onderste rij. De N en de M doe je allebei met je rechter wijsvinger. Vanaf de J schuif je een stapje naar beneden. De N een beetje naar links, de M recht eronder.",
+   "intro": "Les negen: we gaan voor het eerst omlaag, naar de onderste rij. De N en de M doe je allebei met je rechter wijsvinger. Vanaf de J schuif je een stapje naar beneden: voor de N schuin naar links, voor de M schuin naar rechts.",
    "oefeningen": [
     {
      "soort": "drill",
@@ -345,7 +345,7 @@
     "w",
     "p"
    ],
-   "intro": "Les tien: de W en de P. De W doe je met je linker ringvinger, boven de S. De P doe je met je rechter pink, helemaal rechts op de bovenste rij. Pinken zijn klein, maar ze kunnen het best!",
+   "intro": "Les tien: de W en de P. De W doe je met je linker ringvinger, boven de S. De P doe je met je rechter pink, rechts naast de O. Pinken zijn klein, maar ze kunnen het best!",
    "oefeningen": [
     {
      "soort": "drill",
@@ -958,9 +958,8 @@
    "oefeningen": [
     {
      "soort": "zinnen",
-     "label": "Blind: zinnen",
-     "aantal": 3,
-     "blind": true
+     "label": "Opwarmen: zinnen",
+     "aantal": 3
     },
     {
      "soort": "tekst",
