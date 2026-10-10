@@ -15,7 +15,7 @@
 <meta property="og:locale" content="nl_NL">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#ffffff">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233a5bff'/%3E%3Cpath d='M36 8 16 36h14l-4 20 22-30H34z' fill='%23ffc93c'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2048%2048'%3E%3Crect%20x='3'%20y='7'%20width='42'%20height='39'%20rx='11'%20fill='%23070b1f'/%3E%3Crect%20x='3'%20y='3'%20width='42'%20height='38'%20rx='11'%20fill='%231f2648'/%3E%3Cpath%20d='M19.3%2012.6h10.6v3.2h-7.1v3.5h6.3v3.1h-6.3v5.4h-3.5z'%20fill='%23fff'/%3E%3Crect%20x='18'%20y='31.6'%20width='12'%20height='3.2'%20rx='1.6'%20fill='%23ffc93c'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <style>
 :root{
@@ -42,9 +42,8 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 /* nav */
 nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
 nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
-.brand{display:flex;align-items:center;gap:9px;font-family:var(--brand);font-weight:700;font-size:23px;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
-.logo{width:32px;height:32px;border-radius:9px;background:var(--blue);display:grid;place-items:center;color:var(--yellow)}
-.logo svg{width:18px;height:18px;fill:currentColor}
+.brand{display:flex;align-items:center;gap:9px;font-family:'Lexend',system-ui,sans-serif;font-weight:600;font-size:22px;letter-spacing:-.035em;color:#151a30;text-decoration:none;line-height:1}
+.logo{width:32px;height:32px;flex:none;display:block}
 .links{display:flex;gap:24px;margin-left:12px}
 .links a{color:var(--text);text-decoration:none;font-weight:700;font-size:15px}
 .links a:hover{color:var(--blue)}
@@ -220,7 +219,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="#top"><span class="logo"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Flitsvingers</a>
+    <a class="brand" href="#top"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="7" width="42" height="39" rx="11" fill="#070b1f"/><rect x="3" y="3" width="42" height="38" rx="11" fill="#1f2648"/><path d="M19.3 12.6h10.6v3.2h-7.1v3.5h6.3v3.1h-6.3v5.4h-3.5z" fill="#fff"/><rect x="18" y="31.6" width="12" height="3.2" rx="1.6" fill="#ffc93c"/></svg>flitsvingers</a>
     <div class="links">
       <a href="#hoe">Hoe het werkt</a>
       <a href="#ouders">Voor ouders</a>
@@ -438,7 +437,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
   <div class="wrap">
     <div class="fgrid">
       <div>
-        <a class="brand" href="#top"><span class="logo"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Flitsvingers</a>
+        <a class="brand" href="#top"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="7" width="42" height="39" rx="11" fill="#070b1f"/><rect x="3" y="3" width="42" height="38" rx="11" fill="#1f2648"/><path d="M19.3 12.6h10.6v3.2h-7.1v3.5h6.3v3.1h-6.3v5.4h-3.5z" fill="#fff"/><rect x="18" y="31.6" width="12" height="3.2" rx="1.6" fill="#ffc93c"/></svg>flitsvingers</a>
         <p class="about">Online typecursus voor kinderen uit groep 6, 7 en 8.</p>
       </div>
       <div>

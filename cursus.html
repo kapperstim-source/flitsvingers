@@ -6,7 +6,7 @@
 <title>Flitsvingers – leer blind typen met Flits</title>
 <meta name="description" content="De typecursus van Flitsvingers: leer blind typen met tien vingers, met Flits als coach.">
 <meta name="robots" content="noindex">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%233a5bff'/%3E%3Cpath d='M36 8 16 36h14l-4 20 22-30H34z' fill='%23ffc93c'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2048%2048'%3E%3Crect%20x='3'%20y='7'%20width='42'%20height='39'%20rx='11'%20fill='%23070b1f'/%3E%3Crect%20x='3'%20y='3'%20width='42'%20height='38'%20rx='11'%20fill='%231f2648'/%3E%3Cpath%20d='M19.3%2012.6h10.6v3.2h-7.1v3.5h6.3v3.1h-6.3v5.4h-3.5z'%20fill='%23fff'/%3E%3Crect%20x='18'%20y='31.6'%20width='12'%20height='3.2'%20rx='1.6'%20fill='%23ffc93c'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="preload" href="assets/data/lessen.json" as="fetch" crossorigin>
 <link rel="preload" href="assets/data/teksten.json" as="fetch" crossorigin>
@@ -39,9 +39,8 @@ p{line-height:1.6;color:var(--muted);margin:0}
 /* top bar */
 .top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:10px;height:64px}
-.brand{display:flex;align-items:center;gap:10px;font-family:var(--head);font-weight:700;font-size:23px;color:var(--ink);text-decoration:none}
-.logo{width:36px;height:36px;border-radius:11px;background:var(--blue);display:grid;place-items:center;color:var(--yellow);box-shadow:0 3px 0 var(--blue-d)}
-.logo svg{width:20px;height:20px}
+.brand{display:flex;align-items:center;gap:9px;font-family:'Lexend',system-ui,sans-serif;font-weight:600;font-size:22px;letter-spacing:-.035em;color:#151a30;text-decoration:none;line-height:1}
+.logo{width:32px;height:32px;flex:none;display:block}
 .spacer{flex:1}
 .chip{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:99px;background:var(--card);border:1px solid var(--line);font-size:14px;font-weight:800;white-space:nowrap}
 .chip .i{width:16px;height:16px}
@@ -308,8 +307,8 @@ body.calm *{animation:none!important;transition:none!important}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="index.html" title="Naar de website">
-      <span class="logo"><svg viewBox="0 0 24 24" class="i fill"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
-      <span class="bt">Flitsvingers</span>
+      <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="7" width="42" height="39" rx="11" fill="#070b1f"/><rect x="3" y="3" width="42" height="38" rx="11" fill="#1f2648"/><path d="M19.3 12.6h10.6v3.2h-7.1v3.5h6.3v3.1h-6.3v5.4h-3.5z" fill="#fff"/><rect x="18" y="31.6" width="12" height="3.2" rx="1.6" fill="#ffc93c"/></svg>
+      <span class="bt">flitsvingers</span>
     </a>
     <div class="spacer"></div>
     <div class="chip streak hide-sm" id="chip-streak" title="Dagen op rij geoefend"></div>
