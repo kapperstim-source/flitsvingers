@@ -999,7 +999,7 @@ function openParents() {
     '<label class="fl" for="lg-code">Toegangscode</label><input class="field" id="lg-code" autocomplete="off" placeholder="FLITS-XXXX-XXXX" style="text-transform:uppercase">' +
     '<div class="err" id="lg-err"></div>' +
     '<button class="btn" id="lg-go" style="width:100%">Inloggen</button>' +
-    '<p style="font-size:13px;margin-top:12px">Nog geen code? Die krijg je per mail na je aankoop. <a href="index.html#prijs">Bekijk de cursus</a>.</p>' +
+    '<p style="font-size:13px;margin-top:12px">Nog geen code? Die krijg je per mail na je aankoop. <a href="index.html#prijs">Bekijk de cursus</a>. Code kwijt? Mail naar <a href="mailto:info@flitsvingers.nl">info@flitsvingers.nl</a>, dan sturen we hem opnieuw.</p>' +
     (S ? '<h3 style="font-size:17px;margin-top:20px">Zo ziet de wekelijkse mail eruit</h3>' + weekMailHTML(S) : ''));
   const params = new URLSearchParams(location.search);
   if (params.get('email')) $('#lg-mail').value = params.get('email');
