@@ -56,7 +56,8 @@ const $ = s => document.querySelector(s);
 const mk = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
 const esc = s => (window.CSS && CSS.escape) ? CSS.escape(s) : s.replace(/([\\'";\[\]`.,\/!?:-])/g, '\\$1');
 async function sha256(t) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
-const isTestCode = async c => !!c && (await sha256(c)) === CFG.TEST_HASH;
+const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);   // testingang werkt alleen op de eigen testomgeving
+const isTestCode = async c => LOCAL && !!c && (await sha256(c)) === CFG.TEST_HASH;
 const H = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const rnd = a => a[Math.floor(Math.random() * a.length)];
@@ -212,10 +213,10 @@ let LES = [], ZONES = [], WORDS = [], NAMES = [], SENT = [], TEXTS = {}, EXAMS =
 const lessonById = id => LES.find(l => l.id === id);
 const isDone = id => !!(S.lessons[id] && S.lessons[id].done);
 function firstOpen() { for (const l of LES) if (!isDone(l.id)) return l.id; return null; }
-const unlocked = () => !!(DB.session && DB.session.token) || !!DB.testUnlock;
+const unlocked = () => !!(DB.session && DB.session.token) || (LOCAL && !!DB.testUnlock);
 const paidOk = id => id <= CFG.FREE || unlocked();
 function reachable(id) {
-  if (DB.testUnlock) return true;
+  if (LOCAL && DB.testUnlock) return true;
   if (isDone(id)) return true;
   const fo = firstOpen();
   if (id === 29) return isDone(CFG.PROEF_FROM) || isDone(28);
@@ -1083,7 +1084,7 @@ async function boot() {
     return;
   }
   const qp = new URLSearchParams(location.search);
-  if (qp.get('test') && await isTestCode(qp.get('test'))) {           // testingang (samen met TEST_CODE verwijderen bij lancering)
+  if (qp.get('test') && await isTestCode(qp.get('test'))) {           // testingang, alleen lokaal (zie LOCAL)
     DB.testUnlock = true;
     if (qp.get('fast')) { CFG.PROEF_SEC = 12; CFG.EXAM_SEC = 15; }
     if (!Object.keys(DB.profiles).length) { const p = fixProfile(newProfile(qp.get('nick') || 'Test')); DB.profiles[p.id] = p; DB.current = p.id; }
