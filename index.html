@@ -711,7 +711,8 @@ window.addEventListener('scroll', onScroll, { passive: true });
  ]
 }
 </script>
-<script>window.goatcounter = { path: function () { return location.pathname } };</script>
-<script data-goatcounter="https://flitsvingers.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>window.goatcounter = { path: function () { return location.pathname }, endpoint: 'https://flitsvingers.goatcounter.com/count' };
+// count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
+if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
 </body>
 </html>
