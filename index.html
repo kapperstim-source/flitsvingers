@@ -210,6 +210,20 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
 .phone-only,.phone-note{display:none}
 .phone-note{font-size:14.5px;color:var(--muted);margin-top:12px;font-weight:700}
 @media (pointer:coarse) and (max-width:820px){.phone-only{display:inline-flex}.phone-note{display:block}.desk-only{display:none!important}}
+.mailmij{display:none;margin-top:18px;max-width:460px}
+.mailmij label{display:block;font-weight:800;color:var(--ink);margin-bottom:8px}
+.mm-rij{display:flex;gap:8px}
+.mm-rij input{flex:1;min-width:0;font:inherit;font-size:16px;padding:12px 16px;border:2px solid var(--line2);border-radius:999px;background:#fff;color:var(--ink)}
+.mm-rij input:focus{outline:none;border-color:var(--blue)}
+.mm-rij .btn{flex:none}
+.mm-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.mm-klein{font-size:13.5px;color:var(--muted);margin:8px 0 0}
+.mm-deel{background:none;border:0;padding:0;font:inherit;color:var(--blue);text-decoration:underline;cursor:pointer}
+.mm-status{font-size:14.5px;font-weight:700;margin:8px 0 0}
+.mm-status:empty{display:none}
+.mm-status.ok{color:var(--mint)}
+.mm-status.fout{color:#c2410c}
+@media (pointer:coarse) and (max-width:820px){.mailmij{display:block}}
 .sticky{position:fixed;left:12px;right:12px;bottom:12px;z-index:30;display:none}
 .sticky .btn{width:100%;box-shadow:0 10px 30px rgba(21,26,48,.25)}
 @media (max-width:700px){.sticky.on{display:flex}body{padding-bottom:74px}}
@@ -248,9 +262,15 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
       <p class="lead">Een online typecursus die voelt als een spel. Korte lessen van tien minuten, een coach die alles voorleest, en aan het eind een diploma met een openbare eis.</p>
       <div class="row">
         <a class="btn desk-only" href="cursus.html">Start de gratis proefles</a>
-        <button class="btn phone-only" type="button" data-share>Stuur de link naar je laptop</button>
         <a class="arrow" href="#prijs">Bekijk de prijs <span aria-hidden="true">→</span></a>
       </div>
+      <form class="mailmij" id="mailmij" novalidate>
+        <label for="mm-mail">Mail mij de link voor op de laptop</label>
+        <div class="mm-rij"><input type="email" id="mm-mail" name="email" autocomplete="email" inputmode="email" placeholder="jouw@email.nl" required><button class="btn" type="submit">Mail mij</button></div>
+        <input type="text" id="mm-hp" name="website" class="mm-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="mm-klein">Je krijgt één mail met de link, verder niets. <button type="button" class="mm-deel" data-share>Of deel de link zelf</button></p>
+        <p class="mm-status" id="mm-status" role="status" aria-live="polite"></p>
+      </form>
       <p class="phone-note">De gratis proefles speel je op een laptop, Chromebook of computer: je kind heeft een echt toetsenbord nodig.</p>
       <div class="meta">
         <span><svg viewBox="0 0 24 24" class="i"><polyline points="20 6 9 17 4 12"/></svg>Eenmalig €49</span>
@@ -435,7 +455,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
       <div class="t">
         <h2>Begin vandaag met les 1</h2>
         <p>Gratis, zonder account en in een paar minuten gespeeld.</p>
-        <a class="btn white desk-only" href="cursus.html">Start de gratis proefles</a><button class="btn white phone-only" type="button" data-share>Stuur de link naar je laptop</button>
+        <a class="btn white desk-only" href="cursus.html">Start de gratis proefles</a><button class="btn white phone-only" type="button" data-mailmij>Mail mij de link voor op de laptop</button>
       </div>
       <img src="assets/img/flits_juich.webp" alt="" width="497" height="640" loading="lazy">
     </div>
@@ -474,7 +494,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
   </div>
 </footer>
 
-<div class="sticky" id="sticky"><a class="btn desk-only" href="cursus.html">Start de gratis proefles</a><button class="btn phone-only" type="button" data-share>Stuur de link naar je laptop</button></div>
+<div class="sticky" id="sticky"><a class="btn desk-only" href="cursus.html">Start de gratis proefles</a><button class="btn phone-only" type="button" data-mailmij>Mail mij de link voor op de laptop</button></div>
 
 <div class="modal" id="modal" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modal-h">
   <img src="assets/img/flits_wijs.webp" alt="">
@@ -505,6 +525,32 @@ document.querySelectorAll('[data-share]').forEach(b => b.addEventListener('click
   if (navigator.share) { try { await navigator.share({ title: 'Flitsvingers: gratis proefles', text, url }); } catch (e) {} return; }
   location.href = 'mailto:?subject=' + encodeURIComponent('Flitsvingers: gratis proefles') + '&body=' + encodeURIComponent(text + ' ' + url);
 }));
+
+/* op een telefoon: "Mail mij de link" (de server stuurt één mail; het adres wordt niet opgeslagen) */
+const API_URL = 'https://script.google.com/macros/s/AKfycbycENGI2KDXQ3h3RY18VuHf2OJqUb3tOQLntwotXfBFQfLvYowDPKpwLaDtOiopKdM/exec';
+const mmForm = document.getElementById('mailmij'), mmMail = document.getElementById('mm-mail'), mmStatus = document.getElementById('mm-status');
+const mmMeld = (tekst, soort) => { mmStatus.textContent = tekst; mmStatus.className = 'mm-status ' + (soort || ''); };
+document.querySelectorAll('[data-mailmij]').forEach(b => b.addEventListener('click', () => {
+  mmForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => mmMail.focus(), 450);
+}));
+mmForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = mmMail.value.trim(), knop = mmForm.querySelector('button[type=submit]');
+  if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) { mmMeld('Vul een geldig e-mailadres in.', 'fout'); return; }
+  knop.disabled = true; mmMeld('Even geduld…');
+  try {
+    const r = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'linkMail', email, hp: document.getElementById('mm-hp').value }) }).then(r => r.json());
+    if (r.ok) {
+      mmMeld('Verstuurd! Kijk in je mail (soms staat hij bij Reclame of Spam).', 'ok'); mmMail.value = '';
+      try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'link-gemaild', title: 'Link gemaild', event: true }); } catch (err) {}
+    } else {
+      mmMeld(r.error === 'druk' ? 'Het is even druk. Probeer het later nog eens, of deel de link zelf.' : 'Dat lukte niet. Controleer je e-mailadres, of deel de link zelf.', 'fout');
+    }
+  } catch (err) { mmMeld('Geen verbinding. Probeer het nog eens, of deel de link zelf.', 'fout'); }
+  knop.disabled = false;
+});
 
 /* vaste knop op mobiel, pas na de bovenkant */
 const sticky = document.getElementById('sticky');
