@@ -1,6 +1,6 @@
 /* Flitsvingers – tips voor ouders (zelfde huisstijl als de homepage) */
 :root{
-  --bg:#fff2c4;--soft:#fffaf0;--line:#efdb9e;--line2:#e3c87a;
+  --bg:#fff7ec;--soft:#fffdf8;--line:#f0e2cc;--line2:#e6d3b3;
   --ink:#151a30;--text:#3d4459;--muted:#6a7086;
   --blue:#3a5bff;--blue-d:#2a45d6;--blue-l:#eef1ff;--yellow:#ffc93c;--mint:#12a26b;
   --head:'Fredoka','Lexend',system-ui,sans-serif;--ui:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
@@ -8,17 +8,17 @@
   --f-pink:#ff6fa8;--f-ring:#ff9f43;--f-middle:#24bf80;--f-index:#3ba7ff;--f-thumb:#a6afc7;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:var(--ui);font-weight:500;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg) url(../img/achtergrond-toetsen.svg) repeat 0 0/260px 260px;color:var(--text);font-family:var(--ui);font-weight:500;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
 a{color:var(--blue)}
 img{display:block;max-width:100%;height:auto}
 .wrap{max-width:1160px;margin:0 auto;padding:0 16px}
 @media (min-width:700px){.wrap{padding:0 28px}}
 h1,h2,h3{font-family:var(--head);font-weight:600;color:var(--ink);letter-spacing:0;line-height:1.2}
 
-nav{position:sticky;top:0;z-index:20;background:rgba(255,242,196,.94);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+nav{position:sticky;top:0;z-index:20;background:rgba(255,247,236,.94);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
 nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
-.brand{display:flex;align-items:center;gap:9px;font-family:'Lexend',system-ui,sans-serif;font-weight:600;font-size:22px;letter-spacing:-.035em;color:#151a30;text-decoration:none;line-height:1}
-.logo{width:32px;height:32px;flex:none;display:block}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fredoka','Lexend',system-ui,sans-serif;font-weight:600;font-size:24px;letter-spacing:0;color:#151a30;text-decoration:none;line-height:1}
+.logo{width:40px;height:40px;flex:none;display:block;border-radius:50%}
 .links{display:flex;gap:24px;margin-left:12px}
 .links a{color:var(--text);text-decoration:none;font-weight:700;font-size:15px}
 .links a:hover{color:var(--blue)}
@@ -132,5 +132,5 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
 .nb-actie .fine{font-weight:700}
 
 /* gele huisstijl: kaartjes iets lichter dan de pagina */
-.lees a{background:#fffaf0}
+.lees a{background:#fffdf8}
 @media print{body{background:#fff}}
