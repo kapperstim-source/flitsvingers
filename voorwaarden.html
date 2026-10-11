@@ -8,10 +8,11 @@
 <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/menu.css">
 <style>
 :root{--bg:#fff7ec;--card:#fff;--line:#f0e2cc;--ink:#18203a;--muted:#5f6888;--blue:#3a5bff;--blue-d:#2740c8;--yellow:#ffc93c}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg) url(assets/img/achtergrond-toetsen.svg) repeat 0 0/260px 260px;color:var(--ink);font-family:'Nunito',system-ui,sans-serif;font-weight:500;line-height:1.65;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg) url(assets/img/achtergrond-toetsen.svg) repeat 0 0/260px 260px;color:var(--ink);font-family:'Fredoka','Nunito',system-ui,sans-serif;font-weight:500;line-height:1.65;-webkit-font-smoothing:antialiased}
 nav{background:rgba(255,247,236,.94);border-bottom:1px solid var(--line)}
 nav .wrap{display:flex;align-items:center;height:64px}
 .wrap{max-width:820px;margin:0 auto;padding:0 16px}
@@ -31,7 +32,7 @@ footer{padding:0 0 40px;font-size:14px;color:var(--muted)}
 </style>
 </head>
 <body>
-<nav><div class="wrap"><a class="brand" href="index.html"><img class="logo" src="assets/img/flits_logo.webp" alt="" width="40" height="40">flitsvingers</a></div></nav>
+<nav class="altijd-menu"><div class="wrap"><a class="brand" href="index.html"><img class="logo" src="assets/img/flits_logo.webp" alt="" width="40" height="40">flitsvingers</a><span style="flex:1"></span><button class="menu-knop" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu"><svg class="open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="dicht" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="menu" id="menu" hidden><div class="wrap"><a href="index.html#hoe">Hoe het werkt</a><a href="index.html#ouders">Voor ouders</a><a href="index.html#diploma">Diploma</a><a href="index.html#prijs">Prijs</a><a href="index.html#vragen">Vragen</a><a href="blind-leren-typen.html">Tips voor ouders</a><a href="scholen.html">Voor scholen</a><a href="cursus.html?login=1">Inloggen</a></div></div></nav>
 <main class="wrap">
 <div class="card">
 <h1>Algemene voorwaarden</h1>
@@ -87,5 +88,6 @@ Besteld op: … · Naam: … · E-mailadres waarmee betaald is: … · Datum: �
 <script>window.goatcounter = { path: function () { return location.pathname }, endpoint: 'https://flitsvingers.goatcounter.com/count' };
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
+<script src="assets/js/menu.js" defer></script>
 </body>
 </html>

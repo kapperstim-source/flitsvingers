@@ -20,12 +20,13 @@
 <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/menu.css">
 <style>
 :root{
   --bg:#fff7ec;--soft:transparent;--soft2:#f1efe8;--line:#f0e2cc;--line2:#e6d3b3;
   --ink:#151a30;--text:#3d4459;--muted:#6a7086;
   --blue:#3a5bff;--blue-d:#2a45d6;--blue-l:#eef1ff;--yellow:#ffc93c;--mint:#12a26b;--coral:#e5484d;
-  --head:'Fredoka','Lexend',system-ui,sans-serif;--ui:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;--brand:'Fredoka',system-ui,sans-serif;
+  --head:'Fredoka','Lexend',system-ui,sans-serif;--ui:'Fredoka','Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;--brand:'Fredoka',system-ui,sans-serif;
   --r:14px;
 }
 *{box-sizing:border-box}
@@ -303,7 +304,9 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
     <div class="spacer"></div>
     <a class="login" href="cursus.html?login=1">Inloggen</a>
     <a class="btn small desk-only" href="cursus.html">Gratis proefles</a><a class="btn small phone-only" href="#prijs">Prijs</a>
+    <button class="menu-knop" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu"><svg class="open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="dicht" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
+  <div class="menu" id="menu" hidden><div class="wrap"><a href="#hoe">Hoe het werkt</a><a href="#ouders">Voor ouders</a><a href="#diploma">Diploma</a><a href="#prijs">Prijs</a><a href="#vragen">Vragen</a><a href="blind-leren-typen.html">Tips voor ouders</a><a href="scholen.html">Voor scholen</a><a href="cursus.html?login=1">Inloggen</a></div></div>
 </nav>
 
 <main id="top">
@@ -865,5 +868,6 @@ window.addEventListener('scroll', onScroll, { passive: true });
 <script>window.goatcounter = { path: function () { return location.pathname }, endpoint: 'https://flitsvingers.goatcounter.com/count' };
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
+<script src="assets/js/menu.js" defer></script>
 </body>
 </html>
