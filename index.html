@@ -499,7 +499,8 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.hidden
 
 /* op een telefoon: link doorsturen naar de laptop */
 document.querySelectorAll('[data-share]').forEach(b => b.addEventListener('click', async () => {
-  const url = 'https://flitsvingers.nl/cursus.html';
+  try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'link-naar-laptop', title: 'Link naar laptop gestuurd', event: true }); } catch (e) {}
+  const url = 'https://flitsvingers.nl/cursus.html?ref=telefoon';   // ref: GoatCounter toont dan "telefoon" als herkomst
   const text = 'Gratis proefles blind typen met Flitsvingers. Open deze link op de laptop of Chromebook:';
   if (navigator.share) { try { await navigator.share({ title: 'Flitsvingers: gratis proefles', text, url }); } catch (e) {} return; }
   location.href = 'mailto:?subject=' + encodeURIComponent('Flitsvingers: gratis proefles') + '&body=' + encodeURIComponent(text + ' ' + url);
