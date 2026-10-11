@@ -1,9 +1,9 @@
 /* Flitsvingers – tips voor ouders (zelfde huisstijl als de homepage) */
 :root{
-  --bg:#fff;--soft:#f7f6f2;--line:#e6e4dc;--line2:#d9d6cc;
+  --bg:#fff2c4;--soft:#fffaf0;--line:#efdb9e;--line2:#e3c87a;
   --ink:#151a30;--text:#3d4459;--muted:#6a7086;
   --blue:#3a5bff;--blue-d:#2a45d6;--blue-l:#eef1ff;--yellow:#ffc93c;--mint:#12a26b;
-  --head:'Lexend',system-ui,sans-serif;--ui:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --head:'Fredoka','Lexend',system-ui,sans-serif;--ui:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
   --r:14px;
   --f-pink:#ff6fa8;--f-ring:#ff9f43;--f-middle:#24bf80;--f-index:#3ba7ff;--f-thumb:#a6afc7;
 }
@@ -13,11 +13,11 @@ a{color:var(--blue)}
 img{display:block;max-width:100%;height:auto}
 .wrap{max-width:1160px;margin:0 auto;padding:0 16px}
 @media (min-width:700px){.wrap{padding:0 28px}}
-h1,h2,h3{font-family:var(--head);font-weight:600;color:var(--ink);letter-spacing:-.02em;line-height:1.2}
+h1,h2,h3{font-family:var(--head);font-weight:600;color:var(--ink);letter-spacing:0;line-height:1.2}
 
-nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+nav{position:sticky;top:0;z-index:20;background:rgba(255,242,196,.94);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
 nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
-.brand{display:flex;align-items:center;gap:9px;font-family:var(--head);font-weight:600;font-size:22px;letter-spacing:-.035em;color:#151a30;text-decoration:none;line-height:1}
+.brand{display:flex;align-items:center;gap:9px;font-family:'Lexend',system-ui,sans-serif;font-weight:600;font-size:22px;letter-spacing:-.035em;color:#151a30;text-decoration:none;line-height:1}
 .logo{width:32px;height:32px;flex:none;display:block}
 .links{display:flex;gap:24px;margin-left:12px}
 .links a{color:var(--text);text-decoration:none;font-weight:700;font-size:15px}
@@ -123,3 +123,14 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
   body.print-vp .vp-top b{font-size:18pt}
   body.print-vp .vlegend{font-size:11pt}
 }
+
+/* scholen: tekst voor de nieuwsbrief */
+.nb{margin:16px 0 0;background:var(--soft);border:1px dashed var(--line2);border-radius:var(--r);padding:18px 20px;color:var(--ink)}
+.art .nb p{margin:0}
+.art .nb p+p{margin-top:8px}
+.nb-actie{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.nb-actie .fine{font-weight:700}
+
+/* gele huisstijl: kaartjes iets lichter dan de pagina */
+.lees a{background:#fffaf0}
+@media print{body{background:#fff}}
