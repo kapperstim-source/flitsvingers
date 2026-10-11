@@ -235,7 +235,7 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 @media (max-width:640px){.maker{grid-template-columns:1fr;gap:16px;padding:26px 20px}.m-hoi{justify-self:start}}
 
 /* telefoon: korte bovenkant met een echte opname van de race (de video laadt alleen op telefoons) */
-.kicker,.tel-video,.tel-lead,.tel-koop{display:none}
+.kicker,.tel-video,.tel-lead{display:none}
 @media (pointer:coarse) and (max-width:820px){
   .hero{padding:12px 0 30px;gap:0}
   .hero>div:first-child{display:flex;flex-direction:column;padding:8px 0 0}
@@ -254,7 +254,6 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
   .tv-scherm.stil .speel{display:flex}
   .tel-lead{display:block;font-size:16.5px;line-height:1.5;color:var(--text)}
   .hero .mailmij{margin-top:16px;max-width:none}
-  .tel-koop{display:inline-block;align-self:flex-start;text-align:left;margin-top:14px;padding:0;border:0;background:none;font:inherit;font-weight:800;font-size:15.5px;color:var(--blue);text-decoration:underline;text-underline-offset:4px;cursor:pointer}
 
   /* korter: wat op een telefoon niet werkt of dubbel is, valt weg */
   section{padding:52px 0}
@@ -330,7 +329,6 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
         <p class="mm-klein">Je krijgt één mail met de link naar les 1 t/m 3, verder niets.</p>
         <p class="mm-status" id="mm-status" role="status" aria-live="polite"></p>
       </form>
-      <button class="tel-koop" type="button" data-koop="koopknop-start">Of koop meteen de cursus (€49)&nbsp;<span aria-hidden="true">→</span></button>
     </div>
     <div class="shot">
       <div class="bar"><i></i><i></i><i></i><span>flitsvingers.nl</span></div>
@@ -576,7 +574,7 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 const BETAAL_URL = 'https://buy.stripe.com/aFa5kC6bweSc1Np8Y51wY01';
 
 const modal = document.getElementById('modal');
-/* koopknoppen: 'koopknop' = bij de prijs, 'koopknop-start' = bovenaan op de telefoon (GoatCounter telt ze apart) */
+/* koopknop bij de prijs (GoatCounter: 'koopknop') */
 document.querySelectorAll('#koop,[data-koop]').forEach(b => b.addEventListener('click', () => {
   const pad = b.dataset.koop || 'koopknop';
   try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: pad, title: 'Klik op kopen', event: true }); } catch (e) {}
