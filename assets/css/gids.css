@@ -123,3 +123,10 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
   body.print-vp .vp-top b{font-size:18pt}
   body.print-vp .vlegend{font-size:11pt}
 }
+
+/* scholen: tekst voor de nieuwsbrief */
+.nb{margin:16px 0 0;background:var(--soft);border:1px dashed var(--line2);border-radius:var(--r);padding:18px 20px;color:var(--ink)}
+.art .nb p{margin:0}
+.art .nb p+p{margin-top:8px}
+.nb-actie{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.nb-actie .fine{font-weight:700}
