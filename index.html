@@ -218,7 +218,6 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
 .mm-rij .btn{flex:none}
 .mm-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .mm-klein{font-size:13.5px;color:var(--muted);margin:8px 0 0}
-.mm-deel{background:none;border:0;padding:0;font:inherit;color:var(--blue);text-decoration:underline;cursor:pointer}
 .mm-status{font-size:14.5px;font-weight:700;margin:8px 0 0}
 .mm-status:empty{display:none}
 .mm-status.ok{color:var(--mint)}
@@ -329,7 +328,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
         <label for="mm-mail">Gratis proberen op de laptop?</label>
         <div class="mm-rij"><input type="email" id="mm-mail" name="email" autocomplete="email" inputmode="email" placeholder="jouw@email.nl" required><button class="btn" type="submit">Mail mij de link</button></div>
         <input type="text" id="mm-hp" name="website" class="mm-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <p class="mm-klein">Je krijgt één mail met de link naar les 1 t/m 3, verder niets. <button type="button" class="mm-deel" data-share>Of deel de link zelf</button></p>
+        <p class="mm-klein">Je krijgt één mail met de link naar les 1 t/m 3, verder niets.</p>
         <p class="mm-status" id="mm-status" role="status" aria-live="polite"></p>
       </form>
       <button class="tel-koop" type="button" data-koop="koopknop-start">Of koop meteen de cursus (€49)&nbsp;<span aria-hidden="true">→</span></button>
@@ -594,15 +593,6 @@ document.getElementById('modal-close').addEventListener('click', () => { modal.h
 modal.addEventListener('click', e => { if (e.target === modal) modal.hidden = true; });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.hidden = true; });
 
-/* op een telefoon: link doorsturen naar de laptop */
-document.querySelectorAll('[data-share]').forEach(b => b.addEventListener('click', async () => {
-  try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'link-naar-laptop', title: 'Link naar laptop gestuurd', event: true }); } catch (e) {}
-  const url = 'https://flitsvingers.nl/cursus.html?ref=telefoon';   // ref: GoatCounter toont dan "telefoon" als herkomst
-  const text = 'Gratis proefles blind typen met Flitsvingers. Open deze link op de laptop of Chromebook:';
-  if (navigator.share) { try { await navigator.share({ title: 'Flitsvingers: gratis proefles', text, url }); } catch (e) {} return; }
-  location.href = 'mailto:?subject=' + encodeURIComponent('Flitsvingers: gratis proefles') + '&body=' + encodeURIComponent(text + ' ' + url);
-}));
-
 /* op een telefoon: "Mail mij de link" (de server stuurt één mail; het adres wordt niet opgeslagen) */
 const API_URL = 'https://script.google.com/macros/s/AKfycbycENGI2KDXQ3h3RY18VuHf2OJqUb3tOQLntwotXfBFQfLvYowDPKpwLaDtOiopKdM/exec';
 const mmForm = document.getElementById('mailmij'), mmMail = document.getElementById('mm-mail'), mmStatus = document.getElementById('mm-status');
@@ -623,9 +613,9 @@ mmForm.addEventListener('submit', async e => {
       mmMeld('Verstuurd! Kijk in je mail (soms staat hij bij Reclame of Spam).', 'ok'); mmMail.value = '';
       try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'link-gemaild', title: 'Link gemaild', event: true }); } catch (err) {}
     } else {
-      mmMeld(r.error === 'druk' ? 'Het is even druk. Probeer het later nog eens, of deel de link zelf.' : 'Dat lukte niet. Controleer je e-mailadres, of deel de link zelf.', 'fout');
+      mmMeld(r.error === 'druk' ? 'Het is even druk. Probeer het over een paar minuten nog eens.' : 'Dat lukte niet. Controleer je e-mailadres en probeer het nog eens.', 'fout');
     }
-  } catch (err) { mmMeld('Geen verbinding. Probeer het nog eens, of deel de link zelf.', 'fout'); }
+  } catch (err) { mmMeld('Geen verbinding. Probeer het nog eens.', 'fout'); }
   knop.disabled = false;
 });
 
