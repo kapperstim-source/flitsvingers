@@ -552,6 +552,30 @@ mmForm.addEventListener('submit', async e => {
   knop.disabled = false;
 });
 
+/* hoe ver lezen bezoekers? Elk stuk telt één keer per bezoek, zodra de bovenkant halverwege het scherm is (GoatCounter: alleen totalen) */
+(() => {
+  if (!('IntersectionObserver' in window)) return;
+  const wacht = [];
+  const tel = (path, title) => {
+    if (window.goatcounter && window.goatcounter.count) { try { window.goatcounter.count({ path, title, event: true }); } catch (e) {} return; }
+    wacht.push([path, title]);
+  };
+  let pogingen = 0;
+  const spoel = setInterval(() => {   // count.js laadt async: wat eerder gezien is, alsnog versturen
+    if (window.goatcounter && window.goatcounter.count) { wacht.splice(0).forEach(([p, t]) => tel(p, t)); }
+    if (++pogingen > 30) clearInterval(spoel);
+  }, 500);
+  const delen = [['probeer', 'scroll-1-probeer'], ['hoe', 'scroll-2-hoe-het-werkt'], ['ouders', 'scroll-3-voor-ouders'],
+                 ['diploma', 'scroll-4-diploma'], ['prijs', 'scroll-5-prijs'], ['vragen', 'scroll-6-vragen']];
+  const io = new IntersectionObserver(items => items.forEach(it => {
+    if (!it.isIntersecting) return;
+    io.unobserve(it.target);
+    tel(it.target.dataset.tel, 'Gelezen tot: ' + it.target.dataset.tel.slice(9));
+  }), { rootMargin: '0px 0px -50% 0px' });
+  delen.forEach(([id, naam]) => { const el = document.getElementById(id); if (el) { el.dataset.tel = naam; io.observe(el); } });
+  const eind = document.querySelector('.cta'); if (eind) { eind.dataset.tel = 'scroll-7-einde'; io.observe(eind); }
+})();
+
 /* vaste knop op mobiel, pas na de bovenkant */
 const sticky = document.getElementById('sticky');
 const onScroll = () => sticky.classList.toggle('on', window.scrollY > 560 && window.scrollY < document.body.scrollHeight - window.innerHeight - 500);
