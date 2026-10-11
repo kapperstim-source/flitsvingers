@@ -124,6 +124,10 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
   body.print-vp .vlegend{font-size:11pt}
 }
 
+/* leesbaar op het toetsenpatroon: zachte crème rand om de tekst */
+body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px var(--bg)}
+.btn,.kort,.probeer,.nb,.lees a,.vp,.tw{text-shadow:none}
+
 /* scholen: tekst voor de nieuwsbrief */
 .nb{margin:16px 0 0;background:var(--soft);border:1px dashed var(--line2);border-radius:var(--r);padding:18px 20px;color:var(--ink)}
 .art .nb p{margin:0}
