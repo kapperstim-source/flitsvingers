@@ -489,7 +489,8 @@ const BETAAL_URL = 'https://buy.stripe.com/aFa5kC6bweSc1Np8Y51wY01';
 
 const modal = document.getElementById('modal');
 document.getElementById('koop').addEventListener('click', () => {
-  if (BETAAL_URL) { location.href = BETAAL_URL; return; }
+  try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'koopknop', title: 'Klik op kopen', event: true }); } catch (e) {}
+  if (BETAAL_URL) { setTimeout(() => { location.href = BETAAL_URL; }, 200); return; }
   modal.hidden = false;
 });
 document.getElementById('modal-close').addEventListener('click', () => { modal.hidden = true; });
@@ -710,5 +711,7 @@ window.addEventListener('scroll', onScroll, { passive: true });
  ]
 }
 </script>
+<script>window.goatcounter = { path: function () { return location.pathname } };</script>
+<script data-goatcounter="https://flitsvingers.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>

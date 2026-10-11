@@ -446,9 +446,12 @@ function renderMap() {
 
 /* ================= lessen openen ================= */
 let curLesson = null;
+/* bezoekersteller (GoatCounter, zonder cookies): alleen totalen per gebeurtenis, geen namen of codes */
+const tel = (path, title) => { try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path, title, event: true }); } catch (e) {} };
 function openLesson(id) {
   const L = lessonById(id); if (!L) return;
   if (!paidOk(id)) return lockedModal(id);
+  if (id <= 3) tel('les-' + id + '-gestart', 'Les ' + id + ' gestart');
   curLesson = L; R = null;
   stopTimers();
   const zone = ZONES.find(z => id >= z.van && id <= z.tot);
@@ -772,6 +775,7 @@ function finishLesson() {
   const tricky = Object.entries(R.lessonErrs).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([c]) => c);
   R.lastResult = { L, acc, stars, apm, gained, tricky };
   checkBadges(); save();
+  if (L.id <= 3) tel('les-' + L.id + '-afgerond', 'Les ' + L.id + ' afgerond');
   sfx('win'); confetti();
   showResult(R.lastResult);
   play((S.days[today()] || 0) >= CFG.DAY_GOAL ? 'dag_af' : 'les_klaar');
@@ -919,6 +923,7 @@ $('#modal-x').onclick = closeModal;
 $('#modal').addEventListener('click', e => { if (e.target.id === 'modal' && !$('#modal').dataset.noclose) closeModal(); });
 
 function lockedModal(id) {
+  tel('slot-volledige-cursus', 'Wil verder na de gratis lessen');
   openModal('<img class="welcomeimg" src="' + IMG('wijs') + '" alt="">' +
     '<h2 style="text-align:center">Les ' + id + ' zit in de volledige cursus</h2>' +
     '<p style="text-align:center;margin:8px 0 18px">De volledige cursus heeft 30 lessen, races, proefexamens en een diploma. Eenmalig €49, geen abonnement. Heb je al een toegangscode? Log dan in als ouder.</p>' +
