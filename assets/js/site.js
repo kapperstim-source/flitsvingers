@@ -10,7 +10,7 @@ const telGC = (path, title) => { try { if (window.goatcounter && window.goatcoun
 (() => {
   if (!document.body.classList.contains('home')) return;
   const naar = { '#hoe': 'hoe-het-werkt.html', '#probeer': 'hoe-het-werkt.html#probeer', '#ouders': 'voor-ouders.html',
-                 '#diploma': 'voor-ouders.html#diploma', '#vragen': 'vragen.html' };
+                 '#diploma': 'voor-ouders.html#diploma', '#vragen': 'vragen.html', '#mailmij': 'proefles-aanvragen.html' };
   if (naar[location.hash]) location.replace(naar[location.hash]);
 })();
 
@@ -29,18 +29,13 @@ const telGC = (path, title) => { try { if (window.goatcounter && window.goatcoun
   document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.hidden = true; });
 })();
 
-/* op een telefoon: "Mail mij de link" (de server stuurt één mail; het adres wordt niet opgeslagen).
-   Het formulier staat op de homepage; knoppen elders linken naar index.html#mailmij. */
+/* op een telefoon: "Vraag de gratis proefles aan" gaat naar proefles-aanvragen.html (sinds 12-10-2026).
+   Daar staat het formulier "Mail mij de link" (de server stuurt één mail; het adres wordt niet opgeslagen). */
 (() => {
+  const terug = document.getElementById('terug');   // "Terug" gaat naar de vorige pagina als die van deze site komt
+  if (terug && document.referrer.indexOf(location.origin) === 0 && history.length > 1) terug.addEventListener('click', e => { e.preventDefault(); history.back(); });
   const mmForm = document.getElementById('mailmij'), mmMail = document.getElementById('mm-mail'), mmStatus = document.getElementById('mm-status');
-  document.querySelectorAll('[data-mailmij]').forEach(b => b.addEventListener('click', e => {
-    if (!mmForm) return;   // geen formulier op deze pagina: de link gaat naar de homepage
-    e.preventDefault();
-    mmForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => mmMail.focus(), 450);
-  }));
   if (!mmForm) return;
-  if (location.hash === '#mailmij') setTimeout(() => mmMail.focus({ preventScroll: true }), 600);
   const mmMeld = (tekst, soort) => { mmStatus.textContent = tekst; mmStatus.className = 'mm-status ' + (soort || ''); };
   mmForm.addEventListener('submit', async e => {
     e.preventDefault();

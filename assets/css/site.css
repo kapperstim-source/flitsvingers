@@ -212,7 +212,7 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 @media (max-width:640px){.maker{grid-template-columns:1fr;gap:16px;padding:26px 20px}.m-hoi{justify-self:start}}
 
 /* telefoon: korte bovenkant met een echte opname van de race (de video laadt alleen op telefoons) */
-.kicker,.tel-video,.tel-lead{display:none}
+.kicker,.tel-video,.tel-lead,.tel-knop-onder{display:none}
 @media (pointer:coarse) and (max-width:820px){
   .hero{padding:12px 0 calc(var(--ruimte) * 2);gap:0}
   .hero>div:first-child{display:flex;flex-direction:column;padding:8px 0 0}
@@ -230,7 +230,8 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
   .tv-scherm .speel svg{width:20px;height:20px;fill:#fff;margin-left:3px}
   .tv-scherm.stil .speel{display:flex}
   .tel-lead{display:block;font-size:16.5px;line-height:1.5;color:var(--text)}
-  .hero .mailmij{margin-top:16px;max-width:none}
+  .hero .tel-knop{display:flex;width:100%;margin-top:18px;padding:15px 22px;font-size:17px}
+  .tel-knop-onder{display:block;margin-top:8px;text-align:center;font-size:14px;color:var(--muted);font-weight:700}
 
   :root{--ruimte:44px}
   /* het probeer-vak werkt alleen met een echt toetsenbord */
@@ -271,3 +272,24 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 .pkop .lead{margin-top:16px;font-size:clamp(17px,1.6vw,19px);max-width:680px}
 .pkop .lead a{color:var(--blue);font-weight:700}
 .faq-lijst{max-width:860px}
+
+/* telefoon: scherm "Vraag de gratis proefles aan" (proefles-aanvragen.html, sinds 12-10-2026).
+   Alle telefoonknoppen gaan hierheen; het mailformulier staat alleen nog op dit scherm. */
+.terug{font-weight:800;font-size:15px;color:var(--blue);text-decoration:none}
+.aanvraag{padding:26px 0 64px}
+.aanvraag .wrap{max-width:620px}
+.aanvraag h1{font-size:clamp(30px,6vw,44px);margin:6px 0 18px}
+.waarom{background:#fffdf6;border:1px solid var(--line2);border-radius:16px;padding:18px 20px;text-shadow:none}
+.waarom h2{font-size:19px;line-height:1.25;margin-bottom:6px}
+.waarom p{font-size:16.5px;line-height:1.55}
+.aanvraag .mailmij{display:block;max-width:none;margin-top:22px}
+.aanvraag .mm-rij .btn{padding:13px 20px}
+@media (max-width:440px){.aanvraag .mm-rij{flex-direction:column}.aanvraag .mm-rij .btn{width:100%;padding:15px 20px;font-size:17px}}
+.aanvraag .mm-klein a{color:var(--blue);font-weight:700}
+.aanvraag .mm-status.ok{font-size:16px;background:#e9f8f1;border-radius:12px;padding:12px 14px;text-shadow:none}
+.desk-tip{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.desk-tip p{font-weight:700;color:var(--ink);margin-bottom:10px}
+@media (pointer:coarse) and (max-width:820px){.desk-tip{display:none}}
+.aanvraag-shot{margin:34px 0 0}
+.shot-onder{font-size:14px;color:var(--muted);margin-top:10px;text-align:center}
+.zelf{margin-top:24px;font-size:15.5px}
