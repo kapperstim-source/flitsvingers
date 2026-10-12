@@ -293,3 +293,5 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 .aanvraag-shot{margin:34px 0 0}
 .shot-onder{font-size:14px;color:var(--muted);margin-top:10px;text-align:center}
 .zelf{margin-top:24px;font-size:15.5px}
+/* geld-terug-garantie bij de prijs (sinds 12-10-2026) */
+.garantie{margin:14px 0 4px;padding:12px 14px;border-radius:12px;background:#eaf7f0;border:1px solid #bfe6d1;color:#14532d;font-size:15px;line-height:1.5;text-shadow:none}.garantie b,.garantie a{color:#0d4425}
