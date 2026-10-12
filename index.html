@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/menu.css">
 <link rel="stylesheet" href="assets/css/site.css?v=3">
+<link rel="stylesheet" href="assets/css/minidemo.css?v=1">
 </head>
 <body class="home">
 
@@ -62,6 +63,17 @@
     </div>
   </div>
 
+  <!-- MINIDEMO-BEGIN (gemaakt met tools/minidemo_html.py) -->
+  <section class="md" id="minidemo" aria-label="Probeer het zelf, met Flits">
+    <div class="md-kop"><img src="assets/img/flits_typen.webp" alt="" width="64" height="64"><div><h2>Probeer het zelf, met Flits</h2><p>Een stukje uit les 1. Zet je geluid aan.</p></div><button class="md-geluid" type="button">geluid uit</button></div>
+    <p class="md-ballon" aria-live="polite">Druk op Start, dan legt Flits het uit.</p>
+    <div class="md-regel" aria-hidden="true"></div>
+    <div class="md-kb"><div class="md-rij md-laptop"><button type="button" class="md-k pink" data-k="q">Q</button><button type="button" class="md-k orange" data-k="w">W</button><button type="button" class="md-k green" data-k="e">E</button><button type="button" class="md-k lblue" data-k="r">R</button><button type="button" class="md-k lblue" data-k="t">T</button><button type="button" class="md-k lblue" data-k="y">Y</button><button type="button" class="md-k lblue" data-k="u">U</button><button type="button" class="md-k green" data-k="i">I</button><button type="button" class="md-k orange" data-k="o">O</button><button type="button" class="md-k pink" data-k="p">P</button></div><div class="md-rij"><button type="button" class="md-k pink" data-k="a">A</button><button type="button" class="md-k orange" data-k="s">S</button><button type="button" class="md-k green" data-k="d">D</button><button type="button" class="md-k lblue bump" data-k="f">F</button><button type="button" class="md-k lblue" data-k="g">G</button><button type="button" class="md-k lblue" data-k="h">H</button><button type="button" class="md-k lblue bump" data-k="j">J</button><button type="button" class="md-k green" data-k="k">K</button><button type="button" class="md-k orange" data-k="l">L</button></div><div class="md-rij md-laptop"><button type="button" class="md-k pink" data-k="z">Z</button><button type="button" class="md-k orange" data-k="x">X</button><button type="button" class="md-k green" data-k="c">C</button><button type="button" class="md-k lblue" data-k="v">V</button><button type="button" class="md-k lblue" data-k="b">B</button><button type="button" class="md-k lblue" data-k="n">N</button><button type="button" class="md-k lblue" data-k="m">M</button></div><div class="md-rij"><button type="button" class="md-k spatie grey" data-k=" ">spatie</button></div></div>
+    <p class="md-uitleg"><span class="md-laptop">Leg je vingers op de thuisrij en typ op je eigen toetsenbord.</span><span class="md-tel">Op de telefoon tik je de toetsen aan. Echt blind typen oefen je op de laptop.</span></p>
+    <div class="md-start"><button class="btn md-startknop" type="button">Start</button></div>
+    <div class="md-klaar" hidden><b>Wauw, goed gedaan!</b><a class="btn md-laptop" href="cursus.html" data-md-tel="minidemo-les1">Ga verder met les 1</a><a class="btn md-tel" href="proefles-aanvragen.html" data-md-tel="minidemo-mail">Mail mij de link voor les 1</a><p class="md-uitleg">Les 1 t/m 3 zijn gratis, zonder account.</p></div>
+  </section>
+  <!-- MINIDEMO-EINDE -->
   <div class="facts">
     <div><b>30 lessen</b><span>Van de thuisrij tot hoofdletters, cijfers en leestekens</span></div>
     <div><b>10 minuten</b><span>per les. Na 12 minuten oefenen is de dag af</span></div>
@@ -234,6 +246,7 @@
 <script>window.goatcounter = { path: function () { return location.pathname }, endpoint: 'https://flitsvingers.goatcounter.com/count' };
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
+<script src="assets/js/minidemo.js?v=1" defer></script>
 <script src="assets/js/site.js?v=2" defer></script>
 <script src="assets/js/menu.js" defer></script>
 </body>
