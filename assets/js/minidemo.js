@@ -2,13 +2,15 @@
    Werkt op de laptop (eigen toetsenbord) en op de telefoon (toetsen aantikken). Flits praat met de bestaande opnames.
    Onderbouwing: gratis proberen werkt alleen als het NU kan (Bawa & Shoemaker 2004); 90% van het bezoek zit op een telefoon.
    Regels: Flits praat over de letter die NU oplicht (een nieuwe zin breekt de vorige af); bij een fout moedigt hij aan,
-   hooguit eens per 4 s en nooit door een andere zin heen. Meten: minidemo-gestart, minidemo-klaar, minidemo-les1, minidemo-mail. */
+   hooguit eens per 4 s en nooit door een andere zin heen. Meten: minidemo-gestart-, minidemo-klaar-, minidemo-les1-, minidemo-mail- + telefoon/laptop. */
 (() => {
   const vak = document.getElementById('minidemo');
   if (!vak) return;
   const OEFENING = 'fj fj jas';
   const ZEGT = { f: 'De F. Met je linker wijsvinger.', j: 'De J. Met je rechter wijsvinger.', a: 'De A. Met je linker pink.', s: 'De S. Met je linker ringvinger.', ' ': 'De spatiebalk. Met je duim.' };
-  const tel = (path, title) => { try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path, title, event: true }); } catch (e) {} };
+  // Meten per apparaat (Tim, 12-10-2026): elke gebeurtenis krijgt -telefoon of -laptop achter de naam.
+  const APP = matchMedia('(pointer:coarse) and (max-width:820px)').matches ? 'telefoon' : 'laptop';
+  const tel = (path, title) => { try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: path + '-' + APP, title: title + ' (' + APP + ')', event: true }); } catch (e) {} };
   const $ = s => vak.querySelector(s);
   const regel = $('.md-regel'), ballon = $('.md-ballon');
   let pos = -1, gehad = new Set(), aan = true, bezig = false, huidig = null, laatsteOpnieuw = 0;
