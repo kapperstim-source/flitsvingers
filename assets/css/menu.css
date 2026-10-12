@@ -16,3 +16,5 @@ nav.altijd-menu{position:relative}
 nav.altijd-menu .menu-knop{display:inline-flex}
 @media (max-width:940px){.menu-knop{display:inline-flex}}
 @media (min-width:941px){nav:not(.altijd-menu) .menu{display:none!important}}
+/* de pagina waar je bent: blauw in de balk en in het uitklapmenu */
+.links a[aria-current="page"],.menu a[aria-current="page"]{color:var(--blue,#3a5bff)}
