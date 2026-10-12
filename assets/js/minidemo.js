@@ -34,7 +34,10 @@
     vakjes.forEach((v, i) => { v.className = i < pos ? 'ok' : i === pos ? 'nu' : ''; });
     if (pos >= OEFENING.length) return klaar();
     const t = OEFENING[pos]; const k = toets(t); if (k) k.classList.add('doel');
-    if (!gehad.has(t)) { gehad.add(t); ballon.textContent = ZEGT[t]; speel(t === ' ' ? 'toets_spatie' : 'toets_' + t); }
+    // De tekst volgt ALTIJD de letter die nu oplicht (Tim 12-10: bleef anders na de eerste spatie op "De spatiebalk" staan);
+    // hardop zegt Flits een letter alleen de eerste keer.
+    ballon.textContent = ZEGT[t];
+    if (!gehad.has(t)) { gehad.add(t); speel(t === ' ' ? 'toets_spatie' : 'toets_' + t); }
   }
   function druk(t) {
     if (!bezig) return;
