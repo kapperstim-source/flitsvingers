@@ -4,7 +4,7 @@
   --blue:#3a5bff;--blue-d:#2a45d6;--blue-l:#eef1ff;--yellow:#ffc93c;--mint:#12a26b;--coral:#e5484d;
   --head:'Fredoka','Lexend',system-ui,sans-serif;--ui:'Fredoka','Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;--brand:'Fredoka',system-ui,sans-serif;
   --r:14px;
-  --ruimte:72px;   /* halve ruimte tussen twee blokken: overal precies 2x dit */
+  --ruimte:44px;   /* halve ruimte tussen twee blokken: overal precies 2x dit */
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:76px}
@@ -70,7 +70,7 @@ nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
 
 /* secties */
 section{padding:var(--ruimte) 0}
-@media (max-width:700px){:root{--ruimte:56px}}
+@media (max-width:700px){:root{--ruimte:38px}}
 .soft{background:var(--soft)}
 .head{max-width:640px}
 .head p{margin-top:14px;font-size:18px}
@@ -233,7 +233,7 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
   .hero .tel-knop{display:flex;width:100%;margin-top:18px;padding:15px 22px;font-size:17px}
   .tel-knop-onder{display:block;margin-top:8px;text-align:center;font-size:14px;color:var(--muted);font-weight:700}
 
-  :root{--ruimte:44px}
+  :root{--ruimte:34px}
   /* het probeer-vak werkt alleen met een echt toetsenbord */
   #probeer{display:none}
   #hoe .feature{margin-top:30px}
@@ -302,3 +302,18 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 .inb li:first-child{border-top:0;padding-top:4px}
 .inb b{color:var(--ink);font-weight:700}
 .inb i{flex:none;width:10px;height:10px;border-radius:3px;transform:translateY(-1px)}
+
+/* raceweekend-blok en beelden (15-10-2026) */
+.rw-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:36px}
+.rw-kaart{margin:0;display:flex;flex-direction:column;background:#fffdf8;border:1px solid var(--line2);border-radius:18px;overflow:hidden}
+.rw-kaart img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;display:block;border-bottom:1px solid var(--line)}
+.rw-kaart figcaption{padding:18px 20px 22px}
+.rw-kaart h3{margin:0}
+.rw-kaart p{margin:8px 0 0;font-size:16px}
+@media (max-width:760px){.rw-grid{grid-template-columns:1fr;gap:16px}}
+.maker{margin-left:auto;margin-right:auto}
+.price .incl{display:flex;flex-direction:column}
+.incl-beeld{margin:28px 0 0;margin-top:auto;padding-top:28px}
+.incl-beeld img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:14px;border:1px solid var(--line2);display:block}
+.incl-beeld figcaption{font-size:14.5px;color:var(--muted);margin-top:8px}
+@media (max-width:860px){.incl-beeld{display:none}}
