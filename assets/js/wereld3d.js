@@ -175,7 +175,8 @@ function maak(box, opts = {}) {
     if (modus === 'garage') { const ver = cam.aspect > 3.2 ? 0 : 1.6; cam.position.set(GX + 3.4 + ver * .6, 2.5 + ver * .5, 6.2 + ver * 1.8); cam.lookAt(GX - .9, 1.3, -.4); }
     else if (feest > 0) { draai = Math.min(.5, draai + dt * .3); const h = .2 + draai; cam.position.set(kidX + Math.sin(h) * 8, 3.4, jij.position.z + Math.cos(h) * 8); cam.lookAt(kidX, 1.2, jij.position.z); }
     else if (modus === 'tunnel') { cam.position.set(kidX - 6.5 + sx, 2.6 + sy + e * 6, jij.position.z + .3 + e * 8); cam.lookAt(kidX + 6, 1.1, jij.position.z); }
-    else { const mid = modus === 'race' ? kidX * .75 + flits.position.x * .25 : kidX; cam.position.set(mid + 2.5 + sx - e * 4, 3.6 + sy + e * 14, 10.5 + e * 16); cam.lookAt(mid + 1.8, 1 - e * .5, .2); }
+    else { const mid = modus === 'race' ? kidX * .75 + flits.position.x * .25 : kidX; const k = cam.aspect > 3.2 ? (modus === 'race' ? .9 : .72) : 1;   // brede, lage baan: camera dichterbij (bij de race minder, zodat Flits ook in beeld is)
+      cam.position.set(mid + 2.5 * k + sx - e * 4, 3.6 * k + .6 * (1 - k) + sy + e * 14, 10.5 * k + e * 16); cam.lookAt(mid + 1.8 * k, 1 - e * .5, .2); }
     wolken.forEach((w, i) => { w.position.x += dt * (.4 + i * .05); if (w.position.x > L + 60) w.position.x = -40; });
     if (feest > 0 && Math.random() < .9) strooi(L + 1, 6, (Math.random() - .5) * 9, 3, ['#ffc93c', '#3a5bff', '#e5484d', '#12a26b'], 1.6);
     renderer.render(scene, cam);

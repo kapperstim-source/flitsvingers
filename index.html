@@ -22,7 +22,8 @@
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/menu.css">
 <link rel="stylesheet" href="assets/css/site.css?v=4">
-<link rel="stylesheet" href="assets/css/minidemo.css?v=3">
+<link rel="stylesheet" href="assets/css/minidemo.css?v=4">
+<script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js?v=0.160.0"}}</script>
 </head>
 <body class="home">
 
@@ -58,6 +59,7 @@
     <section class="md" id="minidemo" aria-label="Probeer het zelf, met Flits">
       <div class="md-kop"><img src="assets/img/flits_typen.webp" alt="" width="64" height="64"><div><h2>Probeer het zelf, met Flits</h2><p>Een stukje uit les 1. Zet je geluid aan.</p></div><button class="md-geluid" type="button">geluid uit</button></div>
       <p class="md-ballon" aria-live="polite">Druk op Start, dan legt Flits het uit.</p>
+      <div class="md-baan" aria-hidden="true"><img src="assets/img/md_baan.webp" alt="" width="1120" height="226"></div>
       <div class="md-regel" aria-hidden="true"></div>
       <div class="md-kb"><div class="md-rij md-laptop"><button type="button" class="md-k pink" data-k="q">Q</button><button type="button" class="md-k orange" data-k="w">W</button><button type="button" class="md-k green" data-k="e">E</button><button type="button" class="md-k lblue" data-k="r">R</button><button type="button" class="md-k lblue" data-k="t">T</button><button type="button" class="md-k lblue" data-k="y">Y</button><button type="button" class="md-k lblue" data-k="u">U</button><button type="button" class="md-k green" data-k="i">I</button><button type="button" class="md-k orange" data-k="o">O</button><button type="button" class="md-k pink" data-k="p">P</button></div><div class="md-rij"><button type="button" class="md-k pink" data-k="a">A</button><button type="button" class="md-k orange" data-k="s">S</button><button type="button" class="md-k green" data-k="d">D</button><button type="button" class="md-k lblue bump" data-k="f">F</button><button type="button" class="md-k lblue" data-k="g">G</button><button type="button" class="md-k lblue" data-k="h">H</button><button type="button" class="md-k lblue bump" data-k="j">J</button><button type="button" class="md-k green" data-k="k">K</button><button type="button" class="md-k orange" data-k="l">L</button></div><div class="md-rij md-laptop"><button type="button" class="md-k pink" data-k="z">Z</button><button type="button" class="md-k orange" data-k="x">X</button><button type="button" class="md-k green" data-k="c">C</button><button type="button" class="md-k lblue" data-k="v">V</button><button type="button" class="md-k lblue" data-k="b">B</button><button type="button" class="md-k lblue" data-k="n">N</button><button type="button" class="md-k lblue" data-k="m">M</button></div><div class="md-rij"><button type="button" class="md-k spatie grey" data-k=" ">spatie</button></div></div>
       <p class="md-uitleg"><span class="md-laptop">Leg je vingers op de thuisrij en typ op je eigen toetsenbord.</span><span class="md-tel">Op de telefoon tik je de toetsen aan. Echt blind typen oefen je op de laptop.</span></p>
@@ -82,7 +84,7 @@
       <p>Korte lessen die voelen als een spel, met een coach die alles voorleest. Lees hoe een les eruitziet, wat je als ouder meekrijgt en wat het diploma betekent.</p>
     </div>
     <div class="teasers">
-      <a class="teaser" href="hoe-het-werkt.html"><img src="assets/img/shot_les.webp?v=2" alt="Een oefening: getypte letters worden groen en de cursor wacht op de goede toets" width="1600" height="949" loading="lazy"><h3>Hoe het werkt</h3><p>Lessen van ongeveer tien minuten, races tegen Flits en fouten maken mag. Probeer het meteen op de laptop.</p><span class="arrow">Lees meer <span aria-hidden="true">→</span></span></a>
+      <a class="teaser" href="hoe-het-werkt.html"><img src="assets/img/shot_les.webp?v=3" alt="Een oefening op de racebaan: getypte letters worden donker, een fout wordt rood en de cursor wacht op de goede toets" width="1600" height="1013" loading="lazy"><h3>Hoe het werkt</h3><p>Lessen van ongeveer tien minuten, races tegen Flits en fouten maken mag. Probeer het meteen op de laptop.</p><span class="arrow">Lees meer <span aria-hidden="true">→</span></span></a>
       <a class="teaser" href="voor-ouders.html"><img src="assets/img/shot_kaart.webp?v=2" alt="De route langs 30 lessen naar het diploma, met de voortgang van een kind" width="1600" height="1149" loading="lazy"><h3>Voor ouders</h3><p>Je kind oefent zelfstandig en jij krijgt één mail per week. Met dyslexie-modus en rustige modus, veilig en zonder reclame.</p><span class="arrow">Lees meer <span aria-hidden="true">→</span></span></a>
       <a class="teaser" href="voor-ouders.html#diploma"><img src="assets/img/shot_diploma.webp?v=2" alt="Voorbeeld van een Flitsvingers-diploma met QR-code" width="1400" height="991" loading="lazy"><h3>Het diploma</h3><p>Een openbare eis: 5 minuten typen met 100 aanslagen per minuut en maximaal 3% fouten. Met een QR-code om te controleren.</p><span class="arrow">Lees meer <span aria-hidden="true">→</span></span></a>
     </div>
@@ -239,7 +241,7 @@
 <script>window.goatcounter = { path: function () { return location.pathname }, endpoint: 'https://flitsvingers.goatcounter.com/count' };
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
-<script src="assets/js/minidemo.js?v=3" defer></script>
+<script src="assets/js/minidemo.js?v=4" defer></script>
 <script src="assets/js/site.js?v=2" defer></script>
 <script src="assets/js/menu.js" defer></script>
 </body>

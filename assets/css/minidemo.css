@@ -1,27 +1,31 @@
-/* Mini-les "Probeer het zelf, met Flits" (homepage, sinds 12-10-2026). Alle klassen beginnen met md- zodat niets botst. */
-.md{max-width:760px;margin:0 auto calc(var(--ruimte) * 2);background:#fff;border:1.5px solid var(--line2);border-radius:22px;padding:18px 16px 16px;box-shadow:0 14px 34px rgba(21,26,48,.09);text-shadow:none;
---md-pink:#ff5c9a;--md-orange:#ff9a3c;--md-green:#1fbf7a;--md-lblue:#3a95ff;--md-grey:#a7adc6;--md-red:#e5484d}
+/* Mini-les "Probeer het zelf, met Flits" (homepage, sinds 12-10-2026). Alle klassen beginnen met md- zodat niets botst.
+   Sinds 15-10-2026 in stijl A "Sticker" (dikke donkere randen, harde schaduw), net als de cursus en de 3D-racebaan. */
+.md{max-width:760px;margin:0 auto calc(var(--ruimte) * 2);background:#fff;border:3px solid #1b1f3a;border-radius:22px;padding:18px 16px 16px;box-shadow:0 6px 0 #1b1f3a;text-shadow:none;
+--md-nv:#1b1f3a;--md-pink:#ff5c9a;--md-orange:#ff9a3c;--md-green:#1fbf7a;--md-lblue:#3a95ff;--md-grey:#a7adc6;--md-red:#e5484d}
 .md-kop{display:flex;align-items:center;gap:12px;margin:0 0 10px}
-.md-kop img{width:64px;height:64px;object-fit:cover;object-position:50% 18%;border-radius:50%;border:2px solid var(--line2);background:#fff7ec;flex:none}
+.md-kop img{width:64px;height:64px;object-fit:cover;object-position:50% 18%;border-radius:50%;border:2.5px solid var(--md-nv);background:#fff7ec;flex:none}
 .md-kop h2{margin:0;font-size:21px;line-height:1.2}
 .md-kop p{margin:2px 0 0;font-size:14.5px;color:var(--muted)}
 .md-geluid{white-space:nowrap;background:none;border:0;color:var(--muted);font:inherit;font-size:13.5px;text-decoration:underline;cursor:pointer;margin-left:auto;align-self:flex-start;padding:0}
-.md-ballon{min-height:2.6em;background:#fffaf0;border:1px solid var(--line2);border-radius:14px;padding:8px 12px;font-size:15.5px;color:var(--ink);margin:0 0 12px}
-.md-regel{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:clamp(30px,8vw,46px);letter-spacing:.04em;text-align:center;color:#b9bccb;margin:6px 0 12px;white-space:nowrap}
-.md-regel span{display:inline-block;min-width:.62em;border-bottom:3px solid transparent}
-.md-regel .ok{color:var(--md-green)}
-.md-regel .nu{color:var(--ink);border-bottom-color:var(--blue);background:#fff6d6;border-radius:4px}
-.md-regel .fout{color:var(--md-red);background:#ffe3e3}
+.md-ballon{min-height:2.6em;background:#fffaf0;border:2.5px solid var(--md-nv);border-radius:14px;padding:8px 12px;font-size:15.5px;color:var(--ink);margin:0 0 12px}
+/* de racebaan: eerst een plaatje, na Start de echte 3D-baan (canvas eroverheen) */
+.md-baan{position:relative;border:3px solid var(--md-nv);border-radius:16px;overflow:hidden;background:#9fd9ff;margin:0 0 6px;aspect-ratio:1120/280}
+.md-baan img{display:block;width:100%;height:100%;object-fit:cover}
+.md-baan canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.md-regel{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:clamp(30px,8vw,46px);letter-spacing:.04em;text-align:center;color:#b9bccb;margin:6px 0 12px;padding:4px 0 6px;white-space:nowrap}
+.md-regel span{display:inline-block;min-width:.62em;border-radius:7px}
+.md-regel .ok{color:var(--md-nv)}
+.md-regel .nu{color:var(--md-nv);background:#ffc93c;box-shadow:0 0 0 2.5px var(--md-nv),0 4px 0 2.5px var(--md-nv)}
+.md-regel .fout{color:#fff;background:var(--md-red)}
 .md-kb{display:grid;gap:7px;user-select:none;-webkit-user-select:none}
 .md-rij{display:flex;gap:clamp(4px,1.2vw,6px);justify-content:center}
-.md-k{flex:0 0 auto;width:clamp(27px,7.9vw,54px);height:clamp(44px,11vw,54px);border-radius:10px;background:#f6f4ef;border:1px solid #e9e4da;border-bottom:4px solid;
-display:grid;place-items:center;font:inherit;font-size:clamp(14px,2.2vw,18px);color:var(--ink);cursor:pointer;padding:0;touch-action:manipulation;transition:transform .07s,background .07s}
-.md-k.pink{border-bottom-color:var(--md-pink)}.md-k.orange{border-bottom-color:var(--md-orange)}.md-k.green{border-bottom-color:var(--md-green)}.md-k.lblue{border-bottom-color:var(--md-lblue)}.md-k.grey{border-bottom-color:var(--md-grey)}
-.md-k.bump{position:relative}.md-k.bump::after{content:"";position:absolute;bottom:22%;width:26%;height:2px;border-radius:2px;background:var(--ink);opacity:.55}
+.md-k{flex:0 0 auto;width:clamp(27px,7.9vw,54px);height:clamp(44px,11vw,54px);border-radius:10px;background:#fff;border:2px solid var(--md-nv);box-shadow:inset 0 -6px 0 var(--fc,#dfe2ec),0 3px 0 var(--md-nv);
+display:grid;place-items:center;font:inherit;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;font-size:clamp(14px,2.2vw,18px);color:var(--md-nv);cursor:pointer;padding:0;touch-action:manipulation;transition:transform .07s,background .07s}
+.md-k.pink{--fc:var(--md-pink)}.md-k.orange{--fc:var(--md-orange)}.md-k.green{--fc:var(--md-green)}.md-k.lblue{--fc:var(--md-lblue)}.md-k.grey{--fc:var(--md-grey)}
+.md-k.bump{position:relative}.md-k.bump::after{content:"";position:absolute;bottom:26%;width:26%;height:2px;border-radius:2px;background:var(--md-nv);opacity:.6}
 .md-k.spatie{width:min(62%,360px);font-size:14px;color:var(--muted)}
-.md-k.doel{color:#fff;transform:translateY(-2px);box-shadow:0 0 0 3px rgba(58,91,255,.25)}
-.md-k.doel.pink{background:var(--md-pink)}.md-k.doel.orange{background:var(--md-orange)}.md-k.doel.green{background:var(--md-green)}.md-k.doel.lblue{background:var(--md-lblue)}.md-k.doel.grey{background:var(--md-grey)}
-.md-k.tik{transform:translateY(2px)}
+.md-k.doel{color:#fff;background:var(--fc);transform:translateY(-3px);box-shadow:0 6px 0 var(--md-nv)}
+.md-k.tik{transform:translateY(2px);box-shadow:inset 0 -6px 0 var(--fc,#dfe2ec)}
 .md-uitleg{text-align:center;font-size:13.5px;color:var(--muted);margin:10px 0 0}
 .md-start{display:flex;justify-content:center;margin:12px 0 4px}
 .md-klaar{text-align:center;margin:10px 0 2px}
@@ -31,9 +35,14 @@ display:grid;place-items:center;font:inherit;font-size:clamp(14px,2.2vw,18px);co
 /* In de bovenkant (sinds 12-10-2026 in plaats van de schermafbeelding): op de laptop rechts naast de kop */
 .hero .md{margin:0;max-width:none;width:100%}
 @media (min-width:981px){
-  .hero .md-k{width:calc((100% - 54px) / 10);height:auto;aspect-ratio:1/1.08}
-  .hero .md-k.spatie{width:60%;aspect-ratio:auto;height:46px}
-  .hero .md-regel{font-size:40px}
+  .hero .md{padding:14px 16px 14px}
+  .hero .md-kop{margin:0 0 8px}.hero .md-kop img{width:54px;height:54px}
+  .hero .md-ballon{min-height:0;margin:0 0 8px}
+  .hero .md-baan{aspect-ratio:1120/225}
+  .hero .md-k{width:calc((100% - 54px) / 10);height:auto;aspect-ratio:1/.8}
+  .hero .md-k.spatie{width:60%;aspect-ratio:auto;height:38px}
+  .hero .md-regel{font-size:36px;margin:2px 0 6px}
+  .hero .md-uitleg{margin:8px 0 0}.hero .md-start{margin:8px 0 2px}
 }
 @media (max-width:980px){.hero .md{margin-top:calc(var(--ruimte) * 2)}}
 /* Telefoon (Tim, 12-10-2026): mini-les helemaal bovenaan, direct onder de kop, zodat je meteen kunt oefenen.
@@ -48,6 +57,8 @@ display:grid;place-items:center;font:inherit;font-size:clamp(14px,2.2vw,18px);co
   .hero .md-kop{gap:10px;margin:0 0 8px}.hero .md-kop img{width:44px;height:44px}
   .hero .md-kop h2{font-size:17px}.hero .md-kop p{font-size:13px;margin:0}
   .hero .md-ballon{min-height:0;font-size:14px;padding:6px 10px;margin:0 0 6px}
+  .hero .md-baan{display:none}                 /* eerste scherm niet langer maken: de baan komt pas na Start */
+  .hero .md.md-bezig .md-baan{display:block}
   .hero .md-regel{font-size:32px;margin:2px 0 8px}
   .hero .md-k{height:44px}
   .hero .md-uitleg{font-size:12.5px;margin:8px 0 0;line-height:1.35}
@@ -55,3 +66,4 @@ display:grid;place-items:center;font:inherit;font-size:clamp(14px,2.2vw,18px);co
 }
 .md-tel{display:none}
 @media (pointer:coarse) and (max-width:820px){.md-laptop{display:none}.md-tel{display:inline}.md-klaar .md-tel{display:inline-flex}.md-rij.md-laptop{display:none}}
+@media (prefers-reduced-motion:reduce){.md-k,.md-k.doel,.md-k.tik{transition:none;transform:none}}
