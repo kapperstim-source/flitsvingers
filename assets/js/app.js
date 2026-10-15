@@ -21,7 +21,7 @@ const LS = 'flitsvingers_app_v2';
 const DEF_SETTINGS = { voice: true, sfx: true, errSound: false, dys: false, calm: false, kbd: true, hands: true, world3d: true };
 const rid = (n = 10) => { const a = 'abcdefghjkmnpqrstuvwxyz23456789'; let s = ''; const r = crypto.getRandomValues(new Uint8Array(n)); for (const x of r) s += a[x % a.length]; return s; };
 function newProfile(nick, color) {
-  return { id: rid(10), nick: nick || 'Speler', color: color || '#3a5bff', settings: { ...DEF_SETTINGS }, lessons: {}, xp: 0, days: {}, errs: {}, badges: {}, best: { apm: 0 }, proef: [], diploma: null, updated: Date.now() };
+  return { id: rid(10), nick: nick || 'Speler', color: color || '#3a5bff', settings: { ...DEF_SETTINGS }, lessons: {}, xp: 0, days: {}, errs: {}, badges: {}, best: { apm: 0 }, proef: [], diploma: null, munten: 0, kart: {}, bezit: {}, vinger: {}, updated: Date.now() };
 }
 function loadDB() {
   let db = null;
@@ -45,6 +45,7 @@ function fixProfile(p) {
   p.settings = { ...DEF_SETTINGS, ...(p.settings || {}) };
   ['lessons', 'days', 'errs', 'badges'].forEach(k => { p[k] = p[k] || {}; });
   p.best = p.best || { apm: 0 }; p.proef = p.proef || []; p.xp = p.xp || 0;
+  p.munten = p.munten || 0; p.kart = p.kart || {}; p.bezit = p.bezit || {}; p.vinger = p.vinger || {};
   return p;
 }
 if (S) fixProfile(S);
@@ -210,7 +211,7 @@ function streak(p = S) {
 function weekSeconds(p = S) { let s = 0; const d = new Date(); for (let i = 0; i < 7; i++) { s += p.days[dayKey(d)] || 0; d.setDate(d.getDate() - 1); } return s; }
 
 /* ================= data ================= */
-let LES = [], ZONES = [], WORDS = [], NAMES = [], SENT = [], TEXTS = {}, EXAMS = [];
+let LES = [], ZONES = [], WORDS = [], NAMES = [], SENT = [], TEXTS = {}, EXAMS = [], GEK = [];
 const lessonById = id => LES.find(l => l.id === id);
 const isDone = id => !!(S.lessons[id] && S.lessons[id].done);
 function firstOpen() { for (const l of LES) if (!isDone(l.id)) return l.id; return null; }
@@ -272,6 +273,13 @@ function genSentences(L, al, n, thema) {
   if (chosen.length < n) txt = (txt ? txt + ' ' : '') + genWords(L, al, (n - chosen.length) * 4);
   return txt;
 }
+/* gekke zinnetjes (assets/data/grappig.json, gemaakt met tools/grappig.py): alleen zinnen die het kind in deze les al kan typen */
+function genGek(L, al, n) {
+  const pool = GEK.filter(z => z.vanaf <= L.id && okChars(z.t, al) && (!al.shift || /^[A-Z]/.test(z.t)));
+  if (!pool.length) return genWords(L, al, n * 4);
+  const nieuw = shuffle(pool.filter(z => z.vanaf >= L.id - 2)), rest = shuffle(pool.filter(z => z.vanaf < L.id - 2));
+  return nieuw.concat(rest).slice(0, n).map(z => z.t).join(' ');
+}
 function genNames(al, n) {
   const pool = NAMES.filter(w => okChars(w, al));
   return shuffle(pool).slice(0, n).join(' ');
@@ -293,6 +301,7 @@ function buildExercise(L, spec) {
     case 'woorden': return { ...base, text: genWords(L, al, spec.aantal || 7) };
     case 'zinnen': return { ...base, text: genSentences(L, al, spec.aantal || 2, spec.thema) };
     case 'namen': return { ...base, text: genNames(al, spec.aantal || 6) };
+    case 'gek': return { ...base, text: genGek(L, al, spec.aantal || 2) };
     case 'tekst': return { ...base, text: TEXTS[spec.thema] || genLong(L, al, 300), long: true };
     case 'race': return { ...base, kind: 'race', tempo: spec.tempo || 50, text: genWords(L, al, spec.aantal || 8) };
     case 'snelheid': return { ...base, kind: 'speed', seconds: spec.seconden || 60, text: genLong(L, al, 700), long: true };
@@ -310,7 +319,7 @@ function buildExam(kind) {
    en een les zonder race krijgt er een aan het eind (woorden uit de les zelf, Flits net iets sneller dan de training). */
 const FASEN = [['garage', 'Garage'], ['training', 'Training'], ['tunnel', 'Tunnel'], ['race', 'Race']];
 const FASENAAM = Object.fromEntries(FASEN);
-const DELEN = [['spoiler', 'spoiler'], ['strepen', 'racestrepen'], ['uitlaat', 'turbo-uitlaat'], ['velgen', 'gouden velgen']];
+const DELEN = [['spoiler', 'spoiler'], ['strepen', 'racestrepen'], ['uitlaat', 'turbo-uitlaat'], ['velgen', 'velgen']];
 function weekendPlan(L) {
   if (!L || L.soort === 'proef' || L.soort === 'examen' || !L.oefeningen || !L.oefeningen.length) return [];
   const f = { garage: [], training: [], tunnel: [], race: [] };
@@ -325,7 +334,9 @@ function weekendPlan(L) {
 }
 /* race-tekst voor een les zonder eigen race: woorden die het kind in deze les al typte */
 function eigenRaceTekst(L) {
-  const uniq = shuffle([...new Set(R.words.filter(w => w.length >= 2 && w.length <= 10))]);
+  const echt = new Set(WORDS.concat(GEK.flatMap(z => z.t.split(' '))));   // echte woorden eerst, rijtjes als 'rfr' alleen als het niet anders kan
+  const alle = shuffle([...new Set(R.words.filter(w => w.length >= 2 && w.length <= 10))]);
+  const uniq = alle.filter(w => echt.has(w)).concat(alle.filter(w => !echt.has(w)));
   const doel = L.id <= 3 ? 24 : L.id <= 14 ? 40 : 52;
   const out = []; let len = 0;
   for (const w of uniq) { if (len >= doel) break; out.push(w); len += w.length + 1; }
@@ -381,6 +392,184 @@ function aftellen() {
   R.timers.push(setTimeout(() => { a.innerHTML = ''; }, 3300));
 }
 
+/* ================= munten, eigen kart en vingersterren (sinds 15-10-2026) =================
+   Munten: elk woord dat je af typt = een munt (goud = zonder fout, 2 munten; zilver = met fout, 1 munt). Race gewonnen = +10.
+   Les klaar = +5 per ster. Netjes typen levert dus het meest op, niet snel typen ("netjes gaat voor snel").
+   Garage-winkel: met munten koop je blijvende spullen voor je kart; na bepaalde lessen komt er iets nieuws in de winkel.
+   Vingersterren: elke vinger (en de duimen) heeft een ster. Typt die vinger lang genoeg (STER_MIN toetsen) heel netjes
+   (lopend gemiddelde >= STER_ACC), dan wordt zijn ster goud. Alle 9 goud = de gouden lak (niet te koop). */
+const VAKKEN = [['lak', 'Lak'], ['helm', 'Helm'], ['spoiler', 'Spoiler'], ['velgen', 'Velgen'], ['vlam', 'Turbovlam'], ['spoor', 'Spoor'], ['vlag', 'Vlag']];
+// [id, vak, naam, prijs, beschikbaar na les, uiterlijk]
+const WINKEL = [
+  ['lak-eigen', 'lak', 'Jouw eigen kleur', 0, 0, null],
+  ['lak-rood', 'lak', 'Brandweerrood', 40, 1, { kleur: '#e5484d' }],
+  ['lak-groen', 'lak', 'Grasgroen', 40, 1, { kleur: '#12a26b' }],
+  ['lak-roze', 'lak', 'Kauwgomroze', 40, 2, { kleur: '#ff6fa8' }],
+  ['lak-oranje', 'lak', 'Mandarijn', 40, 2, { kleur: '#ff9f2f' }],
+  ['lak-paars', 'lak', 'Paars', 50, 3, { kleur: '#7b4dff' }],
+  ['lak-zwart', 'lak', 'Nachtzwart', 60, 4, { kleur: '#2b2f45' }],
+  ['lak-wit', 'lak', 'Sneeuwwit', 60, 5, { kleur: '#f4f5fa' }],
+  ['lak-neon', 'lak', 'Neongeel', 90, 6, { kleur: '#d9ff3c' }],
+  ['lak-tijger', 'lak', 'Tijgerstrepen', 150, 10, { patroon: 'tijger' }],
+  ['lak-vlammen', 'lak', 'Vlammen', 200, 15, { patroon: 'vlammen' }],
+  ['lak-luipaard', 'lak', 'Luipaardvlekken', 220, 19, { patroon: 'luipaard' }],
+  ['lak-regenboog', 'lak', 'Regenboog', 300, 23, { patroon: 'regenboog' }],
+  ['lak-goud', 'lak', 'Gouden lak', 0, 'goud', { patroon: 'goud' }],
+  ['helm-wit', 'helm', 'Witte helm', 0, 0, { kleur: '#ffffff' }],
+  ['helm-rood', 'helm', 'Rode helm', 30, 1, { kleur: '#e5484d' }],
+  ['helm-geel', 'helm', 'Gele helm', 30, 2, { kleur: '#ffc93c' }],
+  ['helm-zwart', 'helm', 'Zwarte helm', 30, 3, { kleur: '#2b2f45' }],
+  ['helm-streep', 'helm', 'Racestreep', 70, 5, { kleur: '#ffffff', patroon: 'streep' }],
+  ['helm-vlekken', 'helm', 'Luipaardhelm', 120, 12, { kleur: '#ffc93c', patroon: 'vlekken' }],
+  ['helm-ruimte', 'helm', 'Ruimtehelm', 220, 20, { kleur: '#ffffff', patroon: 'bol' }],
+  ['spoiler-klein', 'spoiler', 'Kleine spoiler', 0, 0, { type: 'klein' }],
+  ['spoiler-groot', 'spoiler', 'Grote spoiler', 90, 6, { type: 'groot' }],
+  ['spoiler-dubbel', 'spoiler', 'Dubbeldekker', 150, 14, { type: 'dubbel' }],
+  ['spoiler-vleugels', 'spoiler', 'Vleugels', 250, 24, { type: 'vleugels' }],
+  ['velg-zilver', 'velgen', 'Zilveren velgen', 0, 0, { kleur: '#d9dbe6' }],
+  ['velg-zwart', 'velgen', 'Zwarte velgen', 40, 2, { kleur: '#2b2f45' }],
+  ['velg-rood', 'velgen', 'Rode velgen', 50, 4, { kleur: '#e5484d' }],
+  ['velg-neon', 'velgen', 'Neon velgen', 120, 9, { kleur: '#3cffd0', neon: true }],
+  ['velg-goud', 'velgen', 'Gouden velgen', 200, 16, { kleur: '#ffc93c', neon: true }],
+  ['vlam-oranje', 'vlam', 'Oranje turbovlam', 0, 0, { kleur: '#ff9f2f' }],
+  ['vlam-blauw', 'vlam', 'Blauwe turbovlam', 60, 3, { kleur: '#3aa0ff' }],
+  ['vlam-groen', 'vlam', 'Groene turbovlam', 80, 8, { kleur: '#38e07b' }],
+  ['vlam-regenboog', 'vlam', 'Regenboogvlam', 180, 18, { kleur: 'regenboog' }],
+  ['spoor-geen', 'spoor', 'Geen spoor', 0, 0, null],
+  ['spoor-vonken', 'spoor', 'Vonkenspoor', 100, 7, { soort: 'vonk' }],
+  ['spoor-sterren', 'spoor', 'Sterrenspoor', 150, 13, { soort: 'ster' }],
+  ['spoor-confetti', 'spoor', 'Confettispoor', 220, 22, { soort: 'confetti' }],
+  ['vlag-geen', 'vlag', 'Geen vlag', 0, 0, null],
+  ['vlag-geel', 'vlag', 'Gele vlag', 80, 11, { kleur: '#ffc93c' }],
+  ['vlag-finish', 'vlag', 'Finishvlag', 140, 17, { kleur: 'geblokt' }]
+];
+const STANDAARD = { lak: 'lak-eigen', helm: 'helm-wit', spoiler: 'spoiler-klein', velgen: 'velg-zilver', vlam: 'vlam-oranje', spoor: 'spoor-geen', vlag: 'vlag-geen' };
+const VINGERS = ['lp', 'lr', 'lm', 'li', 'th', 'ri', 'rm', 'rr', 'rp'];
+const VNAAM = { lp: 'Linker pink', lr: 'Linker ringvinger', lm: 'Linker middelvinger', li: 'Linker wijsvinger', th: 'Duimen', ri: 'Rechter wijsvinger', rm: 'Rechter middelvinger', rr: 'Rechter ringvinger', rp: 'Rechter pink' };
+const STER_MIN = 120, STER_ACC = 0.97;
+const MUNT_ICON = '<svg viewBox="0 0 24 24" class="i munt"><circle cx="12" cy="12" r="9.5" fill="#ffc93c" stroke="#1b1f3a" stroke-width="2"/><circle cx="12" cy="12" r="5.5" fill="none" stroke="#a8790a" stroke-width="2"/></svg>';
+const item = id => WINKEL.find(x => x[0] === id);
+const alleGoud = (p = S) => VINGERS.every(f => p.vinger[f] && p.vinger[f].goud);
+function beschikbaar(it, p = S) { const v = it[4]; return v === 'goud' ? alleGoud(p) : !v || !!(p.lessons[v] && p.lessons[v].done); }
+const heeft = (id, p = S) => !!(p.bezit[id] || (item(id) && item(id)[3] === 0 && beschikbaar(item(id), p)));
+function kartLook(p = S, pas) {
+  const k = { ...STANDAARD, ...(p.kart || {}), ...(pas || {}) };
+  const v = id => { const it = item(id); return it ? it[5] : null; };
+  return { lak: k.lak === 'lak-eigen' ? { kleur: p.color } : v(k.lak) || { kleur: p.color }, helm: v(k.helm) || { kleur: '#ffffff' },
+    spoiler: (v(k.spoiler) || {}).type || 'klein', velgen: v(k.velgen) || { kleur: '#d9dbe6' }, vlam: (v(k.vlam) || {}).kleur || '#ff9f2f',
+    spoor: v(k.spoor) || null, vlag: (v(k.vlag) || {}).kleur || null, nummer: (p.kart && p.kart.nummer) || 0,
+    sterren: VINGERS.map(f => (p.vinger[f] && p.vinger[f].goud ? 1 : 0)) };
+}
+/* vinger bijhouden: de vinger die de toets HAD moeten typen krijgt de goede of foute aanslag */
+function telVinger(doel, goed) {
+  if (!S || !R || R.examLike || doel == null) return;
+  const f = doel === ' ' ? 'th' : FMAP[keyOf(doel).key]; if (!f || !VINGERS.includes(f)) return;
+  const v = S.vinger[f] || (S.vinger[f] = { n: 0, a: 0.9, goud: false });
+  v.n++; v.a = Math.round((v.a + ((goed ? 1 : 0) - v.a) * 0.03) * 1e4) / 1e4;
+  if (!v.goud && v.n >= STER_MIN && v.a >= STER_ACC) {
+    v.goud = true;
+    const tekst = 'Gouden ster voor je ' + VNAAM[f].toLowerCase() + '!';
+    if (R.w3) { wtoast(tekst); W.uiterlijk(kartLook()); W.ster(); } else toast(tekst);
+    playSoft('rw_ster_goud');
+    if (alleGoud()) setTimeout(() => toast('Alle vingersterren goud! De gouden lak ligt in je garage.'), 2800);
+  }
+}
+/* munt voor een afgetypt woord */
+function muntVoorWoord() {
+  const goud = !R.woordFout; const w = goud ? 2 : 1;
+  R.munten += w; S.munten += w; R.woordFout = false;
+  if (R.w3) { if (R.muntOpBaan) W.pak(R.woordNr, goud); else W.pakNu(goud); }
+  R.woordNr++;
+  if (S.settings.sfx) { beep(goud ? 1320 : 990, .06, 'triangle', .03); beep(goud ? 1760 : 1320, .09, 'triangle', .03, .05); }
+  muntShow();
+}
+function muntShow() {
+  const m = $('#w-munt-n'); if (m) m.textContent = R ? R.munten : 0;
+  const s = $('#st-munt'); if (s) s.textContent = R ? R.munten : 0;
+  const c = $('#w-munt'); if (c) { c.classList.add('pop'); setTimeout(() => c.classList.remove('pop'), 110); }
+}
+/* woord-einden van de tekst als plek op de baan (0..1) */
+function woordPlekken(t) { const f = []; for (let i = 0; i < t.length; i++) if (t[i] !== ' ' && (t[i + 1] === ' ' || i === t.length - 1)) f.push((i + 1) / t.length); return f; }
+
+/* ---------- de garage ---------- */
+let WG = null, gVak = 'lak', gPas = null;
+function garage3D() {
+  if (!want3D() || !window.FV3D || WG === false) return null;
+  if (!WG) { try { WG = window.FV3D.maak($('#garage-3d'), { nick: S.nick, kleur: S.color }) || false; } catch (e) { WG = false; } }
+  return WG || null;
+}
+function swatch(it) {
+  const v = it[5] || {}, k = v.kleur;
+  const PAT = { tijger: 'repeating-linear-gradient(115deg,#ff9f2f 0 7px,#1b1f3a 7px 11px)', vlammen: 'linear-gradient(0deg,#e5484d 0 40%,#ff9f2f 40% 70%,#ffd23f 70%)',
+    luipaard: 'radial-gradient(circle at 30% 30%,#6b4210 0 3px,transparent 4px),radial-gradient(circle at 70% 65%,#6b4210 0 3px,transparent 4px),#ffc93c',
+    regenboog: 'linear-gradient(180deg,#e5484d,#ff9f2f,#ffd23f,#12a26b,#3a5bff,#7b4dff)', goud: 'linear-gradient(135deg,#fff3c4,#e8b923 45%,#a8790a)',
+    streep: 'linear-gradient(0deg,#fff 0 38%,#e5484d 38% 62%,#fff 62%)', vlekken: 'radial-gradient(circle at 35% 35%,#6b4210 0 3px,transparent 4px),radial-gradient(circle at 68% 62%,#6b4210 0 3px,transparent 4px),#ffc93c',
+    bol: 'radial-gradient(circle at 35% 30%,#fff 0 30%,#cfe9ff 31%)', geblokt: 'repeating-conic-gradient(#1b1f3a 0 25%,#fff 0 50%) 0 0/12px 12px',
+    vonk: 'radial-gradient(circle,#fff 0 15%,#ffd23f 16% 40%,#ff9f2f 41% 60%,transparent 61%),#1b1f3a', ster: 'radial-gradient(circle,#fff 0 20%,#7ad7ff 21% 45%,transparent 46%),#1b1f3a',
+    confetti: 'radial-gradient(circle at 25% 30%,#e5484d 0 3px,transparent 4px),radial-gradient(circle at 70% 35%,#3a5bff 0 3px,transparent 4px),radial-gradient(circle at 45% 72%,#12a26b 0 3px,transparent 4px),#ffc93c' };
+  let bg = '#e9e4da';
+  if (it[0] === 'lak-eigen') bg = S.color;
+  else if (v.patroon && PAT[v.patroon]) bg = PAT[v.patroon];
+  else if (v.soort && PAT[v.soort]) bg = PAT[v.soort];
+  else if (k === 'geblokt' || k === 'regenboog') bg = PAT[k];
+  else if (v.type) bg = { klein: '#cfd4e2', groot: '#a7b0c8', dubbel: '#8a94b0', vleugels: '#6c7799' }[v.type];
+  else if (k) bg = k;
+  const ic = it[1] === 'spoiler' ? '<i class="sp sp-' + (v.type || 'klein') + '"></i>' : '';
+  return '<span class="sw-k" style="background:' + bg + '">' + ic + '</span>';
+}
+function openGarage() {
+  if (!S) return;
+  stopAudio(); gPas = null;
+  renderGarage(); show('garage');
+  const w = garage3D();
+  $('#garage-3d').classList.toggle('plat', !w);
+  if (w) { w.naam(S.nick); w.delen(4); w.uiterlijk(kartLook()); w.modus('toonzaal'); w.pauze(false); }
+  if (!S.garageGezien) { S.garageGezien = today(); save(); play('rw_garage_welkom'); }
+}
+function renderGarage() {
+  $('#g-titel').textContent = 'Garage van ' + S.nick;
+  $('#g-munten').innerHTML = MUNT_ICON + '<b>' + S.munten + '</b> munten';
+  $('#g-tabs').innerHTML = VAKKEN.map(([k, n]) => '<button class="g-tab' + (k === gVak ? ' on' : '') + '" data-vak="' + k + '">' + n + '</button>').join('');
+  $('#g-tabs').querySelectorAll('[data-vak]').forEach(b => b.onclick = () => { gVak = b.dataset.vak; gPas = null; renderGarage(); if (WG) WG.uiterlijk(kartLook()); });
+  const nu = { ...STANDAARD, ...S.kart }[gVak];
+  $('#g-items').innerHTML = WINKEL.filter(it => it[1] === gVak && (it[4] !== 'goud' || alleGoud())).map(it => {
+    const [id, , naam, prijs, vanaf] = it; const kan = beschikbaar(it), bezit = heeft(id);
+    let knop, cls = '';
+    if (bezit && nu === id) { knop = '<button class="btn small" disabled>In gebruik</button>'; cls = ' aan'; }
+    else if (bezit) knop = '<button class="btn small" data-kies="' + id + '">Kies</button>';
+    else if (!kan) { knop = '<span class="g-slot">' + ICON.lock + 'Na les ' + vanaf + '</span>'; cls = ' slot'; }
+    else if (S.munten >= prijs) knop = '<button class="btn small yellow" data-koop="' + id + '">Koop ' + MUNT_ICON + prijs + '</button>';
+    else knop = '<span class="g-slot">Nog ' + (prijs - S.munten) + ' munten</span>';
+    return '<div class="g-item' + cls + (gPas === id ? ' pas' : '') + '" data-pas="' + id + '">' + swatch(it) + '<b>' + H(naam) + '</b>' + (prijs && !bezit ? '<small>' + MUNT_ICON + prijs + '</small>' : '<small>' + (bezit ? 'Van jou' : 'Gratis') + '</small>') + knop + '</div>';
+  }).join('');
+  $('#g-items').querySelectorAll('[data-pas]').forEach(el => el.addEventListener('click', e => {
+    if (e.target.closest('button')) return;
+    gPas = el.dataset.pas; if (WG) WG.uiterlijk(kartLook(S, { [gVak]: gPas }));
+    $('#g-items').querySelectorAll('.g-item').forEach(x => x.classList.toggle('pas', x === el));
+  }));
+  $('#g-items').querySelectorAll('[data-kies]').forEach(b => b.onclick = () => { S.kart[gVak] = b.dataset.kies; gPas = null; save(); renderGarage(); if (WG) WG.uiterlijk(kartLook()); sfx('step'); });
+  $('#g-items').querySelectorAll('[data-koop]').forEach(b => b.onclick = () => {
+    const it = item(b.dataset.koop); if (!it || S.munten < it[3] || !beschikbaar(it)) return;
+    S.munten -= it[3]; S.bezit[it[0]] = today(); S.kart[gVak] = it[0]; gPas = null; save();
+    toast('Gekocht: ' + it[2] + '!'); sfx('win'); renderGarage(); renderTop(); if (WG) { WG.uiterlijk(kartLook()); WG.ster(); }
+  });
+  $('#g-nummer').value = S.kart.nummer || '';
+  $('#g-vingers').innerHTML = VINGERS.map(f => {
+    const v = S.vinger[f] || { n: 0, a: 0.9, goud: false };
+    const voortgang = v.goud ? 100 : Math.round(Math.min(1, v.n / STER_MIN) * Math.min(1, Math.max(0, (v.a - 0.9) / (STER_ACC - 0.9))) * 100);
+    return '<div class="g-vinger' + (v.goud ? ' goud' : '') + '"><span class="g-ster f-' + (FCLASS[f] || 'thumb') + '">' + ICON.star + '</span><div><b>' + VNAAM[f] + '</b><div class="bar"><i style="width:' + voortgang + '%"></i></div><small>' + (v.goud ? 'Goud!' : v.n < 20 ? 'Nog niet genoeg getypt' : voortgang + '% op weg naar goud') + '</small></div></div>';
+  }).join('');
+}
+$('#g-nummer').addEventListener('change', e => { const n = Math.max(0, Math.min(99, parseInt(e.target.value, 10) || 0)); S.kart.nummer = n; e.target.value = n || ''; save(); if (WG) WG.uiterlijk(kartLook()); });
+
+
+/* ---------- race met vier (sinds 15-10-2026) ----------
+   Flits rijdt net iets sneller dan het kind in de training, Vlam (vos) iets langzamer, Hop (haas) het langzaamst.
+   Plek = hoeveel rivalen eerder over de finish waren. (De cup per gebied is op 15-10-2026 op verzoek weer weggehaald.) */
+const RIVALEN = [['flits', 'Flits'], ['vlam', 'Vlam'], ['hop', 'Hop']];   // van snel naar langzaam
+const zoneVan = id => ZONES.find(z => id >= z.van && id <= z.tot);
+const woordBaan = t => { const a = []; let start = 0; for (let i = 0; i <= t.length; i++) if (i === t.length || t[i] === ' ') { if (i > start) a.push({ f: i / t.length, w: t.slice(start, i) }); start = i + 1; } return a; };
+
 /* ================= algemene UI ================= */
 function applySettings() {
   const b = document.body.classList;
@@ -391,7 +580,7 @@ function renderTop() {
   if (!S) return;
   const st = streak();
   $('#chip-streak').innerHTML = ICON.zap + st + (st === 1 ? ' dag' : ' dagen');
-  $('#chip-xp').innerHTML = ICON.star + S.xp + ' punten';
+  $('#chip-xp').innerHTML = MUNT_ICON + S.munten + ' munten';
   $('#chip-nick').innerHTML = '<span class="avatar" style="background:' + S.color + '">' + H(S.nick.charAt(0).toUpperCase()) + '</span><span class="hide-sm">' + H(S.nick) + '</span>';
 }
 let screen = 'loading';
@@ -401,6 +590,7 @@ function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === 's-' + id));
   document.body.classList.toggle('rw3d-on', id === 'ex' && $('#s-ex').classList.contains('rw3d'));
   if (W) W.pauze(id !== 'ex');
+  if (WG) WG.pauze(id !== 'garage');
   window.scrollTo({ top: 0, behavior: 'auto' });
   renderTop();
 }
@@ -471,6 +661,7 @@ function renderMap() {
   const pb = $('#btn-proef');
   pb.hidden = !(paidOk(29) && reachable(29));
   pb.onclick = () => openLesson(29);
+  $('#btn-garage').onclick = () => openGarage();
   $('#dayring').style.setProperty('--p', Math.min(100, secs / CFG.DAY_GOAL * 100));
   $('#daymin').textContent = Math.floor(secs / 60);
   $('#day-msg').textContent = dayDone ? 'Je dag is af! Extra oefenen mag, maar hoeft niet. Morgen verder.' : '12 minuten per dag is genoeg. Daarna is je dag af.';
@@ -630,8 +821,8 @@ function startLesson() {
   const dipName = examLike && $('#dipname') ? $('#dipname').value.trim().slice(0, 30) : '';
   const plan = weekendPlan(L);
   R = { lesson: L, idx: 0, results: [], lessonErrs: {}, shortenNext: false, examLike, dipName, dys: !!S.settings.dys,
-        plan, words: [], trainApm: [], delen: 0, combo: 0, timers: [] };
-  if (!examLike && world()) { W.naam(S.nick, S.color); R.delen = plan.length && plan[0].fase === 'garage' ? 0 : 4; W.delen(R.delen); }
+        plan, words: [], trainApm: [], delen: 0, combo: 0, timers: [], munten: 0, woordNr: 0, woordFout: false };
+  if (!examLike && world()) { W.naam(S.nick); W.uiterlijk(kartLook()); W.gebied((zoneVan(L.id) || {}).id || 'dorp'); R.delen = plan.length && plan[0].fase === 'garage' ? 0 : 4; W.delen(R.delen); }
   renderKeyboard($('#kbd-ex')); renderHands($('#hands-ex'));
   const touch = (navigator.maxTouchPoints || 0) > 0 && !matchMedia('(pointer: fine)').matches;
   $('#tablet-notice').classList.toggle('on', touch);
@@ -649,11 +840,12 @@ function startExercise(drillText) {
   else if (R.item.spec.eigen) ex = { label: R.item.spec.label, blind: false, kind: 'race', tempo: 40, text: eigenRaceTekst(L) };
   else ex = buildExercise(L, R.item.spec);
   if (ex.kind === 'race' && !drillText) ex.tempo = raceTempo(ex.tempo);
+  R.tempi = ex.kind === 'race' ? { flits: ex.tempo, vlam: Math.max(10, Math.round(ex.tempo * .93)), hop: Math.max(9, Math.round(ex.tempo * .85)) } : null;
   R.drill = !!drillText;
   let text = ex.text.replace(/\s+/g, ' ').trim();
   if (!drillText && R.shortenNext && ex.kind === 'normal' && !ex.long) text = shorten(text);
   if (!drillText && !R.examLike && ex.kind !== 'race') R.words.push(...text.split(' '));
-  Object.assign(R, { ex, text, pos: 0, errors: 0, errAt: new Set(), consec: 0, active: 0, lastT: 0, waiting: false, spans: [], t0: 0, flitsDone: false, combo: 0 });
+  Object.assign(R, { ex, text, pos: 0, errors: 0, errAt: new Set(), consec: 0, active: 0, lastT: 0, waiting: false, spans: [], t0: 0, flitsDone: false, combo: 0, woordNr: 0, woordFout: false, muntOpBaan: false });
   stopTimers();
   $('#ex-title').textContent = R.examLike ? L.titel : 'Les ' + L.id + ': ' + L.titel;
   $('#ex-sub').textContent = drillText ? 'Extra: alleen de lastige letters' : R.examLike ? 'Typ zo netjes mogelijk. De tijd start bij je eerste toets.' : 'Oefening ' + (R.idx + 1) + ' van ' + R.plan.length + ' · ' + FASENAAM[R.item.fase] + (R.shortenNext ? ' · iets korter, rustig aan' : '');
@@ -670,7 +862,7 @@ function startExercise(drillText) {
   const tm = $('#timer'); tm.classList.toggle('on', timed); tm.classList.remove('low');
   if (timed) tm.textContent = fmtTime(ex.seconds);
   const race = $('#race'); race.classList.toggle('on', ex.kind === 'race');
-  if (ex.kind === 'race') { const me = $('#run-me'); me.style.background = S.color; me.textContent = S.nick.charAt(0).toUpperCase(); me.style.left = '12%'; $('#run-fl').style.left = '12%'; }
+  if (ex.kind === 'race') { const me = $('#run-me'); me.style.background = S.color; me.textContent = S.nick.charAt(0).toUpperCase(); me.style.left = '12%'; ['#run-fl', '#run-hop', '#run-vlam'].forEach(x => { $(x).style.left = '12%'; }); }
   $('#line').classList.toggle('long', !!ex.long);
   /* 3D-wereld (valt terug op de platte weergave als 3D niet kan of uit staat) */
   R.w3 = !R.examLike && !!world();
@@ -682,11 +874,12 @@ function startExercise(drillText) {
   const eersteVan = f => !!R.item && R.plan.findIndex(q => q.fase === f) === R.idx;
   if (R.w3) {
     W.modus(ex.kind === 'race' ? 'race' : fase); W.pauze(false);
+    R.muntOpBaan = ex.kind !== 'speed'; if (R.muntOpBaan) W.woorden(woordBaan(text));
     $('#w-combo-n').textContent = '0'; $('#w-combo').className = 'w-combo';
     hud();
   }
   buildLine(text);
-  updateHint(); updateStats();
+  updateHint(); updateStats(); muntShow();
   if (ex.kind === 'race') {
     setFlits('juich', R.w3 ? 'Op je plaatsen... klaar...' : 'Klaar voor de race?'); play('race_start');
     if (R.w3) { W.start(); aftellen(); }
@@ -755,9 +948,10 @@ function onTick() {
   if (!R || R.waiting) return;
   const ex = R.ex;
   if (ex.kind === 'race') {
-    const fp = Math.min(1, elapsedMin() * ex.tempo / R.text.length);
-    $('#run-fl').style.left = (12 + fp * 80) + '%';
-    if (R.w3) { W.flits(fp); const ps = $('#w-pos'); if (ps) { const v = W.voor(); ps.textContent = v ? 'Jij ligt voor' : 'Flits ligt voor'; ps.className = v ? 'voor' : ''; } }
+    const tm = elapsedMin(), fr = k => Math.min(1, tm * R.tempi[k] / R.text.length), fp = fr('flits');
+    $('#run-fl').style.left = (12 + fp * 80) + '%'; $('#run-hop').style.left = (12 + fr('hop') * 80) + '%'; $('#run-vlam').style.left = (12 + fr('vlam') * 80) + '%';
+    const plek = 1 + RIVALEN.filter(([k]) => fr(k) > R.pos / R.text.length).length;
+    if (R.w3) { RIVALEN.forEach(([k]) => W.rivaal(k, fr(k))); const ps = $('#w-pos'); if (ps) { ps.textContent = 'Je ligt ' + plek + 'e'; ps.className = plek === 1 ? 'voor' : ''; } }
     if (fp >= 1 && !R.flitsDone) { R.flitsDone = true; setFlits('juich', 'Ik ben er! Maak jij het af?'); }
   } else {
     const left = ex.seconds - elapsedMin() * 60;
@@ -782,7 +976,7 @@ function typeChar(ch) {
     const s = R.spans[R.pos];
     s.classList.remove('cur', 'err'); s.classList.add('done'); if (R.errAt.has(R.pos)) s.classList.add('had');
     R.pos++; R.consec = 0; R.combo++;
-    sfx('tick');
+    sfx('tick'); telVinger(target, true);
     if (R.w3) {
       if (R.item && R.item.fase === 'garage') {   // elke kwart van de garage-oefening = een nieuw onderdeel voor de kart
         const moet = Math.min(4, Math.floor(R.pos / R.text.length * 4 + 1e-9));
@@ -791,6 +985,7 @@ function typeChar(ch) {
       W.goed(R.combo); comboShow();
       if (R.combo === 10 && !(R.item && R.item.fase === 'garage')) { setFlits('juich', 'Reeks van 10! Turbo aan!', 2500); playSoft('rw_turbo'); }
     }
+    if (!R.examLike && target !== ' ' && (R.text[R.pos] === ' ' || R.pos >= R.text.length)) muntVoorWoord();   // woord af = munt
     if (R.ex.kind === 'race') $('#run-me').style.left = (12 + R.pos / R.text.length * 80) + '%';
     if (R.pos >= R.text.length) {
       if (R.ex.kind === 'speed' || R.ex.kind === 'exam') { appendMore(); }
@@ -800,7 +995,7 @@ function typeChar(ch) {
     keepVisible();
     updateHint();
   } else {
-    R.errors++; R.errAt.add(R.pos); R.consec++; R.combo = 0;
+    R.errors++; R.errAt.add(R.pos); R.consec++; R.combo = 0; R.woordFout = true; telVinger(target, false);
     if (R.w3) { W.fout(); comboShow(); }
     if (target !== ' ') { S.errs[target] = (S.errs[target] || 0) + 1; R.lessonErrs[target] = (R.lessonErrs[target] || 0) + 1; }
     sfx('err');
@@ -840,8 +1035,10 @@ function finishExercise() {
   if (acc === 100 && correct >= 20) award('foutloos');
   if (timed || ex.kind === 'race') { if (apm > (S.best.apm || 0)) S.best.apm = apm; }
   if (ex.kind === 'speed') { if (apm >= 50) award('snel50'); if (apm >= 100) award('snel100'); }
-  const won = ex.kind === 'race' && !R.flitsDone;
+  const plek = ex.kind === 'race' ? 1 + RIVALEN.filter(([k]) => R.text.length / R.tempi[k] < elapsedMin()).length : 0;
+  const won = plek === 1;
   if (won) award('race');
+  if (won && !R.examLike) { R.munten += 10; S.munten += 10; muntShow(); setTimeout(() => toast('+10 munten: je won de race!'), 600); }
   if (R.w3 && ex.kind === 'race') W.finish(won);
   save();
   const last = R.drill || R.idx >= R.plan.length - 1;
@@ -853,10 +1050,11 @@ function finishExercise() {
   const perfect = !R.errors && correct > 0;
   let msg, pose, clip, sub = '', clip2 = null;
   if (ex.kind === 'race') {
-    const close = elapsedMin() <= R.text.length / ex.tempo * 1.15;   // hooguit 15% langzamer dan Flits = "net iets"
-    if (won) { msg = 'Je was sneller dan Flits!'; pose = 'juich'; clip = 'race_win'; }
-    else if (close) { msg = 'Flits was net iets sneller.'; sub = 'Volgende keer pak je hem!'; pose = 'duim'; clip = 'race_lose'; }
-    else { msg = 'Flits was deze keer sneller.'; sub = 'Goed bezig! Nauwkeurig is belangrijker dan snel.'; pose = 'duim'; clip = 'goed'; }
+    // tekst en stem gelijk: race_win, rw_plek_2/3/4
+    if (won) { msg = 'Eerste plek! Je was sneller dan Flits!'; pose = 'juich'; clip = 'race_win'; }
+    else if (plek === 2) { msg = 'Tweede plek!'; sub = 'Knap gedaan, je zat er heel dicht bij.'; pose = 'duim'; clip = 'rw_plek_2'; }
+    else if (plek === 3) { msg = 'Derde plek!'; sub = 'Goed gereden. Volgende keer pak je er nog een.'; pose = 'duim'; clip = 'rw_plek_3'; }
+    else { msg = 'Vierde plek.'; sub = 'Het was een spannende race! Volgende keer gaat het vast beter.'; pose = 'rustig'; clip = 'rw_plek_4'; }
   }
   else if (ex.kind === 'speed' && !S.settings.dys) { msg = apm + ' aanslagen per minuut!'; pose = 'juich'; clip = perfect ? 'top_1' : acc >= 95 ? 'top_2' : 'goed'; }
   else if (perfect) { const n = Math.random() < .5 ? 1 : 3; msg = n === 1 ? 'Hartstikke strak, helemaal foutloos!' : 'Foutloos! Dit gaat heel goed!'; pose = 'juich'; clip = 'top_' + n; }
@@ -865,25 +1063,30 @@ function finishExercise() {
   else { msg = 'Rustig aan, dat is helemaal oké. De volgende oefening is wat korter.'; pose = 'rustig'; clip = 'rustig'; R.shortenNext = true; }
   /* raceweekend: overgang naar de volgende fase (tekst en stem gelijk) */
   if (R.item && volgende && acc >= 85 && R.w3) {
-    if (R.item.fase === 'garage' && volgende.fase !== 'garage') { msg = 'Je kart is af!'; sub = 'Spoiler, racestrepen, turbo-uitlaat en gouden velgen. Op naar de baan!'; pose = 'juich'; clip = 'rw_garage_klaar'; }
+    if (R.item.fase === 'garage' && volgende.fase !== 'garage') { msg = 'Je kart is af!'; sub = 'Spoiler, racestrepen, turbo-uitlaat en velgen. Op naar de baan!'; pose = 'juich'; clip = 'rw_garage_klaar'; }
     if (R.item.fase === 'tunnel' && volgende.fase !== 'tunnel') { msg = 'Zonder te kijken door de tunnel!'; pose = 'juich'; clip = 'rw_tunnel_klaar'; }
   }
   if (R.item && volgende && volgende.fase === 'race' && R.item.fase !== 'race') {
     sub = 'Kwalificatie gehaald! In de race rijdt Flits net iets sneller dan jij in de training' + (S.settings.dys ? '.' : ': ' + raceTempo(volgende.spec.tempo) + ' aanslagen per minuut.');
     clip2 = 'rw_kwalificatie';
   }
+  /* vingersterren één keer uitleggen: na de eerste oefening waarin het kind de kart in 3D zag (tekst en stem gelijk: rw_sterren_uitleg) */
+  const sterUitleg = R.w3 && !R.drill && !S.sterUitleg && !!volgende && ex.kind !== 'race' && !clip2;
+  if (sterUitleg) { S.sterUitleg = today(); save(); W.wijsSterren(); }
   const knop = last ? 'Bekijk resultaat' : volgende && R.item && volgende.fase !== R.item.fase ? 'Naar de ' + FASENAAM[volgende.fase].toLowerCase() : 'Volgende oefening';
   const p = $('#ex-panel');
   p.innerHTML = '<img src="' + IMG(pose) + '" alt="">' +
     '<div>' + starsHTML(stars) + '<h3>' + (R.drill ? 'Herhaal-rondje klaar!' : H(msg)) + '</h3>' +
     '<div class="muted" style="font-weight:700">' + acc + '% nauwkeurig' + (S.settings.dys ? '' : ' · ' + apm + ' aanslagen per minuut') + '</div>' +
     (sub ? '<div style="font-weight:700;margin-top:4px">' + H(sub) + '</div>' : '') +
+    (sterUitleg ? '<div class="ster-uitleg"><div class="su-rij" aria-hidden="true">' + ['#ff6fa8', '#ff9f43', '#24bf80', '#3ba7ff', '#ffd23f', '#3ba7ff', '#24bf80', '#ff9f43', '#ff6fa8'].map(k => '<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" fill="' + k + '"/></svg>').join('') + '</div>' +
+      '<span>Zie je de sterren boven je kart? Eén ster voor elke vinger. Typ je heel netjes met een vinger, dan wordt zijn ster goud. Alle sterren goud? Dan krijg je gouden lak!</span></div>' : '') +
     '<button class="btn" id="ex-next">' + knop + ' <span class="kbdhint">Enter</span></button></div>';
   if (R.w3 && ex.kind === 'race') R.timers.push(setTimeout(() => p.classList.add('on'), 1400));   // eerst de finish zien
   else p.classList.add('on');
   $('#ex-next').onclick = nextStep;
   sfx('step');
-  if (!R.drill) play(clip2 ? [clip, clip2] : clip);
+  if (!R.drill) play(clip2 ? [clip, clip2] : sterUitleg ? 'rw_sterren_uitleg' : clip);
   setFingers($('#hands-ex'), []); setNextKeys($('#kbd-ex'), []);
   $('#typebox').classList.remove('unfocused');
 }
@@ -904,7 +1107,9 @@ function finishLesson() {
   S.xp += gained;
   S.lessons[L.id] = { done: true, stars: Math.max(stars, prev ? prev.stars || 0 : 0), acc: Math.max(acc, prev ? prev.acc || 0 : 0), apm, date: today() };
   const tricky = Object.entries(R.lessonErrs).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([c]) => c);
-  R.lastResult = { L, acc, stars, apm, gained, tricky };
+  const bonus = stars * 5; S.munten += bonus;
+  const nieuw = prev && prev.done ? [] : WINKEL.filter(it => it[4] === L.id).map(it => it[2]);
+  R.lastResult = { L, acc, stars, apm, gained, tricky, munten: R.munten + bonus, nieuw };
   checkBadges(); save();
   if (L.id <= 3) tel('les-' + L.id + '-afgerond', 'Les ' + L.id + ' afgerond');
   sfx('win'); confetti();
@@ -922,7 +1127,7 @@ function makeDrill(chars) {
 }
 function showResult(res) {
   R.waiting = true;
-  const { L, acc, stars, apm, gained, tricky } = res;
+  const { L, acc, stars, apm, gained, tricky, munten = 0, nieuw = [] } = res;
   const secs = S.days[today()] || 0;
   const next = firstOpen();
   $('#result').innerHTML =
@@ -933,15 +1138,17 @@ function showResult(res) {
     '<div class="grid4">' +
       '<div class="stat"><b>' + acc + '%</b><span>nauwkeurig</span></div>' +
       (S.settings.dys ? '<div class="stat"><b>' + Math.floor(secs / 60) + ' min</b><span>vandaag geoefend</span></div>' : '<div class="stat"><b>' + apm + '</b><span>aanslagen per minuut</span></div>') +
-      '<div class="stat"><b>+' + gained + '</b><span>punten</span></div>' +
+      '<div class="stat"><b>+' + munten + '</b><span>munten</span></div>' +
       '<div class="stat"><b>' + (L.nieuw.length ? L.nieuw.map(k => k === 'SHIFT' ? 'Shift' : k.toUpperCase()).join(' ') : Object.keys(S.badges).length) + '</b><span>' + (L.nieuw.length ? 'nieuwe toetsen' : 'stickers') + '</span></div>' +
     '</div>' +
     (tricky.length ? '<div class="muted" style="font-size:14px;font-weight:800">Lastige toetsen vandaag:</div><div class="tricky">' + tricky.map(c => '<span>' + H(CHARNAME[c] || c.toUpperCase()) + '</span>').join('') + '</div>' : '') +
+    (nieuw.length ? '<p class="res-nieuw">' + MUNT_ICON + '<span><b>Nieuw in je garage:</b> ' + H(nieuw.join(', ')) + '</span></p>' : '') +
     (secs >= CFG.DAY_GOAL ? '<p style="color:var(--mint);font-weight:800;margin-top:8px">Je dag is af! Extra oefenen mag, maar hoeft niet.</p>' : '') +
     '<div class="row" style="margin-top:18px">' +
       (next && paidOk(next) ? '<button class="btn" id="res-next">' + (next === 30 ? 'Naar het examen' : 'Volgende les') + ' <span class="kbdhint">Enter</span></button>'
         : next ? '<button class="btn yellow" id="res-unlock">Ontgrendel de volledige cursus</button>' : '') +
       (tricky.length ? '<button class="btn ghost" id="res-drill">' + ICON.redo + 'Herhaal-rondje</button>' : '') +
+      '<button class="btn ghost" id="res-garage">' + MUNT_ICON + 'Naar je garage</button>' +
       '<button class="btn ghost" id="res-map">Naar de route</button>' +
     '</div></div>';
   show('result');
@@ -949,6 +1156,7 @@ function showResult(res) {
   const n = $('#res-next'); if (n) n.onclick = () => openLesson(next);
   const u = $('#res-unlock'); if (u) u.onclick = () => lockedModal(next);
   $('#res-map').onclick = () => { R = null; renderMap(); show('map'); };
+  $('#res-garage').onclick = () => { R = null; openGarage(); };
 }
 
 /* ================= examens en diploma ================= */
@@ -1045,7 +1253,7 @@ function openBadges() {
   openModal('<h2>Jouw stickerboek</h2><p style="margin-top:6px">' + Object.keys(S.badges).length + ' van de ' + BADGES.length + ' stickers verzameld.</p>' +
     '<div class="badges">' + BADGES.map(([id, ic, t, d]) => '<div class="badge' + (S.badges[id] ? ' got' : '') + '"><div class="bi">' + H(ic) + '</div><b>' + H(t) + '</b><small>' + H(d) + '</small></div>').join('') + '</div>');
 }
-$('#chip-xp').onclick = openBadges;
+$('#chip-xp').onclick = () => openGarage();
 
 /* ================= modals ================= */
 function openModal(html, opts = {}) { $('#modal-body').innerHTML = html; $('#modal').hidden = false; $('#modal-x').style.display = opts.noClose ? 'none' : ''; $('#modal').dataset.noclose = opts.noClose ? '1' : ''; }
@@ -1115,7 +1323,7 @@ function openPlayers() {
   const list = Object.values(DB.profiles);
   openModal('<h2>Wie gaat er typen?</h2>' +
     '<div class="kids">' + list.map(p => '<button class="kid' + (p.id === S.id ? ' on' : '') + '" data-p="' + p.id + '"><span class="avatar" style="background:' + p.color + '">' + H(p.nick.charAt(0).toUpperCase()) + '</span><span>' + H(p.nick) +
-      '<small>' + Object.values(p.lessons || {}).filter(x => x.done).length + ' van 30 lessen · ' + (p.xp || 0) + ' punten</small></span></button>').join('') + '</div>' +
+      '<small>' + Object.values(p.lessons || {}).filter(x => x.done).length + ' van 30 lessen · ' + (p.munten || 0) + ' munten</small></span></button>').join('') + '</div>' +
     '<button class="btn ghost" id="add-kid" style="margin-top:14px">+ Nieuwe speler</button>');
   document.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { S = fixProfile(DB.profiles[b.dataset.p]); DB.current = S.id; persist(); applySettings(); closeModal(); renderMap(); show('map'); });
   $('#add-kid').onclick = () => openWelcome(false);
@@ -1226,11 +1434,12 @@ document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', 
 /* ================= start ================= */
 async function boot() {
   try {
-    const [les, tx] = await Promise.all([fetch('assets/data/lessen.json?v=4').then(r => r.json()), fetch('assets/data/teksten.json?v=3').then(r => r.json())]);
+    const [les, tx, gk] = await Promise.all([fetch('assets/data/lessen.json?v=6').then(r => r.json()), fetch('assets/data/teksten.json?v=3').then(r => r.json()), fetch('assets/data/grappig.json?v=1').then(r => r.json()).catch(() => ({ zinnen: [] }))]);
+    GEK = gk.zinnen || [];
     LES = les.lessen; ZONES = les.zones;
     WORDS = [...new Set(tx.woorden.split(/\s+/).filter(Boolean))];
     NAMES = tx.namen.split(/\s+/).filter(Boolean);
-    SENT = tx.zinnen; TEXTS = tx.teksten; EXAMS = tx.examens;
+    SENT = tx.zinnen.concat(GEK.map(z => ({ t: z.t, thema: 'gek' }))); TEXTS = tx.teksten; EXAMS = tx.examens;
   } catch (e) {
     $('#loading').textContent = 'Laden lukte niet. Controleer je internetverbinding en ververs de pagina.';
     return;

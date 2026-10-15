@@ -20,7 +20,7 @@
   },
   {
    "id": "kasteel",
-   "naam": "Het Flitskasteel",
+   "naam": "Het Kampioenscircuit",
    "van": 21,
    "tot": 30
   }
@@ -151,9 +151,9 @@
      "aantal": 7
     },
     {
-     "soort": "woorden",
-     "label": "Nog meer woorden",
-     "aantal": 8
+     "soort": "gek",
+     "label": "Gekke zinnetjes",
+     "aantal": 2
     },
     {
      "soort": "woorden",
@@ -186,9 +186,9 @@
      "aantal": 7
     },
     {
-     "soort": "woorden",
-     "label": "Nog meer woorden",
-     "aantal": 8
+     "soort": "gek",
+     "label": "Gekke zinnetjes",
+     "aantal": 2
     },
     {
      "soort": "woorden",
@@ -221,9 +221,9 @@
      "aantal": 7
     },
     {
-     "soort": "woorden",
-     "label": "Nog meer woorden",
-     "aantal": 8
+     "soort": "gek",
+     "label": "Gekke zinnetjes",
+     "aantal": 2
     },
     {
      "soort": "woorden",
@@ -256,9 +256,9 @@
      "aantal": 7
     },
     {
-     "soort": "woorden",
-     "label": "Nog meer woorden",
-     "aantal": 8
+     "soort": "gek",
+     "label": "Gekke zinnetjes",
+     "aantal": 2
     },
     {
      "soort": "woorden",
@@ -326,9 +326,9 @@
      "aantal": 7
     },
     {
-     "soort": "woorden",
-     "label": "Nog meer woorden",
-     "aantal": 8
+     "soort": "gek",
+     "label": "Gekke zinnetjes",
+     "aantal": 2
     },
     {
      "soort": "woorden",
@@ -361,9 +361,9 @@
      "aantal": 7
     },
     {
-     "soort": "woorden",
-     "label": "Nog meer woorden",
-     "aantal": 8
+     "soort": "gek",
+     "label": "Gekke zinnetjes",
+     "aantal": 2
     },
     {
      "soort": "woorden",
@@ -396,9 +396,9 @@
      "aantal": 7
     },
     {
-     "soort": "woorden",
-     "label": "Nog meer woorden",
-     "aantal": 8
+     "soort": "gek",
+     "label": "Gekke zinnetjes",
+     "aantal": 2
     },
     {
      "soort": "woorden",
@@ -503,9 +503,9 @@
      "aantal": 7
     },
     {
-     "soort": "woorden",
-     "label": "Alle letters door elkaar",
-     "aantal": 9
+     "soort": "gek",
+     "label": "Gekke zinnetjes",
+     "aantal": 2
     },
     {
      "soort": "woorden",
@@ -745,7 +745,7 @@
    "id": 21,
    "titel": "Typen over dieren",
    "nieuw": [],
-   "intro": "Les eenentwintig: welkom in het Flitskasteel! Vanaf nu typ je echte teksten. Vandaag gaat alles over dieren. Wist je dat ik, een jachtluipaard, het snelste landdier ben? Nu jij nog op het toetsenbord!",
+   "intro": "Les eenentwintig: welkom op het Kampioenscircuit! Vanaf nu typ je echte teksten. Vandaag gaat alles over dieren. Wist je dat ik, een jachtluipaard, het snelste landdier ben? Nu jij nog op het toetsenbord!",
    "oefeningen": [
     {
      "soort": "zinnen",

@@ -15,17 +15,21 @@
   const tel = (path, title) => { try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: path + '-' + APP, title: title + ' (' + APP + ')', event: true }); } catch (e) {} };
   const $ = s => vak.querySelector(s);
   const regel = $('.md-regel'), ballon = $('.md-ballon'), baan = $('.md-baan');
-  let pos = -1, gehad = new Set(), aan = true, bezig = false, huidig = null, laatsteOpnieuw = 0, reeks = 0, W = null;
+  let pos = -1, gehad = new Set(), aan = true, bezig = false, huidig = null, laatsteOpnieuw = 0, reeks = 0, W = null, woordNr = 0, woordFout = false;
 
   /* 3D-racebaan: alleen als het apparaat het kan en niemand om minder beweging vraagt */
   const rustig = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function wereld() {
     if (W !== null || rustig || !baan) return Promise.resolve(W);
     W = false;
-    return import('./wereld3d.js?v=2').then(() => {
+    return import('./wereld3d.js?v=5').then(() => {
       const w = window.FV3D && window.FV3D.maak(baan, { nick: 'Jij', kleur: '#3a5bff' });
       if (!w) return null;
       W = w; W.delen(4); W.modus('training'); W.pauze(false); W.start(); vak.classList.add('md-3d');
+      // de woorden staan op kratten op de baan; woord af = de kart knalt erdoorheen (zoals in de cursus)
+      const lijst = []; let b = 0; OEFENING.split(' ').forEach(w => { b += w.length; lijst.push({ f: b / OEFENING.length, w }); b++; }); W.woorden(lijst);
+      for (let i = 0; i < woordNr; i++) W.pak(i, true);   // al getypt voordat de 3D-baan klaar was (trage verbinding)
+      W.kid(Math.max(0, pos) / OEFENING.length);
       // niet in beeld = niet tekenen (scheelt batterij)
       if ('IntersectionObserver' in window) new IntersectionObserver(e => { if (W) W.pauze(!e[0].isIntersecting); }).observe(baan);
       return W;
@@ -60,8 +64,10 @@
   function druk(t) {
     if (!bezig) return;
     const k = toets(t); if (k) { k.classList.add('tik'); setTimeout(() => k.classList.remove('tik'), 90); }
-    if (t === OEFENING[pos]) { pos++; reeks++; if (W) W.goed(reeks); zetDoel(); return; }
-    reeks = 0; if (W) W.fout();
+    if (t === OEFENING[pos]) { pos++; reeks++; if (W) W.goed(reeks);
+      if (t !== ' ' && (OEFENING[pos] === ' ' || pos >= OEFENING.length)) { if (W) W.pak(woordNr, !woordFout); woordNr++; woordFout = false; }
+      zetDoel(); return; }
+    reeks = 0; woordFout = true; if (W) W.fout();
     const v = vakjes[pos]; v.className = 'nu fout'; setTimeout(() => { if (vakjes[pos] === v) v.className = 'nu'; }, 350);
     ballon.textContent = 'Goed geprobeerd! Probeer het nog een keer. Zoek de toets die oplicht.';
     if (!huidig && Date.now() - laatsteOpnieuw > 4000) { laatsteOpnieuw = Date.now(); speel('demo_opnieuw'); }
@@ -74,7 +80,7 @@
   }
 
   $('.md-startknop').addEventListener('click', () => {
-    pos = 0; reeks = 0; gehad = new Set(); $('.md-start').hidden = true; vak.classList.add('md-bezig');
+    pos = 0; reeks = 0; woordNr = 0; woordFout = false; gehad = new Set(); $('.md-start').hidden = true; vak.classList.add('md-bezig');
     ballon.textContent = 'Hoi, ik ben Flits! Typ de letter die oplicht. Daar gaan we!';
     tel('minidemo-gestart', 'Mini-les gestart');
     wereld();   // laadt tijdens de begroeting; lukt het niet, dan blijft het plaatje staan

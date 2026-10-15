@@ -1,0 +1,312 @@
+{
+ "zinnen": [
+  {
+   "t": "de dief is dik",
+   "vanaf": 4
+  },
+  {
+   "t": "de slak is lief",
+   "vanaf": 4
+  },
+  {
+   "t": "de kaas is als ijs",
+   "vanaf": 4
+  },
+  {
+   "t": "die slak is dik",
+   "vanaf": 4
+  },
+  {
+   "t": "ik eis kaas",
+   "vanaf": 4
+  },
+  {
+   "t": "ik ruik raar",
+   "vanaf": 5
+  },
+  {
+   "t": "de kaas is lekker",
+   "vanaf": 5
+  },
+  {
+   "t": "die luie slak is rijk",
+   "vanaf": 5
+  },
+  {
+   "t": "jij ruikt als oude kaas",
+   "vanaf": 6
+  },
+  {
+   "t": "de slak toetert",
+   "vanaf": 6
+  },
+  {
+   "t": "flits eet ijs",
+   "vanaf": 6
+  },
+  {
+   "t": "de kat lust kaas",
+   "vanaf": 6
+  },
+  {
+   "t": "de dikke dief eet taart",
+   "vanaf": 6
+  },
+  {
+   "t": "de slak eet de taart",
+   "vanaf": 6
+  },
+  {
+   "t": "de slak heeft haast",
+   "vanaf": 7
+  },
+  {
+   "t": "de geit eet de hoed",
+   "vanaf": 7
+  },
+  {
+   "t": "de haai eet de sla",
+   "vanaf": 7
+  },
+  {
+   "t": "de rode geit hikt",
+   "vanaf": 7
+  },
+  {
+   "t": "het hert eet taart",
+   "vanaf": 7
+  },
+  {
+   "t": "de gekke haas fietst",
+   "vanaf": 7
+  },
+  {
+   "t": "de taart is de hoed",
+   "vanaf": 7
+  },
+  {
+   "t": "ik heet slak",
+   "vanaf": 7
+  },
+  {
+   "t": "de geit heeft hik",
+   "vanaf": 7
+  },
+  {
+   "t": "de olifant neemt een ijsje",
+   "vanaf": 9
+  },
+  {
+   "t": "een slak met een helm",
+   "vanaf": 9
+  },
+  {
+   "t": "het monster eet groente",
+   "vanaf": 9
+  },
+  {
+   "t": "mijn juf heeft een draak als huisdier",
+   "vanaf": 9
+  },
+  {
+   "t": "mijn oma kan heel hard rennen",
+   "vanaf": 9
+  },
+  {
+   "t": "de mol graaft een tunnel naar de maan",
+   "vanaf": 9
+  },
+  {
+   "t": "mijn kat danst op de tafel",
+   "vanaf": 10
+  },
+  {
+   "t": "papa danst op de tafel",
+   "vanaf": 10
+  },
+  {
+   "t": "de pinguin draagt een pet",
+   "vanaf": 10
+  },
+  {
+   "t": "de kip wil een paraplu",
+   "vanaf": 10
+  },
+  {
+   "t": "de aap maakt pannenkoeken",
+   "vanaf": 10
+  },
+  {
+   "t": "de egel wil een knuffel",
+   "vanaf": 10
+  },
+  {
+   "t": "de muis wint de race",
+   "vanaf": 11
+  },
+  {
+   "t": "de koe wil op vakantie",
+   "vanaf": 11
+  },
+  {
+   "t": "de hond draagt een cape",
+   "vanaf": 11
+  },
+  {
+   "t": "de koning valt in de modder",
+   "vanaf": 11
+  },
+  {
+   "t": "de vis heeft een cadeau",
+   "vanaf": 11
+  },
+  {
+   "t": "de clown valt van de fiets",
+   "vanaf": 11
+  },
+  {
+   "t": "de vogel eet een citroen",
+   "vanaf": 11
+  },
+  {
+   "t": "de beer, de bij en de bever bakken een taart",
+   "vanaf": 12
+  },
+  {
+   "t": "opa bakt brood, oma bouwt een boot",
+   "vanaf": 12
+  },
+  {
+   "t": "de robot danst, de kat kijkt",
+   "vanaf": 12
+  },
+  {
+   "t": "de banaan, de appel en de peer gaan op vakantie",
+   "vanaf": 12
+  },
+  {
+   "t": "de piraat is bang voor water",
+   "vanaf": 12
+  },
+  {
+   "t": "de bal rolt, de hond rent",
+   "vanaf": 12
+  },
+  {
+   "t": "het is te heet, zegt de slak",
+   "vanaf": 14
+  },
+  {
+   "t": "de heks vliegt op een stofzuiger",
+   "vanaf": 14
+  },
+  {
+   "t": "de zebra eet pizza",
+   "vanaf": 14
+  },
+  {
+   "t": "de quiz is gek",
+   "vanaf": 14
+  },
+  {
+   "t": "de saxofoon van de zebra is zoek",
+   "vanaf": 14
+  },
+  {
+   "t": "de zeehond zwemt naar de taxi",
+   "vanaf": 14
+  },
+  {
+   "t": "het zwijn zingt een lied",
+   "vanaf": 14
+  },
+  {
+   "t": "de yogales van de zebra is te zwaar",
+   "vanaf": 14
+  },
+  {
+   "t": "Flits rijdt in een raceauto.",
+   "vanaf": 15
+  },
+  {
+   "t": "Mijn hamster heet Bolletje.",
+   "vanaf": 15
+  },
+  {
+   "t": "De eend leest de krant.",
+   "vanaf": 15
+  },
+  {
+   "t": "Opa heeft een paarse fiets.",
+   "vanaf": 15
+  },
+  {
+   "t": "Sam bakt een taart van zand.",
+   "vanaf": 15
+  },
+  {
+   "t": "De koe danst op de maan.",
+   "vanaf": 15
+  },
+  {
+   "t": "Noor heeft een draak in de tuin.",
+   "vanaf": 15
+  },
+  {
+   "t": "De kat van de juf kan fluiten.",
+   "vanaf": 15
+  },
+  {
+   "t": "Wie heeft mijn sok gezien?",
+   "vanaf": 17
+  },
+  {
+   "t": "Help, de kip kan vliegen!",
+   "vanaf": 17
+  },
+  {
+   "t": "Waarom praat de vis zo zacht?",
+   "vanaf": 17
+  },
+  {
+   "t": "Hoera, het is vakantie!",
+   "vanaf": 17
+  },
+  {
+   "t": "Wie heeft de taart opgegeten?",
+   "vanaf": 17
+  },
+  {
+   "t": "Pas op, de slak komt eraan!",
+   "vanaf": 17
+  },
+  {
+   "t": "Opa's auto toetert heel hard.",
+   "vanaf": 18
+  },
+  {
+   "t": "Op het menu: soep van slakken.",
+   "vanaf": 18
+  },
+  {
+   "t": "De ijs-man heeft een roze auto.",
+   "vanaf": 18
+  },
+  {
+   "t": "Er zitten 3 muizen in de kast.",
+   "vanaf": 19
+  },
+  {
+   "t": "Flits eet 7 ijsjes per dag.",
+   "vanaf": 20
+  },
+  {
+   "t": "De slak doet er 10 jaar over.",
+   "vanaf": 20
+  },
+  {
+   "t": "Mijn oma is 92 en skateboardt.",
+   "vanaf": 20
+  }
+ ]
+}
