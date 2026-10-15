@@ -727,7 +727,7 @@ function finishExercise() {
   if (won) award('race');
   save();
   const last = R.drill || R.idx >= R.lesson.oefeningen.length - 1;
-  /* tekst en stem moeten kloppen met wat het kind deed (stemteksten: top_1 "Superstrak!", top_2 "Wauw, bijna foutloos!",
+  /* tekst en stem moeten kloppen met wat het kind deed (stemteksten: top_1 "Hartstikke strak!", top_2 "Wauw, bijna foutloos!",
      top_3 "Dit gaat heel goed!", goed "Goed bezig! Nauwkeurig is belangrijker dan snel.", rustig "... De volgende oefening is wat korter.",
      race_lose "Ik was net iets sneller. Volgende keer pak je me!") */
   const perfect = !R.errors && correct > 0;
@@ -739,8 +739,8 @@ function finishExercise() {
     else { msg = 'Flits was deze keer sneller.'; sub = 'Goed bezig! Nauwkeurig is belangrijker dan snel.'; pose = 'duim'; clip = 'goed'; }
   }
   else if (ex.kind === 'speed' && !S.settings.dys) { msg = apm + ' aanslagen per minuut!'; pose = 'juich'; clip = perfect ? 'top_1' : acc >= 95 ? 'top_2' : 'goed'; }
-  else if (perfect) { const n = Math.random() < .5 ? 1 : 3; msg = n === 1 ? 'Superstrak, helemaal foutloos!' : 'Foutloos! Dit gaat heel goed!'; pose = 'juich'; clip = 'top_' + n; }
-  else if (acc >= 95) { const n = 1 + Math.floor(Math.random() * 3); msg = ['Superstrak!', 'Wauw, bijna foutloos!', 'Dit gaat heel goed!'][n - 1]; pose = 'juich'; clip = 'top_' + n; }
+  else if (perfect) { const n = Math.random() < .5 ? 1 : 3; msg = n === 1 ? 'Hartstikke strak, helemaal foutloos!' : 'Foutloos! Dit gaat heel goed!'; pose = 'juich'; clip = 'top_' + n; }
+  else if (acc >= 95) { const n = 1 + Math.floor(Math.random() * 3); msg = ['Hartstikke strak!', 'Wauw, bijna foutloos!', 'Dit gaat heel goed!'][n - 1]; pose = 'juich'; clip = 'top_' + n; }
   else if (acc >= 85 || last) { msg = 'Goed bezig! Nauwkeurig is belangrijker dan snel.'; pose = acc >= 85 ? 'duim' : 'rustig'; clip = 'goed'; }
   else { msg = 'Rustig aan, dat is helemaal oké. De volgende oefening is wat korter.'; pose = 'rustig'; clip = 'rustig'; R.shortenNext = true; }
   const p = $('#ex-panel');
@@ -1094,7 +1094,7 @@ document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', 
 /* ================= start ================= */
 async function boot() {
   try {
-    const [les, tx] = await Promise.all([fetch('assets/data/lessen.json?v=3').then(r => r.json()), fetch('assets/data/teksten.json?v=3').then(r => r.json())]);
+    const [les, tx] = await Promise.all([fetch('assets/data/lessen.json?v=4').then(r => r.json()), fetch('assets/data/teksten.json?v=3').then(r => r.json())]);
     LES = les.lessen; ZONES = les.zones;
     WORDS = [...new Set(tx.woorden.split(/\s+/).filter(Boolean))];
     NAMES = tx.namen.split(/\s+/).filter(Boolean);
