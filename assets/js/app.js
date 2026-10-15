@@ -18,7 +18,7 @@ const IMG = p => 'assets/img/flits_' + p + '.webp';
 
 /* ================= opslag ================= */
 const LS = 'flitsvingers_app_v2';
-const DEF_SETTINGS = { voice: true, sfx: true, errSound: false, dys: false, calm: false, kbd: true, hands: true };
+const DEF_SETTINGS = { voice: true, sfx: true, errSound: false, dys: false, calm: false, kbd: true, hands: true, world3d: true };
 const rid = (n = 10) => { const a = 'abcdefghjkmnpqrstuvwxyz23456789'; let s = ''; const r = crypto.getRandomValues(new Uint8Array(n)); for (const x of r) s += a[x % a.length]; return s; };
 function newProfile(nick, color) {
   return { id: rid(10), nick: nick || 'Speler', color: color || '#3a5bff', settings: { ...DEF_SETTINGS }, lessons: {}, xp: 0, days: {}, errs: {}, badges: {}, best: { apm: 0 }, proef: [], diploma: null, updated: Date.now() };
@@ -181,6 +181,7 @@ function playNext() {
     a.play().catch(() => {});
   } catch (e) {}
 }
+function playSoft(ids) { if (curAudio && !curAudio.paused && !curAudio.ended) return; play(ids); }
 let AC = null;
 function ac() { if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } return AC; }
 function beep(freq, dur, type, vol, when) {
@@ -303,6 +304,83 @@ function buildExam(kind) {
   return { label: kind === 'examen' ? 'Examen' : 'Proefexamen', kind: 'exam', exam: kind, seconds: kind === 'examen' ? CFG.EXAM_SEC : CFG.PROEF_SEC, text: a.join(' '), long: true };
 }
 
+/* ================= raceweekend ================= */
+/* Elke les is een raceweekend: Garage (nieuwe toetsen) -> Training -> Tunnel (blind) -> Race tegen Flits.
+   De oefeningen uit lessen.json blijven gelijk; alleen de volgorde wordt garage/training/tunnel/race,
+   en een les zonder race krijgt er een aan het eind (woorden uit de les zelf, Flits net iets sneller dan de training). */
+const FASEN = [['garage', 'Garage'], ['training', 'Training'], ['tunnel', 'Tunnel'], ['race', 'Race']];
+const FASENAAM = Object.fromEntries(FASEN);
+const DELEN = [['spoiler', 'spoiler'], ['strepen', 'racestrepen'], ['uitlaat', 'turbo-uitlaat'], ['velgen', 'gouden velgen']];
+function weekendPlan(L) {
+  if (!L || L.soort === 'proef' || L.soort === 'examen' || !L.oefeningen || !L.oefeningen.length) return [];
+  const f = { garage: [], training: [], tunnel: [], race: [] };
+  L.oefeningen.forEach((o, i) => {
+    if (o.soort === 'race') f.race.push({ spec: o, fase: 'race' });
+    else if (o.blind) f.tunnel.push({ spec: o, fase: 'tunnel' });
+    else if (i === 0 && L.nieuw.length && (o.soort === 'drill' || o.soort === 'vast')) f.garage.push({ spec: o, fase: 'garage' });
+    else f.training.push({ spec: o, fase: 'training' });
+  });
+  if (!f.race.length) f.race.push({ spec: { soort: 'race', label: 'Race tegen Flits', eigen: true }, fase: 'race' });
+  return [...f.garage, ...f.training, ...f.tunnel, ...f.race];
+}
+/* race-tekst voor een les zonder eigen race: woorden die het kind in deze les al typte */
+function eigenRaceTekst(L) {
+  const uniq = shuffle([...new Set(R.words.filter(w => w.length >= 2 && w.length <= 10))]);
+  const doel = L.id <= 3 ? 24 : L.id <= 14 ? 40 : 52;
+  const out = []; let len = 0;
+  for (const w of uniq) { if (len >= doel) break; out.push(w); len += w.length + 1; }
+  if (out.length >= 3) return out.join(' ');
+  return genWords(L, allowedFor(L.id), 7) || 'fj jf fj jf';
+}
+/* Flits rijdt net iets sneller dan het kind in de training (de stem zegt dat ook) */
+function raceTempo(standaard) {
+  const t = R.trainApm.filter(x => x > 0);
+  if (!t.length) return standaard || 40;
+  return Math.max(12, Math.min(130, Math.round(t.reduce((a, b) => a + b, 0) / t.length * 1.04)));
+}
+let W = null;   // de 3D-wereld; false = lukt niet op deze computer
+const want3D = () => !!(S && S.settings.world3d && !S.settings.calm && !matchMedia('(prefers-reduced-motion: reduce)').matches);
+function world() {
+  if (!want3D() || !window.FV3D || W === false) return null;
+  if (!W) { try { W = window.FV3D.maak($('#wereld'), { nick: S.nick, kleur: S.color }) || false; } catch (e) { W = false; } }
+  return W || null;
+}
+function wtoast(t) { $('#wereld').querySelectorAll('.w-toast').forEach(x => x.remove()); const d = mk('div', 'w-toast', t); $('#wereld').appendChild(d); setTimeout(() => d.remove(), 2300); }
+function renderFasen() {
+  const box = $('#ex-fasen');
+  if (!R || R.examLike || R.drill || !R.plan.length) { box.innerHTML = ''; return; }
+  const cur = R.plan[R.idx].fase;
+  const aanwezig = FASEN.filter(([k]) => R.plan.some(p => p.fase === k));
+  const ci = aanwezig.findIndex(([k]) => k === cur);
+  box.innerHTML = aanwezig.map(([k, n], i) => {
+    const mijn = R.plan.map((p, j) => [p, j]).filter(([p]) => p.fase === k);
+    const dots = mijn.length > 1 ? '<em>' + mijn.map(([, j]) => '<i class="' + (j < R.idx ? 'done' : j === R.idx ? 'cur' : '') + '"></i>').join('') + '</em>' : '';
+    return '<div class="fase ' + (i < ci ? 'klaar' : i === ci ? 'nu' : '') + '"><b>' + (i + 1) + '</b><span>' + n + '</span>' + dots + '</div>';
+  }).join('<span class="fpijl">›</span>');
+}
+function hud() {
+  if (!R || !R.w3) return;
+  const f = R.item ? R.item.fase : 'training';
+  let h;
+  if (R.ex.kind === 'race') h = '<span id="w-pos">Start</span>' + (S.settings.dys ? '' : '<span>Flits rijdt ' + R.ex.tempo + ' per minuut</span>');
+  else if (f === 'garage') h = '<span>Garage · onderdelen ' + R.delen + '/4</span>';
+  else if (f === 'tunnel') h = '<span>Tunnel · niet kijken</span>';
+  else h = '<span>' + (R.ex.kind === 'speed' ? 'Snelheidsronde' : 'Trainingsrondje') + ' · eigen tempo</span>';
+  $('#w-hud').innerHTML = h;
+}
+function comboShow() {
+  const c = $('#w-combo'); $('#w-combo-n').textContent = R.combo;
+  c.classList.toggle('heet', R.combo >= 10 && R.combo < 25); c.classList.toggle('vuur', R.combo >= 25);
+  c.classList.add('pop'); setTimeout(() => c.classList.remove('pop'), 110);
+}
+/* 3-2-1-GO in de 3D-wereld; de klok (en Flits) starten pas bij GO */
+function aftellen() {
+  R.wachtGo = true; const a = $('#w-aftel'); const piep = (f, d) => { if (S.settings.sfx) beep(f, d, 'square', .04); };
+  [3, 2, 1].forEach((n, k) => R.timers.push(setTimeout(() => { a.innerHTML = '<span>' + n + '</span>'; piep(440, .15); }, 400 + k * 700)));
+  R.timers.push(setTimeout(() => { a.innerHTML = '<span>GO!</span>'; piep(880, .3); R.wachtGo = false; startClock(); focusSink(); }, 2500));
+  R.timers.push(setTimeout(() => { a.innerHTML = ''; }, 3300));
+}
+
 /* ================= algemene UI ================= */
 function applySettings() {
   const b = document.body.classList;
@@ -321,6 +399,8 @@ function show(id) {
   screen = id;
   $('#loading').style.display = 'none';
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === 's-' + id));
+  document.body.classList.toggle('rw3d-on', id === 'ex' && $('#s-ex').classList.contains('rw3d'));
+  if (W) W.pauze(id !== 'ex');
   window.scrollTo({ top: 0, behavior: 'auto' });
   renderTop();
 }
@@ -467,7 +547,7 @@ function openLesson(id) {
   $('#intro-text').textContent = L.intro;
   const exl = $('#intro-exlist');
   const examLike = L.soort === 'proef' || L.soort === 'examen';
-  exl.innerHTML = examLike ? '' : L.oefeningen.map((o, i) => '<span>' + (i + 1) + '. ' + H(o.label) + '</span>').join('');
+  exl.innerHTML = examLike ? '' : weekendPlan(L).map((p, i) => '<span>' + (i + 1) + '. ' + (p.fase === 'race' ? '' : FASENAAM[p.fase] + ': ') + H(p.spec.label) + '</span>').join('');
   $('#intro-visual').hidden = examLike;
   const prep = $('#exam-prep');
   prep.hidden = !examLike;
@@ -540,7 +620,7 @@ sink.addEventListener('keydown', e => {
   if (e.key === ' ' && R && R.waiting) { e.preventDefault(); nextStep(); }
 });
 
-function stopTimers() { if (R) { clearInterval(R.tick); R.tick = null; } }
+function stopTimers() { if (R) { clearInterval(R.tick); R.tick = null; (R.timers || []).forEach(clearTimeout); R.timers = []; R.wachtGo = false; } const a = $('#w-aftel'); if (a) a.innerHTML = ''; }
 function startLesson() {
   if (!curLesson) return;
   stopAudio(); ac();
@@ -548,7 +628,10 @@ function startLesson() {
   const examLike = L.soort === 'proef' || L.soort === 'examen';
   if (examLike && L.soort === 'examen' && !$('#parentok').checked) return;
   const dipName = examLike && $('#dipname') ? $('#dipname').value.trim().slice(0, 30) : '';
-  R = { lesson: L, idx: 0, results: [], lessonErrs: {}, shortenNext: false, examLike, dipName, dys: !!S.settings.dys };
+  const plan = weekendPlan(L);
+  R = { lesson: L, idx: 0, results: [], lessonErrs: {}, shortenNext: false, examLike, dipName, dys: !!S.settings.dys,
+        plan, words: [], trainApm: [], delen: 0, combo: 0, timers: [] };
+  if (!examLike && world()) { W.naam(S.nick, S.color); R.delen = plan.length && plan[0].fase === 'garage' ? 0 : 4; W.delen(R.delen); }
   renderKeyboard($('#kbd-ex')); renderHands($('#hands-ex'));
   const touch = (navigator.maxTouchPoints || 0) > 0 && !matchMedia('(pointer: fine)').matches;
   $('#tablet-notice').classList.toggle('on', touch);
@@ -560,19 +643,23 @@ function shorten(t) { const w = t.split(' '); return w.slice(0, Math.max(2, Math
 function startExercise(drillText) {
   const L = R.lesson;
   let ex;
+  R.item = drillText || R.examLike ? null : R.plan[R.idx];
   if (drillText) ex = { label: 'Herhaal-rondje', text: drillText, kind: 'normal' };
   else if (R.examLike) ex = buildExam(L.soort);
-  else ex = buildExercise(L, L.oefeningen[R.idx]);
+  else if (R.item.spec.eigen) ex = { label: R.item.spec.label, blind: false, kind: 'race', tempo: 40, text: eigenRaceTekst(L) };
+  else ex = buildExercise(L, R.item.spec);
+  if (ex.kind === 'race' && !drillText) ex.tempo = raceTempo(ex.tempo);
   R.drill = !!drillText;
   let text = ex.text.replace(/\s+/g, ' ').trim();
   if (!drillText && R.shortenNext && ex.kind === 'normal' && !ex.long) text = shorten(text);
-  Object.assign(R, { ex, text, pos: 0, errors: 0, errAt: new Set(), consec: 0, active: 0, lastT: 0, waiting: false, spans: [], t0: 0, flitsDone: false });
+  if (!drillText && !R.examLike && ex.kind !== 'race') R.words.push(...text.split(' '));
+  Object.assign(R, { ex, text, pos: 0, errors: 0, errAt: new Set(), consec: 0, active: 0, lastT: 0, waiting: false, spans: [], t0: 0, flitsDone: false, combo: 0 });
   stopTimers();
   $('#ex-title').textContent = R.examLike ? L.titel : 'Les ' + L.id + ': ' + L.titel;
-  $('#ex-sub').textContent = drillText ? 'Extra: alleen de lastige letters' : R.examLike ? 'Typ zo netjes mogelijk. De tijd start bij je eerste toets.' : 'Oefening ' + (R.idx + 1) + ' van ' + L.oefeningen.length + (R.shortenNext ? ' · iets korter, rustig aan' : '');
+  $('#ex-sub').textContent = drillText ? 'Extra: alleen de lastige letters' : R.examLike ? 'Typ zo netjes mogelijk. De tijd start bij je eerste toets.' : 'Oefening ' + (R.idx + 1) + ' van ' + R.plan.length + ' · ' + FASENAAM[R.item.fase] + (R.shortenNext ? ' · iets korter, rustig aan' : '');
   R.shortenNext = false;
-  const dots = $('#ex-dots'); dots.innerHTML = '';
-  if (!drillText && !R.examLike) L.oefeningen.forEach((_, i) => dots.appendChild(mk('i', i < R.idx ? 'done' : i === R.idx ? 'cur' : '')));
+  $('#ex-dots').innerHTML = '';
+  renderFasen();
   const lab = $('#ex-label');
   lab.className = 'exlabel' + (ex.blind ? ' blind' : '');
   lab.innerHTML = (ex.blind ? ICON.eyeoff : ex.kind === 'race' ? ICON.flag : (ex.kind === 'speed' || ex.kind === 'exam') ? ICON.clock : ICON.target) + H(ex.label);
@@ -585,12 +672,30 @@ function startExercise(drillText) {
   const race = $('#race'); race.classList.toggle('on', ex.kind === 'race');
   if (ex.kind === 'race') { const me = $('#run-me'); me.style.background = S.color; me.textContent = S.nick.charAt(0).toUpperCase(); me.style.left = '12%'; $('#run-fl').style.left = '12%'; }
   $('#line').classList.toggle('long', !!ex.long);
+  /* 3D-wereld (valt terug op de platte weergave als 3D niet kan of uit staat) */
+  R.w3 = !R.examLike && !!world();
+  $('#s-ex').classList.toggle('rw3d', R.w3);
+  document.body.classList.toggle('rw3d-on', R.w3 && screen === 'ex');
+  R.lang = !!ex.long || (R.w3 && text.length > 42);   // in 3D: langere tekst kleiner en meeschuivend, zodat alles in beeld blijft
+  $('#line').classList.toggle('long', R.lang);
+  const fase = R.item ? R.item.fase : 'training';
+  const eersteVan = f => !!R.item && R.plan.findIndex(q => q.fase === f) === R.idx;
+  if (R.w3) {
+    W.modus(ex.kind === 'race' ? 'race' : fase); W.pauze(false);
+    $('#w-combo-n').textContent = '0'; $('#w-combo').className = 'w-combo';
+    hud();
+  }
   buildLine(text);
   updateHint(); updateStats();
-  if (ex.kind === 'race') { setFlits('juich', 'Klaar voor de race?'); play('race_start'); }
-  else if (ex.kind === 'speed') { setFlits('typen', 'Een minuut, zo netjes mogelijk!'); if (!R.examLike) play('snel_start'); }
-  else if (ex.blind) { setFlits('blind', 'Niet spieken!'); play('blind'); }
-  else setFlits('typen', R.idx === 0 && !drillText ? 'Jij kunt dit!' : 'Lekker bezig!');
+  if (ex.kind === 'race') {
+    setFlits('juich', R.w3 ? 'Op je plaatsen... klaar...' : 'Klaar voor de race?'); play('race_start');
+    if (R.w3) { W.start(); aftellen(); }
+  }
+  else if (ex.kind === 'speed') { setFlits('typen', 'Een minuut, zo netjes mogelijk!'); if (!R.examLike) play('snel_start'); if (R.w3) W.start(); }
+  else if (ex.blind) { setFlits('blind', 'Niet spieken! Voel de bobbeltjes.'); play(R.w3 && eersteVan('tunnel') ? 'rw_tunnel_start' : 'blind'); if (R.w3) W.start(); }
+  else if (R.w3 && fase === 'garage') setFlits('wijs', 'Elke goede toets is een onderdeel voor je kart!');
+  else if (R.w3 && eersteVan('training')) { setFlits('typen', 'Rij in je eigen tempo. Netjes gaat voor snel.'); play('rw_training_1'); W.start(); }
+  else { setFlits('typen', R.idx === 0 && !drillText ? 'Jij kunt dit!' : 'Lekker bezig!'); if (R.w3) W.start(); }
   if (ex.kind === 'exam') setFlits('typen', 'Rustig ademen. Je kunt dit!');
   focusSink();
   $('#typebox').classList.remove('unfocused');
@@ -608,7 +713,7 @@ function buildLine(text) {
   if (R.spans[0]) R.spans[0].classList.add('cur');
 }
 function keepVisible() {
-  if (!R.ex.long) return;
+  if (!R.lang) return;
   const s = R.spans[R.pos]; if (!s) return;
   const line = $('#line'), lh = s.offsetHeight || 40;
   const top = s.offsetTop;
@@ -652,16 +757,18 @@ function onTick() {
   if (ex.kind === 'race') {
     const fp = Math.min(1, elapsedMin() * ex.tempo / R.text.length);
     $('#run-fl').style.left = (12 + fp * 80) + '%';
+    if (R.w3) { W.flits(fp); const ps = $('#w-pos'); if (ps) { const v = W.voor(); ps.textContent = v ? 'Jij ligt voor' : 'Flits ligt voor'; ps.className = v ? 'voor' : ''; } }
     if (fp >= 1 && !R.flitsDone) { R.flitsDone = true; setFlits('juich', 'Ik ben er! Maak jij het af?'); }
   } else {
     const left = ex.seconds - elapsedMin() * 60;
     const tm = $('#timer'); tm.textContent = fmtTime(Math.ceil(left)); tm.classList.toggle('low', left <= 10);
+    if (R.w3 && ex.kind === 'speed') W.kid(1 - left / ex.seconds);
     updateStats();
     if (left <= 0) finishExercise();
   }
 }
 function typeChar(ch) {
-  if (!R || R.waiting || screen !== 'ex') return;
+  if (!R || R.waiting || screen !== 'ex' || R.wachtGo) return;
   if (ch === '\n' || ch === '\r') return;
   const target = R.text[R.pos];
   const now = performance.now();
@@ -674,8 +781,16 @@ function typeChar(ch) {
     flashKey(kb, keyOf(ch).key, 'hit');
     const s = R.spans[R.pos];
     s.classList.remove('cur', 'err'); s.classList.add('done'); if (R.errAt.has(R.pos)) s.classList.add('had');
-    R.pos++; R.consec = 0;
+    R.pos++; R.consec = 0; R.combo++;
     sfx('tick');
+    if (R.w3) {
+      if (R.item && R.item.fase === 'garage') {   // elke kwart van de garage-oefening = een nieuw onderdeel voor de kart
+        const moet = Math.min(4, Math.floor(R.pos / R.text.length * 4 + 1e-9));
+        while (R.delen < moet) { const [id, naam] = DELEN[R.delen]; R.delen++; W.onderdeel(id); wtoast('Nieuw onderdeel: ' + naam + '!'); if (R.delen < 4) playSoft('rw_onderdeel_' + R.delen); hud(); }
+      } else if (R.ex.kind !== 'speed') W.kid(R.pos / R.text.length);
+      W.goed(R.combo); comboShow();
+      if (R.combo === 10 && !(R.item && R.item.fase === 'garage')) { setFlits('juich', 'Reeks van 10! Turbo aan!', 2500); playSoft('rw_turbo'); }
+    }
     if (R.ex.kind === 'race') $('#run-me').style.left = (12 + R.pos / R.text.length * 80) + '%';
     if (R.pos >= R.text.length) {
       if (R.ex.kind === 'speed' || R.ex.kind === 'exam') { appendMore(); }
@@ -685,7 +800,8 @@ function typeChar(ch) {
     keepVisible();
     updateHint();
   } else {
-    R.errors++; R.errAt.add(R.pos); R.consec++;
+    R.errors++; R.errAt.add(R.pos); R.consec++; R.combo = 0;
+    if (R.w3) { W.fout(); comboShow(); }
     if (target !== ' ') { S.errs[target] = (S.errs[target] || 0) + 1; R.lessonErrs[target] = (R.lessonErrs[target] || 0) + 1; }
     sfx('err');
     flashKey(kb, keyOf(ch).key, 'wrong');
@@ -720,18 +836,22 @@ function finishExercise() {
   if (ex.kind === 'exam') { save(); return showExamResult({ apm, fout, acc, kind: ex.exam }); }
   const stars = acc >= 95 ? 3 : acc >= 85 ? 2 : 1;
   if (!R.drill) R.results.push({ acc, stars, apm, kind: ex.kind });
+  if (!R.drill && R.item && (R.item.fase === 'training' || R.item.fase === 'tunnel')) R.trainApm.push(Math.round(correct / Math.max(elapsedMin(), 0.05)));
   if (acc === 100 && correct >= 20) award('foutloos');
   if (timed || ex.kind === 'race') { if (apm > (S.best.apm || 0)) S.best.apm = apm; }
   if (ex.kind === 'speed') { if (apm >= 50) award('snel50'); if (apm >= 100) award('snel100'); }
   const won = ex.kind === 'race' && !R.flitsDone;
   if (won) award('race');
+  if (R.w3 && ex.kind === 'race') W.finish(won);
   save();
-  const last = R.drill || R.idx >= R.lesson.oefeningen.length - 1;
+  const last = R.drill || R.idx >= R.plan.length - 1;
+  const volgende = R.drill ? null : R.plan[R.idx + 1];
+  const kortKan = !!volgende && !['race', 'snelheid', 'tekst'].includes(volgende.spec.soort);   // alleen dan klopt "de volgende oefening is wat korter"
   /* tekst en stem moeten kloppen met wat het kind deed (stemteksten: top_1 "Hartstikke strak!", top_2 "Wauw, bijna foutloos!",
      top_3 "Dit gaat heel goed!", goed "Goed bezig! Nauwkeurig is belangrijker dan snel.", rustig "... De volgende oefening is wat korter.",
      race_lose "Ik was net iets sneller. Volgende keer pak je me!") */
   const perfect = !R.errors && correct > 0;
-  let msg, pose, clip, sub = '';
+  let msg, pose, clip, sub = '', clip2 = null;
   if (ex.kind === 'race') {
     const close = elapsedMin() <= R.text.length / ex.tempo * 1.15;   // hooguit 15% langzamer dan Flits = "net iets"
     if (won) { msg = 'Je was sneller dan Flits!'; pose = 'juich'; clip = 'race_win'; }
@@ -741,25 +861,36 @@ function finishExercise() {
   else if (ex.kind === 'speed' && !S.settings.dys) { msg = apm + ' aanslagen per minuut!'; pose = 'juich'; clip = perfect ? 'top_1' : acc >= 95 ? 'top_2' : 'goed'; }
   else if (perfect) { const n = Math.random() < .5 ? 1 : 3; msg = n === 1 ? 'Hartstikke strak, helemaal foutloos!' : 'Foutloos! Dit gaat heel goed!'; pose = 'juich'; clip = 'top_' + n; }
   else if (acc >= 95) { const n = 1 + Math.floor(Math.random() * 3); msg = ['Hartstikke strak!', 'Wauw, bijna foutloos!', 'Dit gaat heel goed!'][n - 1]; pose = 'juich'; clip = 'top_' + n; }
-  else if (acc >= 85 || last) { msg = 'Goed bezig! Nauwkeurig is belangrijker dan snel.'; pose = acc >= 85 ? 'duim' : 'rustig'; clip = 'goed'; }
+  else if (acc >= 85 || last || !kortKan) { msg = 'Goed bezig! Nauwkeurig is belangrijker dan snel.'; pose = acc >= 85 ? 'duim' : 'rustig'; clip = 'goed'; }
   else { msg = 'Rustig aan, dat is helemaal oké. De volgende oefening is wat korter.'; pose = 'rustig'; clip = 'rustig'; R.shortenNext = true; }
+  /* raceweekend: overgang naar de volgende fase (tekst en stem gelijk) */
+  if (R.item && volgende && acc >= 85 && R.w3) {
+    if (R.item.fase === 'garage' && volgende.fase !== 'garage') { msg = 'Je kart is af!'; sub = 'Spoiler, racestrepen, turbo-uitlaat en gouden velgen. Op naar de baan!'; pose = 'juich'; clip = 'rw_garage_klaar'; }
+    if (R.item.fase === 'tunnel' && volgende.fase !== 'tunnel') { msg = 'Zonder te kijken door de tunnel!'; pose = 'juich'; clip = 'rw_tunnel_klaar'; }
+  }
+  if (R.item && volgende && volgende.fase === 'race' && R.item.fase !== 'race') {
+    sub = 'Kwalificatie gehaald! In de race rijdt Flits net iets sneller dan jij in de training' + (S.settings.dys ? '.' : ': ' + raceTempo(volgende.spec.tempo) + ' aanslagen per minuut.');
+    clip2 = 'rw_kwalificatie';
+  }
+  const knop = last ? 'Bekijk resultaat' : volgende && R.item && volgende.fase !== R.item.fase ? 'Naar de ' + FASENAAM[volgende.fase].toLowerCase() : 'Volgende oefening';
   const p = $('#ex-panel');
   p.innerHTML = '<img src="' + IMG(pose) + '" alt="">' +
     '<div>' + starsHTML(stars) + '<h3>' + (R.drill ? 'Herhaal-rondje klaar!' : H(msg)) + '</h3>' +
     '<div class="muted" style="font-weight:700">' + acc + '% nauwkeurig' + (S.settings.dys ? '' : ' · ' + apm + ' aanslagen per minuut') + '</div>' +
     (sub ? '<div style="font-weight:700;margin-top:4px">' + H(sub) + '</div>' : '') +
-    '<button class="btn" id="ex-next">' + (last ? 'Bekijk resultaat' : 'Volgende oefening') + ' <span class="kbdhint">Enter</span></button></div>';
-  p.classList.add('on');
+    '<button class="btn" id="ex-next">' + knop + ' <span class="kbdhint">Enter</span></button></div>';
+  if (R.w3 && ex.kind === 'race') R.timers.push(setTimeout(() => p.classList.add('on'), 1400));   // eerst de finish zien
+  else p.classList.add('on');
   $('#ex-next').onclick = nextStep;
   sfx('step');
-  if (!R.drill) play(clip);
+  if (!R.drill) play(clip2 ? [clip, clip2] : clip);
   setFingers($('#hands-ex'), []); setNextKeys($('#kbd-ex'), []);
   $('#typebox').classList.remove('unfocused');
 }
 function nextStep() {
   if (!R || !R.waiting) return;
   if (R.drill) { showResult(R.lastResult); return; }
-  if (R.idx < R.lesson.oefeningen.length - 1) { R.idx++; startExercise(); }
+  if (R.idx < R.plan.length - 1) { R.idx++; startExercise(); }
   else finishLesson();
 }
 function finishLesson() {
@@ -938,7 +1069,8 @@ const SETTINGS = [
   ['dys', 'Dyslexie-modus', 'Rustiger lettertype, meer ruimte tussen letters, geen tempo in beeld en een lagere eis voor het diploma (75 per minuut).'],
   ['calm', 'Rustige modus', 'Geen animaties en geen confetti. Fijn bij veel prikkels.'],
   ['kbd', 'Toetsenbord op het scherm', 'Laat zien welke toets je moet hebben.'],
-  ['hands', 'Handjes op het scherm', 'Laat zien welke vinger aan de beurt is.']
+  ['hands', 'Handjes op het scherm', 'Laat zien welke vinger aan de beurt is.'],
+  ['world3d', '3D-racebaan', 'De lessen spelen zich af op een racebaan in 3D. Zet uit als de computer traag is: dan zie je de gewone weergave.']
 ];
 function openSettings() {
   openModal('<h2>Instellingen van ' + H(S.nick) + '</h2><p style="margin:6px 0 8px">Alles zit er standaard in, ook de dyslexie-modus.</p>' +

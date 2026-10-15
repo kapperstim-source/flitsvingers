@@ -11,6 +11,8 @@
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="preload" href="assets/data/lessen.json" as="fetch" crossorigin>
 <link rel="preload" href="assets/data/teksten.json" as="fetch" crossorigin>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js?v=0.160.0"}}</script>
+<script type="module" src="assets/js/wereld3d.js?v=1"></script>
 <style>
 :root{
   --bg:#fff7ec;--bg2:#fff0dc;--card:#ffffff;--line:#f0e2cc;--line2:#e6d6bd;
@@ -295,6 +297,106 @@ label.fl{display:block;font-size:14px;font-weight:800;margin:12px 0 6px}
 @keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
 .loading{display:grid;place-items:center;min-height:60vh;font-weight:800;color:var(--muted)}
 
+/* raceweekend: fasen (Garage › Training › Tunnel › Race) */
+.fasen{display:flex;gap:4px;align-items:center;font-weight:800;font-size:12.5px;flex-wrap:wrap}
+.fase{display:flex;align-items:center;gap:6px;padding:4px 10px 4px 5px;border-radius:999px;border:2px solid var(--line2);color:var(--muted);background:var(--card);white-space:nowrap}
+.fase b{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--line);color:var(--ink);font-family:var(--head);font-weight:700;font-size:12px}
+.fase em{display:flex;gap:3px;font-style:normal}
+.fase em i{width:7px;height:7px;border-radius:50%;background:#e6d6bd}
+.fase em i.done{background:var(--mint)}.fase em i.cur{background:var(--ink)}
+.fase.nu{border-color:var(--ink);color:var(--ink);background:var(--yellow)}
+.fase.nu b{background:var(--ink);color:#fff}
+.fase.klaar{color:var(--ink)}.fase.klaar b{background:var(--mint);color:#fff}
+.fpijl{color:#c9b998;font-weight:800}
+@media (max-width:980px){.fase span{display:none}.fase{padding:4px}}
+.exlist .fz{color:var(--ink);background:var(--yellow)}
+
+/* raceweekend: 3D-wereld */
+.wereld{display:none;position:relative;border-radius:var(--r);overflow:hidden;border:3px solid #1b1f3a;background:#9fd9ff;box-shadow:var(--shadow)}
+.wereld canvas{display:block;position:absolute;inset:0;width:100%;height:100%}
+.wereld::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;z-index:3;
+  background:repeating-linear-gradient(176deg,transparent 0 26px,rgba(255,255,255,.55) 26px 28px,transparent 28px 61px),repeating-linear-gradient(183deg,transparent 0 41px,rgba(255,255,255,.4) 41px 42px,transparent 42px 87px);
+  background-size:220% 100%;animation:streep .35s linear infinite;-webkit-mask:radial-gradient(ellipse 60% 45% at 50% 55%,transparent 40%,#000 75%);mask:radial-gradient(ellipse 60% 45% at 50% 55%,transparent 40%,#000 75%)}
+.wereld.turbo1::after{opacity:.55}
+.wereld.turbo2::after{opacity:1}
+@keyframes streep{from{background-position:0 0,0 0}to{background-position:-220px 0,-180px 0}}
+.w-hud{position:absolute;left:12px;top:10px;display:flex;gap:8px;z-index:4;pointer-events:none;flex-wrap:wrap}
+.w-hud span{font-family:var(--head);font-weight:700;font-size:14px;background:#fff;border:3px solid #1b1f3a;border-radius:999px;padding:3px 12px;box-shadow:0 3px 0 #1b1f3a}
+.w-hud .voor{background:var(--yellow)}
+.w-combo{position:absolute;right:12px;top:10px;z-index:4;display:flex;align-items:center;gap:6px;font-family:var(--head);font-weight:700;font-size:17px;padding:3px 12px;border-radius:999px;border:3px solid #1b1f3a;background:#fff;box-shadow:0 3px 0 #1b1f3a;transition:transform .12s;pointer-events:none}
+.w-combo svg{width:17px;height:17px}
+.w-combo.pop{transform:scale(1.18)}
+.w-combo.heet{background:var(--yellow)}
+.w-combo.vuur{background:#ff7a2f;color:#fff}
+.w-toast{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:7;font-family:var(--head);font-weight:700;font-size:18px;background:var(--yellow);border:3px solid #1b1f3a;border-radius:14px;padding:6px 16px;box-shadow:0 4px 0 #1b1f3a;animation:wtoast 2.2s ease both;pointer-events:none;white-space:nowrap}
+@keyframes wtoast{0%{opacity:0;transform:translate(-50%,-14px) scale(.9)}12%{opacity:1;transform:translate(-50%,0) scale(1.06)}20%{transform:translate(-50%,0) scale(1)}85%{opacity:1}100%{opacity:0}}
+.w-aftel{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--head);font-weight:700;font-size:clamp(56px,11vh,110px);color:#fff;-webkit-text-stroke:6px #1b1f3a;paint-order:stroke;pointer-events:none;z-index:8}
+.w-aftel span{animation:tel .9s ease-out both}
+@keyframes tel{0%{transform:scale(2.2);opacity:0}25%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:scale(.8);opacity:0}}
+
+/* raceweekend: alles in één scherm (toetsenbord blijft zichtbaar) */
+body.rw3d-on .top{display:none}
+#s-ex.rw3d.on{display:flex;flex-direction:column;gap:8px;height:100vh;height:100dvh;padding:8px 0 10px}
+#s-ex.rw3d>*{flex:none}
+#s-ex.rw3d .exhead{margin:0;flex-wrap:nowrap}
+#s-ex.rw3d .exhead>div:nth-child(2){min-width:0}
+#s-ex.rw3d #ex-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#s-ex.rw3d .wereld{display:block;flex:1 1 auto;min-height:120px;max-height:56vh}
+#s-ex.rw3d .race{display:none!important}
+#s-ex.rw3d .exgrid{grid-template-columns:1fr 124px;gap:10px}
+#s-ex.rw3d .typebox{padding:10px 18px;min-height:0}
+#s-ex.rw3d .exlabel{margin-bottom:4px;padding:3px 10px;font-size:12px}
+#s-ex.rw3d .timer{font-size:18px;padding:2px 10px}
+#s-ex.rw3d .line{font-size:clamp(22px,min(3vw,4.6vh),38px);line-height:1.5}
+#s-ex.rw3d .line.long{font-size:clamp(17px,min(2vw,3.2vh),24px);line-height:1.6;max-height:calc(1.6em * 3)}
+#s-ex.rw3d .hint{margin-top:4px;min-height:24px;font-size:14px}
+#s-ex.rw3d .stats{margin-top:2px;font-size:13px}
+#s-ex.rw3d .capswarn{margin-top:4px}
+#s-ex.rw3d .exflits{padding:6px 6px 4px;justify-content:center;gap:4px}
+#s-ex.rw3d .exflits img{max-height:86px}
+#s-ex.rw3d .exflits .say{min-height:0;font-size:12px;line-height:1.3}
+#s-ex.rw3d .blindban{margin:0;padding:8px 12px}
+#s-ex.rw3d .notice.on{margin:0}
+#s-ex.rw3d .visual{margin:0;display:flex;align-items:flex-end;justify-content:center;gap:14px;
+  --u:clamp(16px,min(calc((min(100vw,1100px) - 120px) / 21.6),calc((100vh - 420px) / 5.4)),48px)}
+#s-ex.rw3d.blindmode .visual{display:none}
+#s-ex.rw3d .kbd{--u:inherit;padding:10px;gap:4px}
+#s-ex.rw3d .krow{gap:4px}
+#s-ex.rw3d .hands{width:calc(var(--u) * 5.6);max-width:none;margin:0 0 6px}
+#s-ex.rw3d .panel{position:fixed;inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);width:min(600px,calc(100vw - 32px));border:3px solid #1b1f3a;box-shadow:0 7px 0 #1b1f3a,0 0 0 100vmax rgba(24,32,58,.35);z-index:30}
+@media (max-width:700px){#s-ex.rw3d.on{height:auto}#s-ex.rw3d .wereld{height:220px;flex:none}}
+
+/* oefenscherm in stijl A "Sticker" (Tims keuze 15-10-2026): dikke donkere randen en harde schaduw, net als de 3D-wereld */
+#s-ex{--nv:#1b1f3a}
+#s-ex .typebox{border:3px solid var(--nv);border-radius:18px;box-shadow:0 5px 0 var(--nv)}
+#s-ex .exlabel{font-family:var(--head);font-weight:600;font-size:14px;letter-spacing:0;text-transform:none;color:var(--nv);background:var(--yellow);border:2.5px solid var(--nv);border-radius:10px;padding:2px 10px;box-shadow:0 2px 0 var(--nv);transform:rotate(-1.5deg)}
+#s-ex .exlabel .i{display:none}
+#s-ex .exlabel.blind{background:var(--nv);color:#ffd23f}
+#s-ex .line{color:#a3a8bd;padding:3px 6px 7px;margin:0 -6px}   /* ruimte voor de rand om de gele letter */
+#s-ex .ch.done{color:var(--nv)}
+#s-ex .ch.done.had{color:#d9534f}
+#s-ex .ch.cur{background:var(--yellow);color:var(--nv);border-radius:7px;box-shadow:0 0 0 2.5px var(--nv),0 4px 0 2.5px var(--nv)}
+#s-ex .ch.err{background:var(--coral);color:#fff;box-shadow:0 0 0 2.5px var(--nv),0 4px 0 2.5px var(--nv)}
+#s-ex .ch.sp::after{opacity:.35}
+#s-ex .hint{color:#3d4459}
+#s-ex .fdot{border:2px solid var(--nv);box-shadow:none}
+#s-ex .speak{background:#fff;color:var(--nv);border:2.5px solid var(--nv);border-radius:10px;box-shadow:0 2px 0 var(--nv)}
+#s-ex .stats{color:#6a7086}
+#s-ex .timer{background:#fff;border:2.5px solid var(--nv);box-shadow:0 2px 0 var(--nv)}
+#s-ex .exflits{background:#fff;border:3px solid var(--nv);border-radius:18px;box-shadow:0 5px 0 var(--nv)}
+#s-ex .exflits .say{color:var(--nv);background:var(--yellow);border:2px solid var(--nv);border-radius:8px;padding:2px 6px;min-height:0}
+#s-ex .iconbtn{border:2.5px solid var(--nv);box-shadow:0 2px 0 var(--nv);border-radius:12px}
+#s-ex .kbd{background:#fffaf0;border:3px solid var(--nv);border-radius:20px;box-shadow:0 5px 0 var(--nv)}
+#s-ex .key{background:#fff;color:var(--nv);font-family:var(--head);font-weight:600;border:2px solid var(--nv);border-radius:9px;box-shadow:inset 0 -6px 0 var(--fc,#dfe2ec),0 3px 0 var(--nv)}
+#s-ex .key.home{background:#fff}
+#s-ex .key.next{background:var(--fc);color:#fff;transform:translateY(-3px);box-shadow:0 6px 0 var(--nv)}
+#s-ex .key.hit{background:#fff4cf;transform:translateY(2px);box-shadow:inset 0 -6px 0 var(--fc,#dfe2ec)}
+#s-ex .key.wrong{background:var(--coral)!important;color:#fff;box-shadow:0 3px 0 var(--nv)}
+#s-ex .blindban{background:var(--nv);color:#ffd23f;border:3px solid var(--nv);border-radius:14px;box-shadow:0 4px 0 #0b0e22}
+#s-ex .race{background:#fffaf0;border:3px solid var(--nv);box-shadow:0 3px 0 var(--nv)}
+#s-ex .panel .btn{box-shadow:0 5px 0 var(--nv);border:2.5px solid var(--nv)}
+#s-ex.rw3d .visual{--u:clamp(16px,min(calc((min(100vw,1100px) - 120px) / 21.6),calc((100vh - 458px) / 5.4)),48px)}
+
 body.dys .line{font-family:'Lexend',var(--ui);letter-spacing:.12em}
 body.dys .speedstat{display:none}
 body.dys p,body.dys .bubble{font-size:18px;line-height:1.75}
@@ -403,9 +505,15 @@ body.calm *{animation:none!important;transition:none!important}
       <button class="iconbtn" data-go="map"><svg viewBox="0 0 24 24" class="i"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Route</button>
       <div><div class="t" id="ex-title"></div><div class="muted" style="font-size:13px;font-weight:700" id="ex-sub"></div></div>
       <div class="spacer"></div>
+      <div class="fasen" id="ex-fasen"></div>
       <div class="dots" id="ex-dots"></div>
     </div>
     <div class="notice" id="tablet-notice">Op een tablet heb je een los toetsenbord nodig. Op een telefoon werkt de cursus niet goed: gebruik een laptop, Chromebook of computer.</div>
+    <div class="wereld" id="wereld" aria-hidden="true">
+      <div class="w-hud" id="w-hud"></div>
+      <div class="w-combo" id="w-combo" title="Goede toetsen achter elkaar"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor" stroke="#1b1f3a" stroke-width="1.5" stroke-linejoin="round"/></svg><span id="w-combo-n">0</span></div>
+      <div class="w-aftel" id="w-aftel"></div>
+    </div>
     <div class="exgrid">
       <div class="card typebox" id="typebox">
         <div class="timer" id="timer">1:00</div>
@@ -440,7 +548,7 @@ body.calm *{animation:none!important;transition:none!important}
 <div id="toast" role="status"></div>
 
 <script src="assets/js/config.js"></script>
-<script src="assets/js/app.js?v=5"></script>
+<script src="assets/js/app.js?v=6"></script>
 <script>window.goatcounter = { path: function () { return location.pathname }, endpoint: 'https://flitsvingers.goatcounter.com/count' };
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
