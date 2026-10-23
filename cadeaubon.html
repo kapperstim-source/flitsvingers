@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cadeaubon – Flitsvingers</title>
+<meta name="description" content="Geef blind leren typen cadeau, bijvoorbeeld met Sinterklaas: koop de online typecursus Flitsvingers voor groep 6 t/m 8 en print zelf een cadeaubon met de inlogcode.">
+<link rel="canonical" href="https://flitsvingers.nl/cadeaubon.html">
+<link rel="icon" href="/favicon.ico?v=2" sizes="48x48">
+<link rel="icon" href="/favicon-192.png?v=2" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>
+:root{--bg:#fff7ec;--ink:#18203a;--muted:#5f6888;--blue:#3a5bff;--blue-d:#2740c8;--yellow:#ffc93c;--line:#f0e2cc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;font-weight:500;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:24px 16px 60px}
+.bar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fredoka','Lexend',system-ui,sans-serif;font-weight:600;font-size:24px;letter-spacing:0;color:#151a30;text-decoration:none;line-height:1}
+.logo{width:40px;height:40px;flex:none;display:block;border-radius:50%}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:14px;padding:11px 18px;font:inherit;font-size:15px;font-weight:800;background:var(--blue);color:#fff;box-shadow:0 4px 0 var(--blue-d);cursor:pointer;text-decoration:none}
+.help{color:var(--muted);font-weight:700;margin:0 0 16px}
+.bon{position:relative;aspect-ratio:297/210;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#3a5bff,#6a84ff);color:#fff;box-shadow:0 20px 60px rgba(58,91,255,.25)}
+.bon::before{content:'';position:absolute;right:-12%;top:-30%;width:62%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.08)}
+.bon::after{content:'';position:absolute;left:-10%;bottom:-40%;width:50%;aspect-ratio:1;border-radius:50%;background:rgba(255,201,60,.18)}
+.bon .in{position:absolute;inset:7%;display:grid;grid-template-columns:1.25fr 1fr;gap:4%;z-index:1}
+.kick{font-family:'Fredoka',sans-serif;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--yellow);font-size:clamp(10px,1.6vw,16px)}
+.bon h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(28px,6vw,62px);line-height:1;margin:.2em 0 .25em}
+.bon p{margin:.25em 0;font-size:clamp(11px,1.8vw,18px);line-height:1.45;color:rgba(255,255,255,.92)}
+.field{display:flex;gap:.5em;align-items:baseline;margin:.45em 0;font-size:clamp(12px,2vw,20px);font-weight:800}
+.field span{opacity:.8;min-width:2.6em}
+.field [contenteditable]{flex:1;border-bottom:2px dashed rgba(255,255,255,.6);padding:0 .2em;outline:none;font-family:'Fredoka',sans-serif;font-size:1.15em;min-height:1.3em}
+.field [contenteditable]:focus{border-bottom-color:var(--yellow)}
+.box{margin-top:3%;background:rgba(255,255,255,.14);border-radius:12px;padding:2.6% 4%;font-size:clamp(10px,1.5vw,15px);line-height:1.45}
+.box .field{font-size:clamp(10px,1.55vw,16px);margin:.35em 0 0}
+.box .field span{min-width:4.2em}
+.box .field [contenteditable]{font-family:'Nunito',sans-serif;font-weight:800;font-size:1.05em;letter-spacing:.02em}
+.side{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center}
+.side img{width:100%;max-width:300px;filter:drop-shadow(0 10px 20px rgba(0,0,0,.25))}
+.side b{font-family:'Fredoka',sans-serif;font-size:clamp(12px,2vw,20px);margin-top:.4em}
+/* telefoon: geen vaste A4-verhouding (anders valt de kop eraf), Flits onder de tekst */
+@media screen and (max-width:640px){
+  .bon{aspect-ratio:auto}
+  .bon .in{position:relative;inset:auto;padding:24px 20px 20px;grid-template-columns:1fr;gap:10px}
+  .bon h1{font-size:40px}
+  .kick{font-size:13px}.bon p,.box{font-size:14px}.field{font-size:17px}.box .field{font-size:15px}
+  .side{flex-direction:row;justify-content:center;gap:12px}
+  .side img{max-width:120px}
+}
+@media print{
+  @page{size:A4 landscape;margin:0}
+  body{background:#fff}
+  .bar,.help{display:none!important}
+  .wrap{max-width:none;padding:0}
+  .bon{border-radius:0;box-shadow:none;width:297mm;height:210mm;aspect-ratio:auto;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .field [contenteditable]{border-bottom-style:solid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <a class="brand" href="index.html"><img class="logo" src="assets/img/flits_logo.webp" alt="" width="40" height="40">flitsvingers</a>
+    <button class="btn" id="print" type="button">Printen of opslaan als PDF</button>
+  </div>
+  <p class="help">Zo geef je Flitsvingers cadeau: <a href="prijs.html">koop de cursus</a> (€49 eenmalig), dan krijg je per mail een inlogcode. Klik hieronder op de stippellijntjes en vul de namen, het e-mailadres en de inlogcode uit je bevestigingsmail in. Daarna printen, en klaar is je cadeau.</p>
+  <div class="bon">
+    <div class="in">
+      <div>
+        <div class="kick">Cadeaubon</div>
+        <h1>Leer blind typen met Flits!</h1>
+        <div class="field"><span>Voor</span><div contenteditable="true" spellcheck="false"></div></div>
+        <div class="field"><span>Van</span><div contenteditable="true" spellcheck="false"></div></div>
+        <div class="box">Goed voor de online typecursus <b>Flitsvingers</b>: 30 lessen, races tegen Flits, proefexamens en een echt diploma. Ga naar <b>flitsvingers.nl</b>, klik op Inloggen en vul in:<div class="field"><span>E-mail</span><div contenteditable="true" spellcheck="false"></div></div><div class="field"><span>Code</span><div contenteditable="true" spellcheck="false"></div></div></div>
+      </div>
+      <div class="side">
+        <img src="assets/img/flits_juich.webp" alt="Flits juicht">
+        <b>flitsvingers</b>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+// Meten (23-10-2026, terug online voor Sinterklaas): bezoek aan deze pagina + event 'cadeaubon-geprint'.
+document.getElementById('print').addEventListener('click', function () {
+  try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'cadeaubon-geprint', title: 'Cadeaubon geprint of opgeslagen', event: true }); } catch (e) {}
+  window.print();
+});
+</script>
+<script>window.goatcounter = { path: function () { return location.pathname }, endpoint: 'https://flitsvingers.goatcounter.com/count' };
+if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
+</body>
+</html>
