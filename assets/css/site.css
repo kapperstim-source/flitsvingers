@@ -192,6 +192,8 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
 .mm-rij .btn{flex:none}
 .mm-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .mm-klein{font-size:13.5px;color:var(--muted);margin:8px 0 0}
+.mailmij .mm-vink{display:flex;gap:9px;align-items:flex-start;font-weight:600;font-size:14.5px;line-height:1.4;color:var(--text);margin:12px 0 0;cursor:pointer}
+.mm-vink input{width:20px;height:20px;margin:0;flex:none;accent-color:var(--blue)}   /* herinneringen (sinds 24-10-2026): standaard uit, alleen met toestemming */
 .mm-status{font-size:14.5px;font-weight:700;margin:8px 0 0}
 .mm-status:empty{display:none}
 .mm-status.ok{color:var(--mint)}
@@ -317,3 +319,23 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 .incl-beeld img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:14px;border:1px solid var(--line2);display:block}
 .incl-beeld figcaption{font-size:14.5px;color:var(--muted);margin-top:8px}
 @media (max-width:860px){.incl-beeld{display:none}}
+
+/* 'Waarom nu?' op de homepage: de reden om te kopen (sinds 24-10-2026) */
+.wn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.wn-kaart{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px 22px 18px;display:flex;flex-direction:column;gap:8px}
+.wn-kaart b{width:34px;height:34px;border-radius:50%;background:var(--yellow);color:var(--ink);display:grid;place-items:center;font-family:var(--head);font-weight:600;font-size:18px;line-height:1}
+.wn-kaart p{font-size:16px}
+.wn-kaart small{margin-top:auto;padding-top:4px;font-size:13px;color:var(--muted)}
+.wn-nu{margin-top:18px;display:flex;align-items:center;justify-content:space-between;gap:16px 24px;flex-wrap:wrap;background:var(--blue-l);border-radius:var(--r);padding:20px 22px}
+.wn-nu p{max-width:660px;color:var(--ink)}
+@media (max-width:820px){.wn-grid{grid-template-columns:1fr;gap:12px}.wn-nu .btn{width:100%}}
+.wn-sub{margin-top:34px;font-size:22px}
+.wn-ons{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px;margin-top:14px}
+.wn-ons p{font-size:16px;padding-left:16px;border-left:3px solid var(--yellow)}
+.wn-ons b{color:var(--ink)}
+.wn-vraag{flex:1 1 420px}
+.wn-groepen{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px}
+.wn-groepen button{font:inherit;font-size:15px;font-weight:800;padding:9px 16px;border-radius:10px;border:1px solid var(--line2);background:#fff;color:var(--ink);cursor:pointer}
+.wn-groepen button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.wn-uitkomst{font-size:16px}
+@media (max-width:820px){.wn-ons{grid-template-columns:1fr}.wn-sub{margin-top:28px}}

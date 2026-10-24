@@ -29,8 +29,34 @@ const telGC = (path, title) => { try { if (window.goatcounter && window.goatcoun
   document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.hidden = true; });
 })();
 
+/* 'Waarom nu?': ouder kiest de groep, wij rekenen uit wanneer de brugklas begint en wanneer het kind klaar is
+   (30 lessen, 5 dagen per week: 8 tot 12 weken, zie vragen.html; we rekenen met het midden, 10 weken). Sinds 24-10-2026. */
+(() => {
+  const knoppen = document.querySelectorAll('[data-groep]'), uit = document.getElementById('wn-uitkomst');
+  if (!knoppen.length || !uit) return;
+  const MAAND = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
+  const nu = new Date(), klaar = new Date(nu.getTime() + 70 * 864e5);
+  const klaarTekst = (klaar.getDate() <= 10 ? 'begin ' : klaar.getDate() <= 20 ? 'half ' : 'eind ') + MAAND[klaar.getMonth()];
+  const duur = m => m < 18 ? 'ongeveer ' + m + ' maanden' : 'ongeveer ' + String(Math.round(m / 6) / 2).replace('.', ',') + ' jaar';
+  knoppen.forEach(b => b.addEventListener('click', () => {
+    const groep = Number(b.dataset.groep);
+    knoppen.forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    const brugklas = new Date((nu.getMonth() >= 7 ? nu.getFullYear() + 1 : nu.getFullYear()) + (8 - groep), 8, 1);
+    const m = Math.max(1, Math.round((brugklas - nu) / (30.44 * 864e5)));
+    uit.textContent = 'Over ' + duur(m) + ' begint de brugklas. ' +
+      (groep === 8 ? (m >= 3 ? 'Begin je deze week, dan is je kind rond ' + klaarTekst + ' klaar.' : 'In 8 tot 12 weken is je kind klaar, dus begin op tijd.')
+                   : 'Dat lijkt ver weg, maar hoe korter een gewoonte bestaat, hoe makkelijker je hem verandert. Begin je deze week, dan is je kind rond ' + klaarTekst + ' klaar.');
+    telGC('waarom-groep-' + groep, 'Groep gekozen in Waarom nu');
+  }));
+  knoppen.forEach(b => b.setAttribute('aria-pressed', 'false'));
+})();
+
+/* losse knoppen meten (GoatCounter-gebeurtenis uit data-gc, bv. het blok 'Waarom nu?', sinds 24-10-2026) */
+document.querySelectorAll('[data-gc]').forEach(a => a.addEventListener('click', () => telGC(a.dataset.gc, a.textContent.trim())));
+
 /* op een telefoon: "Vraag de gratis proefles aan" gaat naar proefles-aanvragen.html (sinds 12-10-2026).
-   Daar staat het formulier "Mail mij de link" (de server stuurt één mail; het adres wordt niet opgeslagen). */
+   Daar staat het formulier "Mail mij de link": de server stuurt één mail; met het vinkje "herinneringen" (sinds 24-10-2026)
+   bewaart hij het adres tijdelijk en volgen nog twee mails (dag 2 en dag 5), daarna wist hij het adres. */
 (() => {
   const terug = document.getElementById('terug');   // "Terug" gaat naar de vorige pagina als die van deze site komt
   if (terug && document.referrer.indexOf(location.origin) === 0 && history.length > 1) terug.addEventListener('click', e => { e.preventDefault(); history.back(); });
@@ -41,13 +67,15 @@ const telGC = (path, title) => { try { if (window.goatcounter && window.goatcoun
     e.preventDefault();
     const email = mmMail.value.trim(), knop = mmForm.querySelector('button[type=submit]');
     if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) { mmMeld('Vul een geldig e-mailadres in.', 'fout'); return; }
+    const vink = document.getElementById('mm-herinner'), herinner = !!(vink && vink.checked);   // herinneringen: alleen met vinkje (24-10-2026)
     knop.disabled = true; mmMeld('Even geduld…');
     try {
       const r = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'linkMail', email, hp: document.getElementById('mm-hp').value }) }).then(r => r.json());
+        body: JSON.stringify({ action: 'linkMail', email, hp: document.getElementById('mm-hp').value, herinnering: herinner }) }).then(r => r.json());
       if (r.ok) {
         mmMeld('Verstuurd! Kijk in je mail (soms staat hij bij Reclame of Spam).', 'ok'); mmMail.value = '';
         telGC('link-gemaild', 'Link gemaild');
+        if (herinner) { telGC('link-gemaild-herinnering', 'Link gemaild met herinneringen'); vink.checked = false; }
       } else {
         mmMeld(r.error === 'druk' ? 'Het is even druk. Probeer het over een paar minuten nog eens.' : 'Dat lukte niet. Controleer je e-mailadres en probeer het nog eens.', 'fout');
       }
