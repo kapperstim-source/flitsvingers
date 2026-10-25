@@ -820,6 +820,10 @@ function startLesson() {
   if (examLike && L.soort === 'examen' && !$('#parentok').checked) return;
   const dipName = examLike && $('#dipname') ? $('#dipname').value.trim().slice(0, 30) : '';
   const plan = weekendPlan(L);
+  /* opwarmen: elke les begint (na de garage) met de lastige letters van de vorige les, als het kind die al kent */
+  const al = allowedFor(L.id);
+  const warm = examLike ? [] : (S.lastTricky || []).filter(c => okChars(makeDrill([c]), al)).slice(0, 2);
+  if (warm.length && plan.length) plan.splice(plan.filter(q => q.fase === 'garage').length, 0, { spec: { label: 'Opwarmen: je lastige letters', warm }, fase: 'training' });
   R = { lesson: L, idx: 0, results: [], lessonErrs: {}, shortenNext: false, examLike, dipName, dys: !!S.settings.dys,
         plan, words: [], trainApm: [], delen: 0, combo: 0, timers: [], munten: 0, woordNr: 0, woordFout: false };
   if (!examLike && world()) { W.naam(S.nick); W.uiterlijk(kartLook()); W.gebied((zoneVan(L.id) || {}).id || 'dorp'); R.delen = plan.length && plan[0].fase === 'garage' ? 0 : 4; W.delen(R.delen); }
@@ -837,6 +841,7 @@ function startExercise(drillText) {
   R.item = drillText || R.examLike ? null : R.plan[R.idx];
   if (drillText) ex = { label: 'Herhaal-rondje', text: drillText, kind: 'normal' };
   else if (R.examLike) ex = buildExam(L.soort);
+  else if (R.item.spec.warm) ex = { label: R.item.spec.label, kind: 'normal', text: makeDrill(R.item.spec.warm) };
   else if (R.item.spec.eigen) ex = { label: R.item.spec.label, blind: false, kind: 'race', tempo: 40, text: eigenRaceTekst(L) };
   else ex = buildExercise(L, R.item.spec);
   if (ex.kind === 'race' && !drillText) ex.tempo = raceTempo(ex.tempo);
@@ -1032,6 +1037,10 @@ function finishExercise() {
   const stars = acc >= 95 ? 3 : acc >= 85 ? 2 : 1;
   if (!R.drill) R.results.push({ acc, stars, apm, kind: ex.kind });
   if (!R.drill && R.item && (R.item.fase === 'training' || R.item.fase === 'tunnel')) R.trainApm.push(Math.round(correct / Math.max(elapsedMin(), 0.05)));
+  if (ex.blind && !R.drill) {   // blind-score per dag (tunnel en blind-rondjes), voor de weekmail aan ouders
+    S.blind = S.blind || {}; const b = S.blind[today()] || { g: 0, f: 0 };
+    b.g += correct; b.f += R.errors; S.blind[today()] = b;
+  }
   if (acc === 100 && correct >= 20) award('foutloos');
   if (timed || ex.kind === 'race') { if (apm > (S.best.apm || 0)) S.best.apm = apm; }
   if (ex.kind === 'speed') { if (apm >= 50) award('snel50'); if (apm >= 100) award('snel100'); }
@@ -1107,6 +1116,7 @@ function finishLesson() {
   S.xp += gained;
   S.lessons[L.id] = { done: true, stars: Math.max(stars, prev ? prev.stars || 0 : 0), acc: Math.max(acc, prev ? prev.acc || 0 : 0), apm, date: today() };
   const tricky = Object.entries(R.lessonErrs).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([c]) => c);
+  S.lastTricky = tricky;   // de volgende les begint hiermee (opwarmen)
   const bonus = stars * 5; S.munten += bonus;
   const nieuw = prev && prev.done ? [] : WINKEL.filter(it => it[4] === L.id).map(it => it[2]);
   R.lastResult = { L, acc, stars, apm, gained, tricky, munten: R.munten + bonus, nieuw };
@@ -1124,6 +1134,23 @@ function makeDrill(chars) {
     else parts.push(buddy + c + buddy, c + c, buddy + c);
   });
   return parts.join(' ');
+}
+/* vooruitblik onder het resultaat: waar het volgende raceweekend over gaat; na les 3 (laatste gratis les) het hele seizoen */
+function teaserHTML(L, next) {
+  if (!next || next === L.id) return '';
+  const N = LES.find(l => l.id === next); if (!N) return '';
+  const zNu = zoneVan(L.id), zNext = zoneVan(next);
+  let t;
+  if (L.id === CFG.FREE && !paidOk(next)) {
+    t = '<b>Zo gaat je seizoen verder.</b> In les 4 gaan je vingers voor het eerst omhoog, naar de E en de I. ' +
+        'Op het Onderrij-strand wachten Vlam de vos en Hop de haas op een revanche, ' +
+        'en in het Kampioenscircuit wacht het examen, met je eigen diploma.';
+  } else if (zNext && zNu && zNext.id !== zNu.id) {
+    t = '<b>Nieuw gebied!</b> Volgende keer rij je ' + H(zNext.naam.replace(/^(Het|De) /, m => m.toLowerCase())) + ' binnen: ' + H(N.titel) + '.';
+  } else {
+    t = '<b>Volgende keer:</b> ' + H(N.titel) + '.';
+  }
+  return '<p class="res-teaser">' + t + '</p>';
 }
 function showResult(res) {
   R.waiting = true;
@@ -1144,6 +1171,7 @@ function showResult(res) {
     (tricky.length ? '<div class="muted" style="font-size:14px;font-weight:800">Lastige toetsen vandaag:</div><div class="tricky">' + tricky.map(c => '<span>' + H(CHARNAME[c] || c.toUpperCase()) + '</span>').join('') + '</div>' : '') +
     (nieuw.length ? '<p class="res-nieuw">' + MUNT_ICON + '<span><b>Nieuw in je garage:</b> ' + H(nieuw.join(', ')) + '</span></p>' : '') +
     (secs >= CFG.DAY_GOAL ? '<p style="color:var(--mint);font-weight:800;margin-top:8px">Je dag is af! Extra oefenen mag, maar hoeft niet.</p>' : '') +
+    teaserHTML(L, next) +
     '<div class="row" style="margin-top:18px">' +
       (next && paidOk(next) ? '<button class="btn" id="res-next">' + (next === 30 ? 'Naar het examen' : 'Volgende les') + ' <span class="kbdhint">Enter</span></button>'
         : next ? '<button class="btn yellow" id="res-unlock">Ontgrendel de volledige cursus</button>' : '') +
@@ -1336,9 +1364,13 @@ function weekMailHTML(p) {
   const avg = accs.length ? Math.round(accs.reduce((a, b) => a + b, 0) / accs.length) : null;
   const hard = Object.entries(p.errs || {}).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([c]) => CHARNAME[c] || c.toUpperCase());
   const wk = Math.round(weekSeconds(p) / 60);
+  let bg = 0, bf = 0; const dd = new Date();
+  for (let i = 0; i < 7; i++) { const b = (p.blind || {})[dayKey(dd)]; if (b) { bg += b.g; bf += b.f; } dd.setDate(dd.getDate() - 1); }
+  const blind = bg + bf >= 30 ? Math.floor(bg / (bg + bf) * 100) : null;
   return '<div class="mail"><h4>Week-update van ' + H(p.nick) + '</h4><div class="muted" style="font-weight:700">Eén keer per week, nooit vaker.</div>' +
     '<ul><li>Deze week ' + wk + ' minuten geoefend</li><li>' + done.length + ' van de 30 lessen gehaald</li>' +
     '<li>Gemiddeld ' + (avg != null ? avg + '%' : '–') + ' nauwkeurig' + (p.best && p.best.apm ? ', record ' + p.best.apm + ' aanslagen per minuut' : '') + '</li>' +
+    (blind != null ? '<li>Blind typen: in de tunnel, waar het toetsenbord van het scherm verdwijnt, ' + blind + '% van de toetsen goed</li>' : '') +
     (hard.length ? '<li>Lastigste toetsen: ' + H(hard.join(', ')) + '. Na een les met fouten kan je kind die extra oefenen met het herhaal-rondje.</li>' : '') +
     '</ul>Tip: een compliment werkt beter dan een herinnering. 10 tot 15 minuten per dag is genoeg.</div>';
 }
