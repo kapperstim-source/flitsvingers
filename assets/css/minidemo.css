@@ -1,49 +1,87 @@
-/* Mini-les "Probeer het zelf, met Flits" (homepage, sinds 12-10-2026). Alle klassen beginnen met md- zodat niets botst.
-   Sinds 15-10-2026 in stijl A "Sticker" (dikke donkere randen, harde schaduw), net als de cursus en de 3D-racebaan. */
-.md{max-width:760px;margin:0 auto calc(var(--ruimte) * 2);background:#fff;border:3px solid #1b1f3a;border-radius:22px;padding:18px 16px 16px;box-shadow:0 6px 0 #1b1f3a;text-shadow:none;
---md-nv:#1b1f3a;--md-pink:#ff5c9a;--md-orange:#ff9a3c;--md-green:#1fbf7a;--md-lblue:#3a95ff;--md-grey:#a7adc6;--md-red:#e5484d}
+/* Mini-les "Probeer het zelf, met Flits" (homepage, sinds 12-10-2026). Alle eigen klassen beginnen met md- zodat niets botst.
+   Sinds 26-10-2026 (Tim: "laat hem meer lijken op de echte cursus, met hetzelfde toetsenbord"): dezelfde opbouw en stijl als de cursus.
+   De 3D-wereld met een donkere letterbalk erover en Flits met een ballon, daaronder het donkere dashboard met hetzelfde toetsenbord
+   (keycaps met een tint in de vingerkleur, de volgende toets gloeit) en dezelfde handjes. De .kbd/.krow/.key/.hands-regels hieronder
+   volgen de cursus (cursus.html, blok "cockpit"). */
+.md{max-width:760px;margin:0 auto calc(var(--ruimte) * 2);background:#fff;border:3px solid #1b1f3a;border-radius:22px;padding:16px 16px 14px;box-shadow:0 6px 0 #1b1f3a;text-shadow:none;
+--md-nv:#1b1f3a;--f-pink:#ff6fa8;--f-ring:#ff9f43;--f-middle:#24bf80;--f-index:#3ba7ff;--f-thumb:#a6afc7}
 .md-kop{display:flex;align-items:center;gap:12px;margin:0 0 10px}
-.md-kop img{width:64px;height:64px;object-fit:cover;object-position:50% 18%;border-radius:50%;border:2.5px solid var(--md-nv);background:#fff7ec;flex:none}
+.md-kop img{width:56px;height:56px;object-fit:cover;object-position:50% 18%;border-radius:50%;border:2.5px solid var(--md-nv);background:#fff7ec;flex:none}
 .md-kop h2{margin:0;font-size:21px;line-height:1.2}
 .md-kop p{margin:2px 0 0;font-size:14.5px;color:var(--muted)}
 .md-geluid{white-space:nowrap;background:none;border:0;color:var(--muted);font:inherit;font-size:13.5px;text-decoration:underline;cursor:pointer;margin-left:auto;align-self:flex-start;padding:0}
-.md-ballon{min-height:2.6em;background:#fffaf0;border:2.5px solid var(--md-nv);border-radius:14px;padding:8px 12px;font-size:15.5px;color:var(--ink);margin:0 0 12px}
-/* de racebaan: eerst een plaatje, na Start de echte 3D-baan (canvas eroverheen) */
-.md-baan{position:relative;border:3px solid var(--md-nv);border-radius:16px;overflow:hidden;background:#9fd9ff;margin:0 0 6px;aspect-ratio:1120/280}
-.md-baan img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* het scherm: wereld + dashboard in één kader, zoals de cursus */
+.md-scherm{border:3px solid var(--md-nv);border-radius:18px;overflow:hidden;box-shadow:0 5px 0 var(--md-nv);background:#1b1f3a;container-type:inline-size}
+.md-baan{position:relative;overflow:hidden;background:#9fd9ff;aspect-ratio:2/1}
+.md-poster{display:block;width:100%;height:100%;object-fit:cover}
 .md-baan canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.md-regel{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:clamp(30px,8vw,46px);letter-spacing:.04em;text-align:center;color:#b9bccb;margin:6px 0 12px;padding:4px 0 6px;white-space:nowrap}
-.md-regel span{display:inline-block;min-width:.62em;border-radius:7px}
-.md-regel .ok{color:var(--md-nv)}
-.md-regel .nu{color:var(--md-nv);background:#ffc93c;box-shadow:0 0 0 2.5px var(--md-nv),0 4px 0 2.5px var(--md-nv)}
-.md-regel .fout{color:#fff;background:var(--md-red)}
-.md-kb{display:grid;gap:7px;user-select:none;-webkit-user-select:none}
-.md-rij{display:flex;gap:clamp(4px,1.2vw,6px);justify-content:center}
-.md-k{flex:0 0 auto;width:clamp(27px,7.9vw,54px);height:clamp(44px,11vw,54px);border-radius:10px;background:#fff;border:2px solid var(--md-nv);box-shadow:inset 0 -6px 0 var(--fc,#dfe2ec),0 3px 0 var(--md-nv);
-display:grid;place-items:center;font:inherit;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;font-size:clamp(14px,2.2vw,18px);color:var(--md-nv);cursor:pointer;padding:0;touch-action:manipulation;transition:transform .07s,background .07s}
-.md-k.pink{--fc:var(--md-pink)}.md-k.orange{--fc:var(--md-orange)}.md-k.green{--fc:var(--md-green)}.md-k.lblue{--fc:var(--md-lblue)}.md-k.grey{--fc:var(--md-grey)}
-.md-k.bump{position:relative}.md-k.bump::after{content:"";position:absolute;bottom:26%;width:26%;height:2px;border-radius:2px;background:var(--md-nv);opacity:.6}
-.md-k.spatie{width:min(62%,360px);font-size:14px;color:var(--muted)}
-.md-k.doel{color:#fff;background:var(--fc);transform:translateY(-3px);box-shadow:0 6px 0 var(--md-nv)}
-.md-k.tik{transform:translateY(2px);box-shadow:inset 0 -6px 0 var(--fc,#dfe2ec)}
-.md-uitleg{text-align:center;font-size:13.5px;color:var(--muted);margin:10px 0 0}
-.md-start{display:flex;justify-content:center;margin:12px 0 4px}
-.md-klaar{text-align:center;margin:10px 0 2px}
-.md-klaar b{display:block;font-size:22px;color:var(--ink);margin:0 0 8px}
+.md-baan .w-dash{position:absolute;inset:0;z-index:2;pointer-events:none}
+/* de letterbalk bovenin de wereld */
+.md-balk{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:min(86%,430px);box-sizing:border-box;padding:12px 14px 5px;text-align:center;
+  background:rgba(27,31,58,.9);border:3px solid #1b1f3a;border-radius:15px;box-shadow:0 4px 0 #0b0e22,inset 0 1px 0 rgba(255,255,255,.1)}
+.md-label{position:absolute;left:12px;top:-13px;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;font-size:12px;line-height:1.4;color:#1b1f3a;background:#ffc93c;border:2.5px solid #1b1f3a;border-radius:10px;padding:1px 9px;box-shadow:0 2px 0 #1b1f3a;transform:rotate(-1.5deg)}
+.md-regel{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:clamp(24px,7cqw,36px);letter-spacing:.04em;color:#8a93c2;white-space:nowrap;margin:0;padding:3px 0 6px;line-height:1.3}
+.md-regel span{display:inline-block;min-width:.62em;border-radius:7px;position:relative}
+.md-regel .sp::after{content:"";position:absolute;left:50%;bottom:.42em;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:currentColor;opacity:.55}
+.md-regel .ok{color:#fff}
+.md-regel .nu{color:#1b1f3a;background:#ffc93c;box-shadow:0 0 0 2.5px #ffe7a3,0 4px 0 2.5px #b8860b,0 0 20px rgba(255,201,60,.55)}
+.md-regel .fout{color:#fff;background:#e5484d;box-shadow:0 0 0 2.5px #ffc2c4,0 4px 0 2.5px #a8323a}
+.md-hint{min-height:22px;display:flex;align-items:center;justify-content:center;gap:7px;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;font-size:13.5px;color:#c9cfee}
+.md-hint i{width:13px;height:13px;border-radius:50%;border:2px solid #fff;flex:none}
+.md-hint b{color:#fff}
+/* Flits praat via een ballon in de wereld, net als in de cursus */
+.md-ballon{position:absolute;left:10px;bottom:10px;z-index:3;display:flex;align-items:center;gap:8px;max-width:min(40%,260px);margin:0;padding:4px 12px 4px 4px;
+  background:#fff;border:3px solid #1b1f3a;border-radius:16px;box-shadow:0 3px 0 #1b1f3a;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;font-size:14px;line-height:1.25;color:#1b1f3a}
+.md-ballon img{width:38px;height:47px;object-fit:contain;flex:none}
+/* Start en klaar liggen over de wereld */
+.md-start{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;background:rgba(27,31,58,.18)}
+.md-startknop{font-size:20px;padding:14px 34px}
+.md-klaar{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:12px;text-align:center;background:rgba(27,31,58,.66)}
+.md-klaar b{font-family:'Fredoka',system-ui,sans-serif;font-size:24px;color:#fff;text-shadow:0 2px 0 #1b1f3a}
+/* voor de start alleen de Start-knop (en Flits); na afloop alleen het klaar-scherm */
+.md:not(.md-bezig) .md-baan .w-dash{display:none}
+.md.md-af .md-baan .w-dash,.md.md-af .md-ballon{display:none}
+.md-klaar .md-uitleg{color:#e6e9f7;margin:0}
 .md-klaar .btn{margin:0 auto}
+
+/* het dashboard: hetzelfde toetsenbord en dezelfde handjes als de cursus */
+.md-dash{display:flex;align-items:center;justify-content:center;gap:14px;padding:12px 12px 14px;background:linear-gradient(180deg,#2c3360,#1b1f3a);border-top:3px solid #1b1f3a;
+  --u:clamp(13px,calc((100cqw - 54px) / 21.4),38px)}
+.md .kbd{display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;-webkit-user-select:none}
+.md .krow{display:flex;gap:4px}
+.md .key{width:calc(var(--u) * var(--w,1) - 4px);height:calc(var(--u) * .92);border:0;border-radius:calc(var(--u) * .27);padding:0;display:grid;place-items:center;position:relative;
+  font-family:'Fredoka',system-ui,sans-serif;font-weight:600;font-size:clamp(9px,calc(var(--u) * .34),15px);line-height:1.05;text-align:center;color:#1b1f3a;
+  background:color-mix(in srgb,var(--fc,#dfe2ec) 20%,#ffffff);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.85),inset 0 -4px 0 color-mix(in srgb,var(--fc,#c9cede) 78%,#1b1f3a),0 2px 0 rgba(0,0,0,.45);transition:transform .08s,background .12s}
+.md .key small{display:block;font-size:.72em;opacity:.7}
+.md .key.home{background:color-mix(in srgb,var(--fc,#dfe2ec) 34%,#ffffff)}
+.md .key.f-pink{--fc:var(--f-pink)}.md .key.f-ring{--fc:var(--f-ring)}.md .key.f-middle{--fc:var(--f-middle)}.md .key.f-index{--fc:var(--f-index)}.md .key.f-thumb{--fc:var(--f-thumb)}
+.md .key.bump::after{content:"";position:absolute;bottom:20%;width:30%;height:2px;border-radius:2px;background:#1b1f3a;opacity:.55}
+.md .key.doel{background:var(--fc);color:#fff;transform:translateY(-3px);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.4),inset 0 -4px 0 color-mix(in srgb,var(--fc) 70%,#1b1f3a),0 0 0 3px #fff,0 0 16px 4px var(--fc);animation:md-volgende 1.2s ease-in-out infinite}
+@keyframes md-volgende{50%{box-shadow:inset 0 2px 0 rgba(255,255,255,.4),inset 0 -4px 0 color-mix(in srgb,var(--fc) 70%,#1b1f3a),0 0 0 3px #fff,0 0 26px 8px var(--fc)}}
+.md .key.tik{background:#fff4cf;transform:translateY(2px);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--fc,#c9cede) 78%,#1b1f3a)}
+.md .key.fout{background:#e5484d!important;color:#fff;box-shadow:inset 0 -4px 0 #a8323a,0 0 14px 4px rgba(229,72,77,.7)}
+.md .hands{display:block;flex:none;width:calc(var(--u) * 5.6);margin:0}
+.md .hands .palm{fill:#ffdcbd;stroke:#efbf93;stroke-width:2.5}
+.md .hands .fg{transition:transform .15s,fill-opacity .15s;transform-box:fill-box;transform-origin:50% 100%}
+.md .hands .fg rect.f{fill-opacity:.72;stroke:#fff;stroke-width:0}
+.md .hands .fg .nail{fill:#fff;fill-opacity:.55}
+.md .hands .fg.on{transform:translateY(-8px)}
+.md .hands .fg.on rect.f{fill-opacity:1;stroke-width:3}
+.md .fg.f-pink rect.f{fill:var(--f-pink)}.md .fg.f-ring rect.f{fill:var(--f-ring)}.md .fg.f-middle rect.f{fill:var(--f-middle)}.md .fg.f-index rect.f{fill:var(--f-index)}.md .fg.f-thumb rect.f{fill:var(--f-thumb)}
+/* telefoon: alleen de thuisrij en de spatie, groot genoeg om aan te tikken */
+.md .md-tik{display:none}
+.md-tik .key{cursor:pointer;touch-action:manipulation;--u:clamp(28px,calc((100cqw - 64px) / 9),46px);height:calc(var(--u) * 1.2);font-size:17px}
+.md-tik .key.spatie{width:min(70cqw,360px);height:calc(var(--u) * .95);font-size:14px}
+.md-dash .md-laptop .key{cursor:pointer}
+
+.md-uitleg{text-align:center;font-size:13.5px;color:var(--muted);margin:10px 0 0}
 .md [hidden]{display:none!important}
 /* In de bovenkant (sinds 12-10-2026 in plaats van de schermafbeelding): op de laptop rechts naast de kop */
 .hero .md{margin:0;max-width:none;width:100%}
-@media (min-width:981px){
-  .hero .md{padding:14px 16px 14px}
-  .hero .md-kop{margin:0 0 8px}.hero .md-kop img{width:54px;height:54px}
-  .hero .md-ballon{min-height:0;margin:0 0 8px}
-  .hero .md-baan{aspect-ratio:1120/225}
-  .hero .md-k{width:calc((100% - 54px) / 10);height:auto;aspect-ratio:1/.8}
-  .hero .md-k.spatie{width:60%;aspect-ratio:auto;height:38px}
-  .hero .md-regel{font-size:36px;margin:2px 0 6px}
-  .hero .md-uitleg{margin:8px 0 0}.hero .md-start{margin:8px 0 2px}
-}
+@media (min-width:981px){.hero .md{padding:14px 16px 12px}.hero .md-kop{margin:0 0 8px}.hero .md-kop img{width:50px;height:50px}.hero .md-uitleg{margin:8px 0 0}}
 @media (max-width:980px){.hero .md{margin-top:calc(var(--ruimte) * 2)}}
 /* Telefoon (Tim, 12-10-2026): mini-les helemaal bovenaan, direct onder de kop, zodat je meteen kunt oefenen.
    De tekstkolom van de bovenkant wordt 'onzichtbaar' (display:contents), zodat de mini-les tussen de kop en de knop kan. */
@@ -56,14 +94,14 @@ display:grid;place-items:center;font:inherit;font-family:'Fredoka',system-ui,san
   .hero .md{padding:12px 12px 12px;border-radius:18px}
   .hero .md-kop{gap:10px;margin:0 0 8px}.hero .md-kop img{width:44px;height:44px}
   .hero .md-kop h2{font-size:17px}.hero .md-kop p{font-size:13px;margin:0}
-  .hero .md-ballon{min-height:0;font-size:14px;padding:6px 10px;margin:0 0 6px}
-  .hero .md-baan{display:none}                 /* eerste scherm niet langer maken: de baan komt pas na Start */
-  .hero .md.md-bezig .md-baan{display:block}
-  .hero .md-regel{font-size:32px;margin:2px 0 8px}
-  .hero .md-k{height:44px}
+  .md-baan{aspect-ratio:16/10}
+  .md-balk{top:12px;width:90%}
+  .md-ballon{font-size:12.5px;max-width:44%;left:6px;bottom:6px;padding:3px 9px 3px 3px;border-radius:13px}
+  .md-ballon img{width:26px;height:32px}
+  .md .md-kb.md-laptop,.md .hands{display:none}
+  .md .md-tik{display:flex}
   .hero .md-uitleg{font-size:12.5px;margin:8px 0 0;line-height:1.35}
-  .hero .md-start{margin:8px 0 0}
 }
 .md-tel{display:none}
-@media (pointer:coarse) and (max-width:820px){.md-laptop{display:none}.md-tel{display:inline}.md-klaar .md-tel{display:inline-flex}.md-rij.md-laptop{display:none}}
-@media (prefers-reduced-motion:reduce){.md-k,.md-k.doel,.md-k.tik{transition:none;transform:none}}
+@media (pointer:coarse) and (max-width:820px){span.md-laptop,a.md-laptop{display:none}.md-tel{display:inline}.md-klaar .md-tel{display:inline-flex}}
+@media (prefers-reduced-motion:reduce){.md .key,.md .key.doel,.md .key.tik{transition:none;transform:none;animation:none}}
