@@ -18,7 +18,7 @@ const IMG = p => 'assets/img/flits_' + p + '.webp';
 
 /* ================= opslag ================= */
 const LS = 'flitsvingers_app_v2';
-const DEF_SETTINGS = { voice: true, sfx: true, errSound: false, dys: false, calm: false, kbd: true, hands: true, world3d: true };
+const DEF_SETTINGS = { voice: true, sfx: true, muziek: true, errSound: false, dys: false, calm: false, kbd: true, hands: true, world3d: true };
 const rid = (n = 10) => { const a = 'abcdefghjkmnpqrstuvwxyz23456789'; let s = ''; const r = crypto.getRandomValues(new Uint8Array(n)); for (const x of r) s += a[x % a.length]; return s; };
 function newProfile(nick, color) {
   return { id: rid(10), nick: nick || 'Speler', color: color || '#3a5bff', settings: { ...DEF_SETTINGS }, lessons: {}, xp: 0, days: {}, errs: {}, badges: {}, best: { apm: 0 }, proef: [], diploma: null, munten: 0, kart: {}, bezit: {}, vinger: {}, updated: Date.now() };
@@ -167,7 +167,7 @@ const setFingers = (svg, ids) => svg.querySelectorAll('.fg').forEach(f => f.clas
 
 /* ================= geluid ================= */
 let curAudio = null, queue = [];
-function stopAudio() { queue = []; if (curAudio) { try { curAudio.pause(); } catch (e) {} curAudio = null; } }
+function stopAudio() { queue = []; if (curAudio) { try { curAudio.pause(); } catch (e) {} curAudio = null; } if (W && W.duik) W.duik(false); }
 function play(ids, force) {
   if ((!S || !S.settings.voice) && !force) return;
   stopAudio();
@@ -175,11 +175,11 @@ function play(ids, force) {
   playNext();
 }
 function playNext() {
-  const id = queue.shift(); if (!id) return;
+  const id = queue.shift(); if (!id) { if (W && W.duik) W.duik(false); return; }
   try {
-    const a = new Audio(VOICE_DIR + id + '.mp3');
+    const a = new Audio(VOICE_DIR + id + '.mp3'); if (W && W.duik) W.duik(true);
     curAudio = a; a.onended = playNext; a.onerror = playNext;
-    a.play().catch(() => {});
+    a.play().catch(() => { if (W && W.duik) W.duik(false); });
   } catch (e) {}
 }
 function playSoft(ids) { if (curAudio && !curAudio.paused && !curAudio.ended) return; play(ids); }
@@ -352,8 +352,9 @@ function raceTempo(standaard) {
 let W = null;   // de 3D-wereld; false = lukt niet op deze computer
 const want3D = () => !!(S && S.settings.world3d && !S.settings.calm && !matchMedia('(prefers-reduced-motion: reduce)').matches);
 function world() {
+  if (W && W.mislukt && W.mislukt()) { W.pauze(true); W = false; }
   if (!want3D() || !window.FV3D || W === false) return null;
-  if (!W) { try { W = window.FV3D.maak($('#wereld'), { nick: S.nick, kleur: S.color }) || false; } catch (e) { W = false; } }
+  if (!W) { try { W = window.FV3D.maak($('#wereld'), { nick: S.nick, kleur: S.color, geluid: S.settings.sfx, muziek: S.settings.muziek }) || false; } catch (e) { W = false; } }
   return W || null;
 }
 function wtoast(t) { $('#wereld').querySelectorAll('.w-toast').forEach(x => x.remove()); const d = mk('div', 'w-toast', t); $('#wereld').appendChild(d); setTimeout(() => d.remove(), 2300); }
@@ -388,7 +389,7 @@ function comboShow() {
 function aftellen() {
   R.wachtGo = true; const a = $('#w-aftel'); const piep = (f, d) => { if (S.settings.sfx) beep(f, d, 'square', .04); };
   [3, 2, 1].forEach((n, k) => R.timers.push(setTimeout(() => { a.innerHTML = '<span>' + n + '</span>'; piep(440, .15); }, 400 + k * 700)));
-  R.timers.push(setTimeout(() => { a.innerHTML = '<span>GO!</span>'; piep(880, .3); R.wachtGo = false; startClock(); focusSink(); }, 2500));
+  R.timers.push(setTimeout(() => { a.innerHTML = '<span>GO!</span>'; piep(880, .3); R.wachtGo = false; startClock(); focusSink(); setFlits('juich', 'Daar gaan we! Netjes typen, dan haal je me in.'); }, 2500));
   R.timers.push(setTimeout(() => { a.innerHTML = ''; }, 3300));
 }
 
@@ -494,8 +495,9 @@ function woordPlekken(t) { const f = []; for (let i = 0; i < t.length; i++) if (
 /* ---------- de garage ---------- */
 let WG = null, gVak = 'lak', gPas = null;
 function garage3D() {
+  if (WG && WG.mislukt && WG.mislukt()) { WG.pauze(true); WG = false; }
   if (!want3D() || !window.FV3D || WG === false) return null;
-  if (!WG) { try { WG = window.FV3D.maak($('#garage-3d'), { nick: S.nick, kleur: S.color }) || false; } catch (e) { WG = false; } }
+  if (!WG) { try { WG = window.FV3D.maak($('#garage-3d'), { nick: S.nick, kleur: S.color, geluid: S.settings.sfx }) || false; } catch (e) { WG = false; } }
   return WG || null;
 }
 function swatch(it) {
@@ -523,7 +525,7 @@ function openGarage() {
   renderGarage(); show('garage');
   const w = garage3D();
   $('#garage-3d').classList.toggle('plat', !w);
-  if (w) { w.naam(S.nick); w.delen(4); w.uiterlijk(kartLook()); w.modus('toonzaal'); w.pauze(false); }
+  if (w) { w.naam(S.nick); w.delen(4); w.uiterlijk(kartLook()); w.modus('toonzaal'); w.pauze(false); } else if (WG) WG.pauze(true);
   if (!S.garageGezien) { S.garageGezien = today(); save(); play('rw_garage_welkom'); }
 }
 function renderGarage() {
@@ -575,6 +577,7 @@ function applySettings() {
   const b = document.body.classList;
   b.toggle('dys', S.settings.dys); b.toggle('calm', S.settings.calm);
   b.toggle('nokbd', !S.settings.kbd); b.toggle('nohands', !S.settings.hands);
+  [W, WG].forEach(w => { if (w && w.geluid) w.geluid(S.settings.sfx); if (w && w.muziek) w.muziek(S.settings.muziek); });
 }
 function renderTop() {
   if (!S) return;
@@ -584,6 +587,11 @@ function renderTop() {
   $('#chip-nick').innerHTML = '<span class="avatar" style="background:' + S.color + '">' + H(S.nick.charAt(0).toUpperCase()) + '</span><span class="hide-sm">' + H(S.nick) + '</span>';
 }
 let screen = 'loading';
+/* tabblad op de achtergrond: 3D-wereld (motor, muziek) stilzetten; terug: weer aan als die wereld in beeld hoort */
+document.addEventListener('visibilitychange', () => {
+  if (W) W.pauze(document.hidden || screen !== 'ex' || !R || !R.w3);
+  if (WG) WG.pauze(document.hidden || screen !== 'garage');
+});
 function show(id) {
   screen = id;
   $('#loading').style.display = 'none';
@@ -723,8 +731,7 @@ function openLesson(id) {
   const L = lessonById(id); if (!L) return;
   if (!paidOk(id)) return lockedModal(id);
   if (id <= 3) tel('les-' + id + '-gestart', 'Les ' + id + ' gestart');
-  curLesson = L; R = null;
-  stopTimers();
+  stopTimers(); curLesson = L; R = null;
   const zone = ZONES.find(z => id >= z.van && id <= z.tot);
   $('#intro-kicker').textContent = 'Les ' + id + ' van 30' + (zone ? ' · ' + zone.naam : '');
   $('#intro-title').textContent = L.titel;
@@ -782,6 +789,9 @@ function setFlits(pose, say, ms) {
   if (!img.src.endsWith(IMG(pose))) img.src = IMG(pose);
   if (!S.settings.calm) { img.classList.remove('bounce'); void img.offsetWidth; img.classList.add('bounce'); }
   if (say != null) $('#flits-say').textContent = say;
+  /* in de 3D-wereld praat Flits via een ballon rechtsboven in beeld */
+  const bi = $('#w-ballon-img'); if (!bi.src.endsWith(IMG(pose))) bi.src = IMG(pose);
+  if (say != null) { $('#w-ballon-say').textContent = say; const bl = $('#w-ballon'); bl.classList.remove('pop'); void bl.offsetWidth; bl.classList.add('pop'); }
   if (ms) flitsTimer = setTimeout(() => { if (R && R.ex) setFlits(R.ex.blind ? 'blind' : 'typen', R.ex.blind ? 'Niet spieken!' : 'Lekker bezig!'); }, ms);
 }
 
@@ -850,7 +860,7 @@ function startExercise(drillText) {
   let text = ex.text.replace(/\s+/g, ' ').trim();
   if (!drillText && R.shortenNext && ex.kind === 'normal' && !ex.long) text = shorten(text);
   if (!drillText && !R.examLike && ex.kind !== 'race') R.words.push(...text.split(' '));
-  Object.assign(R, { ex, text, pos: 0, errors: 0, errAt: new Set(), consec: 0, active: 0, lastT: 0, waiting: false, spans: [], t0: 0, flitsDone: false, combo: 0, woordNr: 0, woordFout: false, muntOpBaan: false });
+  Object.assign(R, { ex, text, pos: 0, errors: 0, errAt: new Set(), consec: 0, active: 0, lastT: 0, waiting: false, spans: [], t0: 0, flitsDone: false, flitsVoor: undefined, roepT: 0, laatsteStuk: false, spook: 0, combo: 0, woordNr: 0, woordFout: false, muntOpBaan: false });
   stopTimers();
   $('#ex-title').textContent = R.examLike ? L.titel : 'Les ' + L.id + ': ' + L.titel;
   $('#ex-sub').textContent = drillText ? 'Extra: alleen de lastige letters' : R.examLike ? 'Typ zo netjes mogelijk. De tijd start bij je eerste toets.' : 'Oefening ' + (R.idx + 1) + ' van ' + R.plan.length + ' · ' + FASENAAM[R.item.fase] + (R.shortenNext ? ' · iets korter, rustig aan' : '');
@@ -871,15 +881,25 @@ function startExercise(drillText) {
   $('#line').classList.toggle('long', !!ex.long);
   /* 3D-wereld (valt terug op de platte weergave als 3D niet kan of uit staat) */
   R.w3 = !R.examLike && !!world();
+  if (!R.w3 && W) W.pauze(true);
   $('#s-ex').classList.toggle('rw3d', R.w3);
   document.body.classList.toggle('rw3d-on', R.w3 && screen === 'ex');
+  /* in 3D ligt de letterbalk bovenin de schermvullende wereld en komen Flits en de blind-melding in het dashboard bij het toetsenbord; anders staat alles eronder */
+  const tb = $('#typebox'), dash = $('#w-dash'), vis = $('#s-ex .visual'), fl = $('#s-ex .exflits'), bb = $('#s-ex .blindban');
+  if (R.w3 && tb.parentNode !== dash) { dash.append(tb); vis.prepend(fl); vis.append(bb); }
+  else if (!R.w3 && tb.parentNode === dash) { const g = $('#s-ex .exgrid'); g.prepend(tb); g.append(fl); vis.before(bb); }
   R.lang = !!ex.long || (R.w3 && text.length > 42);   // in 3D: langere tekst kleiner en meeschuivend, zodat alles in beeld blijft
   $('#line').classList.toggle('long', R.lang);
   const fase = R.item ? R.item.fase : 'training';
   const eersteVan = f => !!R.item && R.plan.findIndex(q => q.fase === f) === R.idx;
   if (R.w3) {
     W.modus(ex.kind === 'race' ? 'race' : fase); W.pauze(false);
-    R.muntOpBaan = ex.kind !== 'speed'; if (R.muntOpBaan) W.woorden(woordBaan(text));
+    /* geen woordkratten meer op de baan (Tim 26-10-2026: dubbel nu de woorden als lopende band bovenin staan); de munt per woord springt boven de kart op */
+    R.muntOpBaan = false; W.woorden([]);
+    /* spook: in de training rijdt een doorzichtige kart mee in jouw tempo van de vorige keer */
+    const vorigTempo = R.trainApm.length ? R.trainApm[R.trainApm.length - 1] : ((S.lessons[L.id - 1] || {}).apm || 0);
+    R.spook = !drillText && fase === 'training' && ex.kind === 'normal' && !(R.item && R.item.spec.warm) && vorigTempo >= 8 ? vorigTempo : 0;
+    W.spookAan(!!R.spook); if (R.spook) R.timers.push(setTimeout(() => wtoast('Je spook rijdt mee: jouw tempo van vorige keer'), 900));
     $('#w-combo-n').textContent = '0'; $('#w-combo').className = 'w-combo';
     hud();
   }
@@ -909,8 +929,11 @@ function buildLine(text) {
   });
   line.appendChild(frag);
   if (R.spans[0]) R.spans[0].classList.add('cur');
+  line.scrollLeft = 0;
 }
 function keepVisible() {
+  /* 3D: lopende band - de letter waar je bent blijft op ongeveer een derde, de nieuwe woorden schuiven van rechts in beeld */
+  if (R.w3) { const s = R.spans[R.pos] || R.spans[R.pos - 1], line = $('#line'); if (s) line.scrollLeft = Math.max(0, s.offsetLeft - line.clientWidth * .3); return; }
   if (!R.lang) return;
   const s = R.spans[R.pos]; if (!s) return;
   const line = $('#line'), lh = s.offsetHeight || 40;
@@ -945,19 +968,35 @@ function updateStats() {
 }
 function startClock() {
   R.t0 = performance.now();
-  if (R.ex.kind === 'speed' || R.ex.kind === 'exam' || R.ex.kind === 'race') {
+  if (R.ex.kind === 'speed' || R.ex.kind === 'exam' || R.ex.kind === 'race' || R.spook) {
     R.tick = setInterval(onTick, 200);
   }
+}
+/* tegenstanders die leven: ze rijden niet als treintjes maar halen in en vallen terug. Het golfje om hun vaste tempo is aan het begin
+   en aan het eind nul, zodat hun finishtijd (en dus wie er wint, zie finishExercise) precies hetzelfde blijft. */
+const GOLF = { flits: [.55, 0], vlam: [.47, 2.1], hop: [.62, 4.2] };
+function rivaalPlek(k, tm) {
+  const v = R.tempi[k] / R.text.length, basis = tm * v; if (basis >= 1) return 1;
+  const [w, fase] = GOLF[k], amp = Math.min(.045, v / 60 * .85 / w);
+  return Math.max(0, Math.min(.999, basis + amp * Math.sin(tm * 60 * w + fase) * Math.min(1, basis * 5) * (1 - basis)));
 }
 function onTick() {
   if (!R || R.waiting) return;
   const ex = R.ex;
   if (ex.kind === 'race') {
-    const tm = elapsedMin(), fr = k => Math.min(1, tm * R.tempi[k] / R.text.length), fp = fr('flits');
+    const tm = elapsedMin(), fr = k => rivaalPlek(k, tm), fp = fr('flits');
     $('#run-fl').style.left = (12 + fp * 80) + '%'; $('#run-hop').style.left = (12 + fr('hop') * 80) + '%'; $('#run-vlam').style.left = (12 + fr('vlam') * 80) + '%';
     const plek = 1 + RIVALEN.filter(([k]) => fr(k) > R.pos / R.text.length).length;
     if (R.w3) { RIVALEN.forEach(([k]) => W.rivaal(k, fr(k))); const ps = $('#w-pos'); if (ps) { ps.textContent = 'Je ligt ' + plek + 'e'; ps.className = plek === 1 ? 'voor' : ''; } }
     if (fp >= 1 && !R.flitsDone) { R.flitsDone = true; setFlits('juich', 'Ik ben er! Maak jij het af?'); }
+    /* Flits roept als hij inhaalt of ingehaald wordt, en bij het laatste stuk */
+    const kidF = R.pos / R.text.length, flitsVoor = fp > kidF, kies = x => x[Math.floor(Math.random() * x.length)];
+    if (R.flitsVoor !== undefined && flitsVoor !== R.flitsVoor && performance.now() - R.roepT > 3500 && fp < .97 && kidF < .97 && kidF > .03) {
+      R.roepT = performance.now(); setFlits(flitsVoor ? 'juich' : 'duim', flitsVoor ? kies(['Ik kom eraan!', 'Zoef, daar ga ik!', 'Hihi, ingehaald!']) : kies(['Hé, wacht op mij!', 'Wauw, jij bent snel!', 'Oei, ik moet harder!']), 2400); }
+    R.flitsVoor = flitsVoor;
+    if (kidF >= .8 && !R.laatsteStuk && !R.flitsDone) { R.laatsteStuk = true; setFlits('juich', 'Laatste stuk! Netjes blijven!', 2400); }
+  } else if (R.spook && ex.kind !== 'speed' && ex.kind !== 'exam') {
+    if (R.w3) W.spook(Math.min(1, elapsedMin() * R.spook / R.text.length));
   } else {
     const left = ex.seconds - elapsedMin() * 60;
     const tm = $('#timer'); tm.textContent = fmtTime(Math.ceil(left)); tm.classList.toggle('low', left <= 10);
@@ -990,6 +1029,7 @@ function typeChar(ch) {
       W.goed(R.combo); comboShow();
       if (R.combo === 10 && !(R.item && R.item.fase === 'garage')) { setFlits('juich', 'Reeks van 10! Turbo aan!', 2500); playSoft('rw_turbo'); }
     }
+    if (R.w3 && target !== ' ' && (R.text[R.pos] === ' ' || R.pos >= R.text.length)) W.boost(!R.woordFout);   // woord af = de kart schiet even naar voren
     if (!R.examLike && target !== ' ' && (R.text[R.pos] === ' ' || R.pos >= R.text.length)) muntVoorWoord();   // woord af = munt
     if (R.ex.kind === 'race') $('#run-me').style.left = (12 + R.pos / R.text.length * 80) + '%';
     if (R.pos >= R.text.length) {
@@ -1044,11 +1084,19 @@ function finishExercise() {
   if (acc === 100 && correct >= 20) award('foutloos');
   if (timed || ex.kind === 'race') { if (apm > (S.best.apm || 0)) S.best.apm = apm; }
   if (ex.kind === 'speed') { if (apm >= 50) award('snel50'); if (apm >= 100) award('snel100'); }
-  const plek = ex.kind === 'race' ? 1 + RIVALEN.filter(([k]) => R.text.length / R.tempi[k] < elapsedMin()).length : 0;
+  const tEind = elapsedMin();
+  const plek = ex.kind === 'race' ? 1 + RIVALEN.filter(([k]) => R.text.length / R.tempi[k] < tEind).length : 0;
   const won = plek === 1;
   if (won) award('race');
   if (won && !R.examLike) { R.munten += 10; S.munten += 10; muntShow(); setTimeout(() => toast('+10 munten: je won de race!'), 600); }
-  if (R.w3 && ex.kind === 'race') W.finish(won);
+  if (R.w3 && ex.kind === 'race') {
+    W.finish(won);
+    RIVALEN.forEach(([k]) => W.rivaal(k, rivaalPlek(k, tEind)));
+    const tk = tEind, tijden = [['jij', tk], ...RIVALEN.map(([k]) => [k, R.text.length / R.tempi[k]])].sort((a, b) => a[1] - b[1]);
+    if (Math.abs(R.text.length / R.tempi.flits - tk) * 60 < 1.2) R.timers.push(setTimeout(() => { W.fotofinish(); wtoast('Fotofinish!'); }, 250));
+    R.timers.push(setTimeout(() => W.podium(tijden.map(x => x[0])), 1500));
+  }
+  if (R.w3 && R.spook && !R.drill && elapsedMin() < R.text.length / R.spook) R.timers.push(setTimeout(() => wtoast('Je hebt je spook verslagen!'), 300));
   save();
   const last = R.drill || R.idx >= R.plan.length - 1;
   const volgende = R.drill ? null : R.plan[R.idx + 1];
@@ -1091,7 +1139,7 @@ function finishExercise() {
     (sterUitleg ? '<div class="ster-uitleg"><div class="su-rij" aria-hidden="true">' + ['#ff6fa8', '#ff9f43', '#24bf80', '#3ba7ff', '#ffd23f', '#3ba7ff', '#24bf80', '#ff9f43', '#ff6fa8'].map(k => '<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" fill="' + k + '"/></svg>').join('') + '</div>' +
       '<span>Zie je de sterren boven je kart? Eén ster voor elke vinger. Typ je heel netjes met een vinger, dan wordt zijn ster goud. Alle sterren goud? Dan krijg je gouden lak!</span></div>' : '') +
     '<button class="btn" id="ex-next">' + knop + ' <span class="kbdhint">Enter</span></button></div>';
-  if (R.w3 && ex.kind === 'race') R.timers.push(setTimeout(() => p.classList.add('on'), 1400));   // eerst de finish zien
+  if (R.w3 && ex.kind === 'race') R.timers.push(setTimeout(() => p.classList.add('on'), 4200));   // eerst de finish en het podium zien
   else p.classList.add('on');
   $('#ex-next').onclick = nextStep;
   sfx('step');
@@ -1106,6 +1154,7 @@ function nextStep() {
   else finishLesson();
 }
 function finishLesson() {
+  stopTimers();
   const L = R.lesson;
   const res = R.results;
   const acc = Math.round(res.reduce((a, r) => a + r.acc, 0) / res.length);
@@ -1183,7 +1232,7 @@ function showResult(res) {
   const d = $('#res-drill'); if (d) d.onclick = () => { R.lessonErrs = {}; show('ex'); startExercise(makeDrill(tricky)); };
   const n = $('#res-next'); if (n) n.onclick = () => openLesson(next);
   const u = $('#res-unlock'); if (u) u.onclick = () => lockedModal(next);
-  $('#res-map').onclick = () => { R = null; renderMap(); show('map'); };
+  $('#res-map').onclick = () => { stopTimers(); R = null; renderMap(); show('map'); };
   $('#res-garage').onclick = () => { R = null; openGarage(); };
 }
 
@@ -1232,7 +1281,7 @@ function showExamResult({ apm, fout, acc, kind }) {
   const g = $('#res-diploma'); if (g) g.onclick = () => issueDiploma({ apm, fout, name: R.dipName || S.nick, dys: R.dys });
   const e = $('#res-exam'); if (e) e.onclick = () => openLesson(30);
   $('#res-again').onclick = () => openLesson(L.id);
-  $('#res-map').onclick = () => { R = null; renderMap(); show('map'); };
+  $('#res-map').onclick = () => { stopTimers(); R = null; renderMap(); show('map'); };
 }
 async function issueDiploma(d) {
   const btn = $('#res-diploma'); if (btn) { btn.disabled = true; btn.textContent = 'Diploma wordt gemaakt...'; }
@@ -1301,6 +1350,7 @@ function lockedModal(id) {
 const SETTINGS = [
   ['voice', 'Flits praat mee', 'Flits legt alles hardop uit en noemt de lastige letters.'],
   ['sfx', 'Zachte geluidjes', 'Een zacht tikje bij elke goede toets.'],
+  ['muziek', 'Muziek tijdens het racen', 'Een vrolijk deuntje per gebied op de racebaan. Zet uit als het afleidt.'],
   ['errSound', 'Geluid bij een fout', 'Staat standaard uit: fouten maken mag.'],
   ['dys', 'Dyslexie-modus', 'Rustiger lettertype, meer ruimte tussen letters, geen tempo in beeld en een lagere eis voor het diploma (75 per minuut).'],
   ['calm', 'Rustige modus', 'Geen animaties en geen confetti. Fijn bij veel prikkels.'],

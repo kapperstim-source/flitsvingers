@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/data/lessen.json" as="fetch" crossorigin>
 <link rel="preload" href="assets/data/teksten.json" as="fetch" crossorigin>
 <script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js?v=0.160.0"}}</script>
-<script type="module" src="assets/js/wereld3d.js?v=5"></script>
+<script type="module" src="assets/js/racewereld.js?v=20"></script>
 <style>
 :root{
   --bg:#fff7ec;--bg2:#fff0dc;--card:#ffffff;--line:#f0e2cc;--line2:#e6d6bd;
@@ -108,6 +108,20 @@ button.chip{cursor:pointer}
 .mnode .i{width:46%;height:46%}
 @keyframes pulse{50%{box-shadow:0 0 0 8px rgba(255,201,60,.35),0 6px 14px rgba(0,0,0,.2)}}
 .mflits{position:absolute;width:clamp(34px,4.4vw,58px);transform:translate(-20%,-118%);pointer-events:none;transition:left .6s,top .6s;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25))}
+/* route-kaart (Tim 26-10-2026): de knoppen als glanzende fiches die bij de getekende klei-wereld passen, kleiner zodat ze niet over elkaar vallen;
+   de volgende les groot en geel; nog dichte lessen als rustige steentjes; Flits staat naast de volgende les in plaats van ervoor */
+.mnode{width:clamp(22px,2.7vw,34px);height:clamp(22px,2.7vw,34px);font-size:clamp(10px,1.15vw,14px);text-shadow:0 1px 0 rgba(0,0,0,.25);
+  background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.55),rgba(255,255,255,0) 42%),linear-gradient(180deg,#d8ccb6,#b3a283);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18),0 3px 0 rgba(27,31,58,.25),0 7px 12px rgba(27,31,58,.22)}
+.mnode.open{background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.55),rgba(255,255,255,0) 42%),linear-gradient(180deg,#6d8bff,#2f4de0)}
+.mnode.done{background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.55),rgba(255,255,255,0) 42%),linear-gradient(180deg,#3fdca0,#0f9b68)}
+.mnode.locked{background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.55),rgba(255,255,255,0) 42%),linear-gradient(180deg,#fffaf0,#e3d5bb);color:#a8977a;text-shadow:none}
+.mnode.next{z-index:2;width:clamp(30px,3.7vw,48px);height:clamp(30px,3.7vw,48px);border-width:4px;color:#1b1f3a;text-shadow:none;font-size:clamp(13px,1.55vw,20px);
+  background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.55),rgba(255,255,255,0) 42%),linear-gradient(180deg,#ffe27a,#ffb300);box-shadow:inset 0 -3px 0 rgba(0,0,0,.15),0 0 0 4px rgba(255,201,60,.5),0 8px 16px rgba(27,31,58,.3);animation:volgendeLes 1.8s ease-in-out infinite}
+@keyframes volgendeLes{50%{box-shadow:inset 0 -3px 0 rgba(0,0,0,.15),0 0 0 11px rgba(255,201,60,.22),0 8px 16px rgba(27,31,58,.3)}}
+body.calm .mnode.next{animation:none}
+.mnode.exam{width:clamp(30px,3.9vw,50px);height:clamp(30px,3.9vw,50px);color:#5a3a00;background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.55),rgba(255,255,255,0) 42%),linear-gradient(180deg,#ffd75e,#e8961e)}
+.mnode.done:hover,.mnode.open:hover,.mnode.next:hover{transform:translate(-50%,-50%) scale(1.18)}
+.mflits{width:clamp(38px,4.8vw,64px);transform:translate(-108%,-80%);z-index:1}
 .zones{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
 .zone{padding:16px 18px;border-right:1px solid var(--line)}
 .zone:last-child{border-right:0}
@@ -334,37 +348,68 @@ label.fl{display:block;font-size:14px;font-weight:800;margin:12px 0 6px}
 .w-aftel span{animation:tel .9s ease-out both}
 @keyframes tel{0%{transform:scale(2.2);opacity:0}25%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:scale(.8);opacity:0}}
 
-/* raceweekend: alles in één scherm (toetsenbord blijft zichtbaar) */
+/* raceweekend in 3D (indeling 26-10-2026, Tims keuze): de wereld schermvullend met alleen de letterbalk erin (bovenin);
+   daaronder een donker dashboard over de volle breedte met Flits, het toetsenbord en de handen. Niets ligt midden over de race. */
 body.rw3d-on .top{display:none}
-#s-ex.rw3d.on{display:flex;flex-direction:column;gap:8px;height:100vh;height:100dvh;padding:8px 0 10px}
+#s-ex.rw3d.on{position:fixed;inset:0;z-index:15;display:flex;flex-direction:column;gap:8px;height:auto;max-width:none;margin:0;padding:8px 12px 12px;background:var(--bg)}
 #s-ex.rw3d>*{flex:none}
 #s-ex.rw3d .exhead{margin:0;flex-wrap:nowrap}
 #s-ex.rw3d .exhead>div:nth-child(2){min-width:0}
 #s-ex.rw3d #ex-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#s-ex.rw3d .wereld{display:block;flex:1 1 auto;min-height:120px;max-height:56vh}
+#s-ex.rw3d .wereld{display:block;flex:1 1 auto;min-height:260px}
 #s-ex.rw3d .race{display:none!important}
-#s-ex.rw3d .exgrid{grid-template-columns:1fr 124px;gap:10px}
-#s-ex.rw3d .typebox{padding:10px 18px;min-height:0}
-#s-ex.rw3d .exlabel{margin-bottom:4px;padding:3px 10px;font-size:12px}
-#s-ex.rw3d .timer{font-size:18px;padding:2px 10px}
-#s-ex.rw3d .line{font-size:clamp(22px,min(3vw,4.6vh),38px);line-height:1.5}
-#s-ex.rw3d .line.long{font-size:clamp(17px,min(2vw,3.2vh),24px);line-height:1.6;max-height:calc(1.6em * 3)}
-#s-ex.rw3d .hint{margin-top:4px;min-height:24px;font-size:14px}
-#s-ex.rw3d .stats{margin-top:2px;font-size:13px}
-#s-ex.rw3d .capswarn{margin-top:4px}
-#s-ex.rw3d .exflits{padding:6px 6px 4px;justify-content:center;gap:4px}
-#s-ex.rw3d .exflits img{max-height:86px}
-#s-ex.rw3d .exflits .say{min-height:0;font-size:12px;line-height:1.3}
-#s-ex.rw3d .blindban{margin:0;padding:8px 12px}
+#s-ex.rw3d .exgrid{display:none}
 #s-ex.rw3d .notice.on{margin:0}
-#s-ex.rw3d .visual{margin:0;display:flex;align-items:flex-end;justify-content:center;gap:14px;
-  --u:clamp(16px,min(calc((min(100vw,1100px) - 120px) / 21.6),calc((100vh - 420px) / 5.4)),48px)}
-#s-ex.rw3d.blindmode .visual{display:none}
-#s-ex.rw3d .kbd{--u:inherit;padding:10px;gap:4px}
-#s-ex.rw3d .krow{gap:4px}
-#s-ex.rw3d .hands{width:calc(var(--u) * 5.6);max-width:none;margin:0 0 6px}
 #s-ex.rw3d .panel{position:fixed;inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);width:min(600px,calc(100vw - 32px));border:3px solid #1b1f3a;box-shadow:0 7px 0 #1b1f3a,0 0 0 100vmax rgba(24,32,58,.35);z-index:30}
-@media (max-width:700px){#s-ex.rw3d.on{height:auto}#s-ex.rw3d .wereld{height:220px;flex:none}}
+/* de letterbalk bovenin de wereld (de camera richt zich op de strook eronder, zie racewereld.js) */
+.w-dash{display:none}
+#s-ex.rw3d .w-dash{position:absolute;inset:0;z-index:5;display:block;pointer-events:none}
+#s-ex.rw3d .w-dash>*{pointer-events:auto}
+#s-ex.rw3d .w-aftel{bottom:auto;top:var(--zicht-top,0);height:var(--zicht,55%)}
+#s-ex.rw3d .typebox{position:absolute;top:22px;left:0;right:0;margin:0 auto;width:max(480px,min(820px,calc(100% - 560px)));z-index:1;padding:14px 18px 6px;min-height:0;border-radius:16px}
+#s-ex.rw3d .typebox .exlabel{position:absolute;left:14px;top:-13px;margin:0}
+#s-ex.rw3d .typebox .timer{position:absolute;right:14px;top:-15px;float:none}
+#s-ex.rw3d .typebox .stats{display:none}
+#s-ex.rw3d .exlabel{padding:3px 10px;font-size:12px}
+#s-ex.rw3d .timer{font-size:18px;padding:2px 10px}
+#s-ex.rw3d .hint{margin-top:0;min-height:24px;font-size:14px}
+#s-ex.rw3d .capswarn{margin-top:4px}
+/* lopende band (zoals de tape-modus van Monkeytype; Tims wens 26-10-2026): de letter waar je bent blijft op een vaste plek,
+   de woorden komen van rechts tevoorschijn terwijl je rijdt en vervagen links weer. Cijfers tijdens het rijden weg: die staan op de uitslag. */
+#s-ex.rw3d .line,#s-ex.rw3d .line.long{white-space:nowrap;overflow:hidden;max-height:none;font-size:clamp(22px,min(2.6vw,4.8vh),40px);line-height:1.5;padding-left:9%;padding-right:45%;scroll-behavior:smooth;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 76%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 76%,transparent 100%)}
+#s-ex.rw3d .w-toast{bottom:auto;top:9px}
+/* Flits-ballon in de wereld: alleen op smallere schermen, waar Flits niet in het dashboard past */
+.w-ballon{display:none}
+#s-ex.rw3d .w-ballon{position:absolute;right:12px;bottom:12px;z-index:4;align-items:center;gap:8px;max-width:min(300px,46%);background:#fff;border:3px solid #1b1f3a;border-radius:16px;padding:5px 12px 5px 5px;box-shadow:0 3px 0 #1b1f3a;font-family:var(--head);font-weight:600;font-size:15px;line-height:1.25;color:#1b1f3a;pointer-events:none}
+#s-ex.rw3d .w-ballon img{width:42px;height:52px;object-fit:contain;flex:none}
+#s-ex.rw3d .w-ballon.pop{animation:wballon .35s ease-out}
+@keyframes wballon{0%{transform:scale(.85)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+/* het dashboard: Flits links, toetsenbord in het midden, handen rechts; in de tunnel staat de blind-melding op de plek van het toetsenbord */
+#s-ex.rw3d .visual,#s-ex.rw3d.blindmode .visual{margin:0;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:22px;padding:10px 16px;
+  background:linear-gradient(180deg,#2c3360,#1b1f3a);border:3px solid #1b1f3a;border-radius:22px;box-shadow:0 5px 0 #0b0e22,inset 0 1px 0 rgba(255,255,255,.12);
+  --u:clamp(16px,min(calc((100vw - 640px) / 15.6),calc((100vh - 450px) / 5.2)),42px)}
+#s-ex.rw3d .visual>*{grid-row:1}
+#s-ex.rw3d .visual .exflits{grid-column:1;justify-self:end;display:flex;flex-direction:row;align-items:center;gap:10px;padding:0;background:none;border:0;box-shadow:none;min-width:0}
+#s-ex.rw3d .visual .exflits .say{max-width:clamp(120px,12vw,210px);min-height:0;font-family:var(--head);font-weight:600;font-size:15px;line-height:1.3;padding:8px 12px;background:#fff;color:#1b1f3a;border:2.5px solid #1b1f3a;border-radius:14px;box-shadow:0 3px 0 #0b0e22}
+#s-ex.rw3d .visual .exflits img{height:calc(var(--u) * 4.4);width:auto;max-height:none;flex:none}
+#s-ex.rw3d .kbd{grid-column:2;--u:inherit;padding:0;gap:4px;background:none;border:0;box-shadow:none}
+#s-ex.rw3d .krow{gap:4px}
+#s-ex.rw3d .hands{grid-column:3;justify-self:start;width:calc(var(--u) * 5.6);max-width:none;margin:0;padding:0;background:none;border:0;box-shadow:none}
+#s-ex.rw3d .visual .blindban{grid-column:2;display:none;margin:0;max-width:520px;padding:16px 20px;background:none;border:2.5px dashed #ffd23f;border-radius:16px;color:#ffd23f;box-shadow:none;font-size:17px;line-height:1.4}
+#s-ex.rw3d.blindmode .visual .blindban{display:block}
+#s-ex.rw3d.blindmode .visual .kbd,#s-ex.rw3d.blindmode .visual .hands{visibility:hidden}
+@media (max-width:1180px){#s-ex.rw3d .visual .exflits{display:none}#s-ex.rw3d .w-ballon{display:flex}
+  #s-ex.rw3d .visual{grid-template-columns:auto auto;justify-content:center;--u:clamp(16px,min(calc((100vw - 330px) / 15.6),calc((100vh - 450px) / 5.2)),42px)}
+  #s-ex.rw3d .kbd{grid-column:1}#s-ex.rw3d .hands{grid-column:2}#s-ex.rw3d .visual .blindban{grid-column:1 / -1}}
+/* toetsenbord en handjes uit in de instellingen: het dashboard wordt een smalle strook met alleen Flits */
+body.nokbd.nohands #s-ex.rw3d .visual{padding:6px 16px}
+body.nokbd.nohands #s-ex.rw3d .visual .exflits img{height:64px}
+body.nokbd.nohands #s-ex.rw3d .visual .exflits{grid-column:1 / -1;justify-self:center}
+@media (max-width:1180px){body.nokbd.nohands #s-ex.rw3d:not(.blindmode) .visual{display:none}}
+@media (max-width:1100px){#s-ex.rw3d .typebox{top:54px;width:calc(100% - 24px)}}
+@media (max-width:700px){#s-ex.rw3d.on{position:static;height:auto;padding:8px 0}#s-ex.rw3d .wereld{height:420px;flex:none}#s-ex.rw3d .w-ballon{display:none}
+  #s-ex.rw3d .visual{grid-template-columns:minmax(0,1fr) auto;column-gap:8px;padding:8px}#s-ex.rw3d .kbd{grid-column:1;justify-self:center}#s-ex.rw3d .hands{grid-column:2}}
 
 /* oefenscherm in stijl A "Sticker" (Tims keuze 15-10-2026): dikke donkere randen en harde schaduw, net als de 3D-wereld */
 #s-ex{--nv:#1b1f3a}
@@ -395,10 +440,34 @@ body.rw3d-on .top{display:none}
 #s-ex .blindban{background:var(--nv);color:#ffd23f;border:3px solid var(--nv);border-radius:14px;box-shadow:0 4px 0 #0b0e22}
 #s-ex .race{background:#fffaf0;border:3px solid var(--nv);box-shadow:0 3px 0 var(--nv)}
 #s-ex .panel .btn{box-shadow:0 5px 0 var(--nv);border:2.5px solid var(--nv)}
+/* ---- toetsenbord en letterbalk als één "cockpit" (Tims wens 26-10-2026): donkere kast, toetsen als echte keycaps met een zachte
+   tint in de vingerkleur (zo zie je de vingerzones in één oogopslag), de volgende toets gloeit; de letterbalk in hetzelfde materiaal ---- */
+#s-ex .kbd{background:linear-gradient(180deg,#2c3360,#1b1f3a);border:3px solid #1b1f3a;border-radius:22px;box-shadow:0 6px 0 #0b0e22,inset 0 1px 0 rgba(255,255,255,.14)}
+#s-ex .key{background:color-mix(in srgb,var(--fc,#dfe2ec) 20%,#ffffff);color:#1b1f3a;border:0;border-radius:10px;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.85),inset 0 -5px 0 color-mix(in srgb,var(--fc,#c9cede) 78%,#1b1f3a),0 2px 0 rgba(0,0,0,.45)}
+#s-ex .key.home{background:color-mix(in srgb,var(--fc,#dfe2ec) 34%,#ffffff)}
+#s-ex .key.bump::after{bottom:20%;width:30%;height:3px;background:#1b1f3a;opacity:.55}
+#s-ex .key.next{background:var(--fc);color:#fff;transform:translateY(-3px);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.4),inset 0 -5px 0 color-mix(in srgb,var(--fc) 70%,#1b1f3a),0 0 0 3px #fff,0 0 18px 4px var(--fc)}
+body:not(.calm) #s-ex .key.next{animation:volgende 1.2s ease-in-out infinite}
+@keyframes volgende{50%{box-shadow:inset 0 2px 0 rgba(255,255,255,.4),inset 0 -5px 0 color-mix(in srgb,var(--fc) 70%,#1b1f3a),0 0 0 3px #fff,0 0 28px 9px var(--fc)}}
+@media (prefers-reduced-motion:reduce){#s-ex .key.next{animation:none!important}}
+#s-ex .key.hit{background:#fff4cf;transform:translateY(2px);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--fc,#c9cede) 78%,#1b1f3a)}
+#s-ex .key.wrong{background:var(--coral)!important;color:#fff;box-shadow:inset 0 -5px 0 #a8323a,0 0 16px 4px rgba(229,72,77,.7)}
+#s-ex.rw3d .hands .fg rect.f{fill-opacity:.72}
+#s-ex.rw3d .w-dash .typebox,#s-ex.rw3d.blindmode .w-dash .typebox{background:rgba(27,31,58,.9);border:3px solid #1b1f3a;box-shadow:0 5px 0 #0b0e22,inset 0 1px 0 rgba(255,255,255,.1)}
+#s-ex.rw3d .line{color:#8a93c2}
+#s-ex.rw3d .ch.done{color:#fff}
+#s-ex.rw3d .ch.done.had{color:#ff9b9b}
+#s-ex.rw3d .ch.cur{background:#ffc93c;color:#1b1f3a;box-shadow:0 0 0 2.5px #ffe7a3,0 4px 0 2.5px #b8860b,0 0 20px rgba(255,201,60,.55)}
+#s-ex.rw3d .ch.err{background:var(--coral);color:#fff;box-shadow:0 0 0 2.5px #ffc2c4,0 4px 0 2.5px #a8323a}
+#s-ex.rw3d .ch.sp::after{opacity:.55}
+#s-ex.rw3d .hint{color:#c9cfee}
+#s-ex.rw3d .hint b{color:#fff}
+#s-ex.rw3d .fdot{border-color:#fff}
 .ster-uitleg{display:grid;gap:6px;margin-top:10px;padding:9px 12px;background:#fff6d6;border:2.5px solid #1b1f3a;border-radius:14px;font-weight:700;font-size:15px;line-height:1.35;text-align:left}
 .su-rij{display:inline-flex;gap:2px;justify-self:start;background:#262b48;border-radius:99px;padding:3px 9px}
 .su-rij svg{width:17px;height:17px}
-#s-ex.rw3d .visual{--u:clamp(16px,min(calc((min(100vw,1100px) - 120px) / 21.6),calc((100vh - 458px) / 5.4)),48px)}
 
 
 /* munten en garage (sinds 15-10-2026), in stijl A */
@@ -571,11 +640,13 @@ body.calm *{animation:none!important;transition:none!important}
       <div class="dots" id="ex-dots"></div>
     </div>
     <div class="notice" id="tablet-notice">Op een tablet heb je een los toetsenbord nodig. Op een telefoon werkt de cursus niet goed: gebruik een laptop, Chromebook of computer.</div>
-    <div class="wereld" id="wereld" aria-hidden="true">
-      <div class="w-hud" id="w-hud"></div>
+    <div class="wereld" id="wereld">
+      <div class="w-hud" id="w-hud" aria-hidden="true"></div>
+      <div class="w-ballon" id="w-ballon" aria-hidden="true"><img src="assets/img/flits_typen.webp" alt="" id="w-ballon-img" width="517" height="640"><span id="w-ballon-say">Jij kunt dit!</span></div>
       <div class="w-combo" id="w-combo" title="Goede toetsen achter elkaar"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor" stroke="#1b1f3a" stroke-width="1.5" stroke-linejoin="round"/></svg><span id="w-combo-n">0</span></div>
       <div class="w-munt" id="w-munt" title="Munten in deze les"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="#ffc93c" stroke="#1b1f3a" stroke-width="2"/><circle cx="12" cy="12" r="5.5" fill="none" stroke="#a8790a" stroke-width="2"/></svg><span id="w-munt-n">0</span></div>
-      <div class="w-aftel" id="w-aftel"></div>
+      <div class="w-aftel" id="w-aftel" aria-hidden="true"></div>
+      <div class="w-dash" id="w-dash"></div>
     </div>
     <div class="exgrid">
       <div class="card typebox" id="typebox">
@@ -639,7 +710,7 @@ body.calm *{animation:none!important;transition:none!important}
 <div id="toast" role="status"></div>
 
 <script src="assets/js/config.js"></script>
-<script src="assets/js/app.js?v=11"></script>
+<script src="assets/js/app.js?v=20"></script>
 <script>window.goatcounter = { path: function () { return location.pathname }, endpoint: 'https://flitsvingers.goatcounter.com/count' };
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
