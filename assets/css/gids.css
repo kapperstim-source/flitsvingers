@@ -3,7 +3,7 @@
   --bg:#fff7ec;--soft:#fffdf8;--line:#f0e2cc;--line2:#e6d3b3;
   --ink:#151a30;--text:#3d4459;--muted:#6a7086;
   --blue:#3a5bff;--blue-d:#2a45d6;--blue-l:#eef1ff;--yellow:#ffc93c;--mint:#12a26b;
-  --head:'Fredoka','Lexend',system-ui,sans-serif;--ui:'Fredoka','Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --head:'Fredoka','Lexend',system-ui,sans-serif;--ui:'Nunito','Fredoka',system-ui,-apple-system,'Segoe UI',sans-serif;
   --r:14px;
   --f-pink:#ff6fa8;--f-ring:#ff9f43;--f-middle:#24bf80;--f-index:#3ba7ff;--f-thumb:#a6afc7;
 }
@@ -28,7 +28,7 @@ nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
 .login:hover{color:var(--blue)}
 @media (max-width:520px){.login{display:none}nav .wrap{gap:12px}}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;border:1px solid transparent;border-radius:12px;padding:13px 22px;font:inherit;font-size:16px;font-weight:800;cursor:pointer;background:var(--blue);color:#fff;text-decoration:none;transition:background .15s,border-color .15s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;border:1px solid transparent;border-radius:12px;padding:13px 22px;font:inherit;font-size:16px;font-weight:700;cursor:pointer;background:var(--blue);color:#fff;text-decoration:none;transition:background .15s,border-color .15s}
 .btn:hover{background:var(--blue-d)}
 .btn:focus-visible{outline:3px solid #9fb0ff;outline-offset:2px}
 .btn.small{padding:9px 16px;font-size:15px;border-radius:10px}
@@ -51,8 +51,8 @@ nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
 .art p{margin:14px 0 0}
 .art ul,.art ol{margin:14px 0 0;padding-left:22px}
 .art li{margin:9px 0;padding-left:2px}
-.art li::marker{color:var(--blue);font-weight:800}
-.art strong{color:var(--ink);font-weight:800}
+.art li::marker{color:var(--blue);font-weight:700}
+.art strong{color:var(--ink);font-weight:700}
 .fine{font-size:14.5px;color:var(--muted)}
 .tw{overflow-x:auto;margin-top:16px}
 .art table{width:100%;border-collapse:collapse;font-size:16px}
@@ -84,7 +84,7 @@ nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
 .vkb{--u:min(44px,calc((100vw - 66px) / 15.2));display:flex;flex-direction:column;gap:4px;align-items:center;margin:18px auto 0}
 .vkr{display:flex;gap:4px}
 .vk{width:calc(var(--u) * var(--w,1) - 4px);height:calc(var(--u) * .9);border-radius:8px;display:grid;place-items:center;position:relative;line-height:1;
-  font-family:var(--ui);font-weight:800;font-size:clamp(9px,calc(var(--u) * .36),17px);color:var(--ink);background:color-mix(in srgb,var(--fc) 20%,#fff);border:1.5px solid var(--fc)}
+  font-family:var(--ui);font-weight:700;font-size:clamp(9px,calc(var(--u) * .36),17px);color:var(--ink);background:color-mix(in srgb,var(--fc) 20%,#fff);border:1.5px solid var(--fc)}
 .vk.home{background:color-mix(in srgb,var(--fc) 46%,#fff)}
 .vk.bump::after{content:'';position:absolute;bottom:14%;width:26%;height:2px;border-radius:2px;background:var(--ink);opacity:.55}
 .vk.s{font-size:clamp(8px,calc(var(--u) * .27),13px);font-weight:700}
@@ -94,7 +94,7 @@ nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
 .vhands .f.p{fill:var(--f-pink)}.vhands .f.r{fill:var(--f-ring)}.vhands .f.m{fill:var(--f-middle)}.vhands .f.i{fill:var(--f-index)}.vhands .f.t{fill:var(--f-thumb)}
 .vhands .nail{fill:#fff;fill-opacity:.55}
 .vhands .palm{fill:#ffdcbd;stroke:#efbf93;stroke-width:2.5}
-.vhands text{font-family:var(--ui);font-weight:800;font-size:17px;fill:var(--ink);text-anchor:middle}
+.vhands text{font-family:var(--ui);font-weight:700;font-size:17px;fill:var(--ink);text-anchor:middle}
 .vlegend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin-top:12px;font-size:14.5px;font-weight:700;color:var(--ink)}
 .vlegend span{display:flex;align-items:center;gap:7px}
 .vlegend i{width:14px;height:14px;border-radius:4px;display:block}
@@ -128,7 +128,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
 }
 
 /* leesbaar op het toetsenpatroon: zachte crème rand om de tekst */
-body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px var(--bg)}
+body{text-shadow:none}
 .btn,.kort,.probeer,.nb,.lees a,.vp,.tw{text-shadow:none}
 
 /* scholen: tekst voor de nieuwsbrief */
@@ -141,3 +141,7 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 /* gele huisstijl: kaartjes iets lichter dan de pagina */
 .lees a{background:#fffdf8}
 @media print{body{background:#fff}}
+
+/* Letters rustiger (Tim 28-10-2026: 'te veel verschillende lettertypes'): koppen, knoppen en menu in Fredoka, de gewone
+   tekst in Nunito, hooguit drie diktes (500 tekst, 600 koppen, 700 vet) en geen gloed achter de tekst. */
+.btn,nav .links a,nav .login,.brand,.over,.kicker,.aanb-label,.sint-balk,.m-hoi{font-family:var(--head)}

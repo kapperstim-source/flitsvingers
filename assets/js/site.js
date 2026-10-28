@@ -32,7 +32,10 @@ const telGC = (path, title) => { try { if (window.goatcounter && window.goatcoun
     balk.className = 'sint-balk';
     balk.innerHTML = '<span class="sint-lang">Sinterklaasaanbieding: <b>bijna 50% korting</b> op de typecursus, ' + nog + ' (t/m 5 december) · <a href="prijs.html" data-gc="sint-balk">Bekijk de prijs</a></span>' +
       '<span class="sint-kort">Sinterklaas: <b>bijna 50% korting</b>, ' + nog + ' · <a href="prijs.html" data-gc="sint-balk">Bekijk</a></span>';
-    document.body.prepend(balk);
+    // in de vaste menubalk (nav is sticky), zodat de balk meebeweegt bij het scrollen (Tim, 28-10-2026)
+    const nav = document.querySelector('nav');
+    if (nav) { nav.prepend(balk); document.documentElement.style.scrollPaddingTop = (nav.offsetHeight + 10) + 'px'; }
+    else document.body.prepend(balk);
     document.querySelectorAll('[data-aftellen]').forEach(e => { e.textContent = nog.charAt(0).toUpperCase() + nog.slice(1) + ', tot en met 5 december'; });
     return;
   }

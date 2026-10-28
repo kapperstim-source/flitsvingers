@@ -2,7 +2,7 @@
   --bg:#fff7ec;--soft:transparent;--soft2:#f1efe8;--line:#f0e2cc;--line2:#e6d3b3;
   --ink:#151a30;--text:#3d4459;--muted:#6a7086;
   --blue:#3a5bff;--blue-d:#2a45d6;--blue-l:#eef1ff;--yellow:#ffc93c;--mint:#12a26b;--coral:#e5484d;
-  --head:'Fredoka','Lexend',system-ui,sans-serif;--ui:'Fredoka','Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;--brand:'Fredoka',system-ui,sans-serif;
+  --head:'Fredoka','Lexend',system-ui,sans-serif;--ui:'Nunito','Fredoka',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;--brand:'Fredoka',system-ui,sans-serif;
   --r:14px;
   --ruimte:44px;   /* halve ruimte tussen twee blokken: overal precies 2x dit */
 }
@@ -34,7 +34,7 @@ nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
 @media (max-width:940px){.links{display:none}}
 @media (max-width:520px){.login{display:none}nav .wrap{gap:12px}}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:12px;padding:13px 22px;font:inherit;font-size:16px;font-weight:800;cursor:pointer;
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:12px;padding:13px 22px;font:inherit;font-size:16px;font-weight:700;cursor:pointer;
   background:var(--blue);color:#fff;text-decoration:none;transition:background .15s,border-color .15s,color .15s}
 .btn:hover{background:var(--blue-d)}
 .btn:focus-visible,.demo-box:focus-visible,summary:focus-visible{outline:3px solid #9fb0ff;outline-offset:2px}
@@ -43,7 +43,7 @@ nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
 .btn.small{padding:9px 16px;font-size:15px;border-radius:10px}
 .btn.white{background:#fff;color:var(--blue)}
 .btn.white:hover{background:#eef1ff}
-.arrow{font-weight:800;color:var(--blue);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.arrow{font-weight:700;color:var(--blue);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
 .arrow:hover{text-decoration:underline;text-underline-offset:4px}
 
 /* browserframe rond schermafbeeldingen */
@@ -55,7 +55,7 @@ nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
 /* hero */
 .hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6.4fr);gap:56px;align-items:center;padding:64px 0 calc(var(--ruimte) * 2)}
 @media (max-width:980px){.hero{grid-template-columns:1fr;gap:36px;padding:40px 0 calc(var(--ruimte) * 2)}}
-.over{font-weight:800;color:var(--blue);font-size:15px}
+.over{font-weight:700;color:var(--blue);font-size:15px}
 .hero h1{font-size:clamp(36px,4.6vw,56px);margin:14px 0 18px}
 .hero .lead{font-size:clamp(17px,1.6vw,19px);max-width:520px}
 .hero .row{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:30px}
@@ -107,7 +107,7 @@ section{padding:var(--ruimte) 0}
 .voice img{width:170px;align-self:end}
 .voice .q{padding-bottom:34px}
 .voice blockquote{margin:0;font-family:var(--head);font-weight:500;font-size:clamp(17px,1.8vw,20px);color:var(--ink);line-height:1.45;letter-spacing:0}
-.play{margin-top:20px;display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid #cdd5ff;border-radius:999px;padding:8px 16px 8px 8px;font:inherit;font-weight:800;font-size:15px;color:var(--blue);cursor:pointer}
+.play{margin-top:20px;display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid #cdd5ff;border-radius:999px;padding:8px 16px 8px 8px;font:inherit;font-weight:700;font-size:15px;color:var(--blue);cursor:pointer}
 .play:hover{border-color:var(--blue)}
 .play .pi{width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center}
 .play .pi svg{width:14px;height:14px;fill:currentColor;stroke:none}
@@ -130,7 +130,7 @@ section{padding:var(--ruimte) 0}
 .eis div{display:flex;justify-content:space-between;gap:16px;padding:12px 18px;border-top:1px solid var(--line);font-size:16px}
 .eis div:first-child{border-top:0}
 .eis dt{color:var(--muted);font-weight:700}
-.eis dd{margin:0;color:var(--ink);font-weight:800;text-align:right}
+.eis dd{margin:0;color:var(--ink);font-weight:700;text-align:right}
 .dipimg{border-radius:10px;box-shadow:0 1px 2px rgba(21,26,48,.06),0 30px 60px -30px rgba(21,26,48,.35)}
 .cap{font-size:14px;color:var(--muted);margin-top:12px;text-align:center}
 
@@ -145,12 +145,12 @@ section{padding:var(--ruimte) 0}
 .amount b{font-family:var(--head);font-weight:600;font-size:60px;color:var(--ink);letter-spacing:-.01em;line-height:1}
 .amount span{font-weight:700;color:var(--muted)}
 /* Sinterklaasaanbieding (28-10-2026, t/m 5 december) */
-.aanb-label{display:inline-block;margin:6px 0 0;background:var(--yellow);color:var(--ink);font-weight:800;font-size:14px;border-radius:10px;padding:5px 12px}
-.aanb-dagen{margin:6px 0 2px;font-weight:800;font-size:17px;color:var(--coral)}
-.aanb-cadeau{margin-top:10px!important}
+.aanb-label{display:inline-block;margin:6px 0 0;background:var(--yellow);color:var(--ink);font-weight:700;font-size:14px;border-radius:10px;padding:5px 12px}
+.aanb-dagen{margin:6px 0 2px;font-weight:700;font-size:17px;color:var(--coral)}
+.aanb-cadeau{margin-top:12px!important}
 .sint-balk{background:var(--ink);color:#fff;text-align:center;font-weight:700;font-size:15px;line-height:1.35;padding:9px 16px;text-shadow:none}
 .sint-balk b{color:var(--yellow)}
-.sint-balk a{color:#fff;text-decoration:underline;font-weight:800;white-space:nowrap}
+.sint-balk a{color:#fff;text-decoration:underline;font-weight:700;white-space:nowrap}
 .sint-kort{display:none}
 @media (max-width:700px){.sint-lang{display:none}.sint-kort{display:inline}.sint-balk{font-size:14px;padding:8px 12px}}
 .amount s{font-family:var(--head);font-weight:600;font-size:30px;color:var(--muted);text-decoration-thickness:3px}
@@ -195,7 +195,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
 .phone-note{font-size:14.5px;color:var(--muted);margin-top:12px;font-weight:700}
 @media (pointer:coarse) and (max-width:820px){.phone-only{display:inline-flex}.phone-note{display:block}.desk-only{display:none!important}}
 .mailmij{display:none;margin-top:18px;max-width:460px}
-.mailmij label{display:block;font-weight:800;color:var(--ink);margin-bottom:8px}
+.mailmij label{display:block;font-weight:700;color:var(--ink);margin-bottom:8px}
 .mm-rij{display:flex;gap:8px}
 .mm-rij input{flex:1;min-width:0;font:inherit;font-size:16px;padding:12px 16px;border:2px solid var(--line2);border-radius:999px;background:#fff;color:var(--ink)}
 .mm-rij input:focus{outline:none;border-color:var(--blue)}
@@ -210,7 +210,7 @@ footer .about{max-width:280px;margin-top:12px;color:var(--muted)}
 .mm-status.fout{color:#c2410c}
 @media (pointer:coarse) and (max-width:820px){.mailmij{display:block}}
 /* leesbaar op het toetsenpatroon: tekst krijgt een zachte crème rand, zodat het patroon niet achter de letters zit */
-body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px var(--bg)}
+body{text-shadow:none}
 .price,.maker,.shot,.voice,.cta,.btn,input,#ouders .item,.demo-box,.eis,.sheet,.tv-scherm,.play,.m-hoi,.dipimg,.mm-status,.markeer{text-shadow:none}
 
 /* wie maakt dit */
@@ -218,8 +218,8 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 .m-hoi{font-family:var(--brand);font-weight:600;font-size:21px;color:var(--ink);background:var(--yellow);border-radius:16px;padding:12px 16px;transform:rotate(-3deg);line-height:1.1;box-shadow:0 3px 0 rgba(21,26,48,.12)}
 .maker h2{font-size:clamp(24px,2.6vw,30px)}
 .maker p{margin-top:12px}
-.maker a{color:var(--blue);font-weight:800}
-.m-naam{margin-top:16px!important;font-weight:800;color:var(--ink)}
+.maker a{color:var(--blue);font-weight:700}
+.m-naam{margin-top:16px!important;font-weight:700;color:var(--ink)}
 .m-naam span{display:block;font-weight:600;font-size:14.5px;color:var(--muted)}
 @media (max-width:640px){.maker{grid-template-columns:1fr;gap:16px;padding:26px 20px}.m-hoi{justify-self:start}}
 
@@ -287,7 +287,7 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 
 /* telefoon: scherm "Vraag de gratis proefles aan" (proefles-aanvragen.html, sinds 12-10-2026).
    Alle telefoonknoppen gaan hierheen; het mailformulier staat alleen nog op dit scherm. */
-.terug{font-weight:800;font-size:15px;color:var(--blue);text-decoration:none}
+.terug{font-weight:700;font-size:15px;color:var(--blue);text-decoration:none}
 .aanvraag{padding:26px 0 64px}
 .aanvraag .wrap{max-width:620px}
 .aanvraag h1{font-size:clamp(30px,6vw,44px);margin:6px 0 18px}
@@ -306,7 +306,7 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 .shot-onder{font-size:14px;color:var(--muted);margin-top:10px;text-align:center}
 .zelf{margin-top:24px;font-size:15.5px}
 /* geld-terug-garantie bij de prijs (sinds 12-10-2026) */
-.garantie{margin:14px 0 4px;padding:12px 14px;border-radius:12px;background:#eaf7f0;border:1px solid #bfe6d1;color:#14532d;font-size:15px;line-height:1.5;text-shadow:none}.garantie b,.garantie a{color:#0d4425}
+.garantie{margin:14px 0 4px;padding:12px 14px;border-radius:12px;background:#eaf7f0;border:1px solid #bfe6d1;color:#14532d;font-size:15px;line-height:1.5;text-shadow:none}.garantie b,.garantie a{color:#0d4425}.garantie p{margin:0}.garantie p+p{margin-top:8px}
 
 /* "Inbegrepen" in het prijsblok: kopwoord + uitleg, scheidingslijntjes, vingerkleuren (variant B, Tim 12-10-2026) */
 .inb{list-style:none;padding:0;margin:16px 0 0}
@@ -345,7 +345,11 @@ body{text-shadow:0 0 2px var(--bg),0 0 5px var(--bg),0 0 9px var(--bg),0 0 14px 
 .wn-ons b{color:var(--ink)}
 .wn-vraag{flex:1 1 420px}
 .wn-groepen{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px}
-.wn-groepen button{font:inherit;font-size:15px;font-weight:800;padding:9px 16px;border-radius:10px;border:1px solid var(--line2);background:#fff;color:var(--ink);cursor:pointer}
+.wn-groepen button{font:inherit;font-size:15px;font-weight:700;padding:9px 16px;border-radius:10px;border:1px solid var(--line2);background:#fff;color:var(--ink);cursor:pointer}
 .wn-groepen button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
 .wn-uitkomst{font-size:16px}
 @media (max-width:820px){.wn-ons{grid-template-columns:1fr}.wn-sub{margin-top:28px}}
+
+/* Letters rustiger (Tim 28-10-2026: 'te veel verschillende lettertypes'): koppen, knoppen en menu in Fredoka, de gewone
+   tekst in Nunito, hooguit drie diktes (500 tekst, 600 koppen, 700 vet) en geen gloed achter de tekst. */
+.btn,nav .links a,nav .login,.brand,.over,.kicker,.aanb-label,.sint-balk,.m-hoi{font-family:var(--head)}
