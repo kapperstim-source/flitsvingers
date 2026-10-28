@@ -717,7 +717,7 @@ function renderMap() {
     b.onclick = e => { e.preventDefault(); S.diploma ? openDiploma() : openBadges(); };
   } else {
     $('#cta-title').textContent = 'Vond je het leuk?';
-    $('#cta-text').textContent = 'De volledige cursus: 30 lessen, races, proefexamens en een diploma. Eenmalig €49, geen abonnement.';
+    $('#cta-text').textContent = 'De volledige cursus: 30 lessen, races, proefexamens en een diploma. ' + PRIJS_ZIN() + ', geen abonnement.';
     const b = $('#cta-btn'); b.textContent = 'Bekijk de cursus'; b.href = 'index.html#prijs'; b.onclick = null;
   }
   cta.hidden = false;
@@ -1338,11 +1338,14 @@ function closeModal() { $('#modal').hidden = true; if (document.activeElement &&
 $('#modal-x').onclick = closeModal;
 $('#modal').addEventListener('click', e => { if (e.target.id === 'modal' && !$('#modal').dataset.noclose) closeModal(); });
 
+/* Sinterklaasaanbieding (28-10-2026): t/m 5 december EUR 24,95 i.p.v. EUR 49 (zelfde einddatum als site.js) */
+function PRIJS_ZIN() { return Date.now() < new Date('2026-12-06T00:00:00+01:00').getTime() ? 'Tot en met 5 december €24,95 in plaats van €49 (bijna 50% korting)' : 'Eenmalig €49'; }
+
 function lockedModal(id) {
   tel('slot-volledige-cursus', 'Wil verder na de gratis lessen');
   openModal('<img class="welcomeimg" src="' + IMG('wijs') + '" alt="">' +
     '<h2 style="text-align:center">Les ' + id + ' zit in de volledige cursus</h2>' +
-    '<p style="text-align:center;margin:8px 0 18px">De volledige cursus heeft 30 lessen, races, proefexamens en een diploma. Eenmalig €49, geen abonnement. Heb je al een toegangscode? Log dan in als ouder.</p>' +
+    '<p style="text-align:center;margin:8px 0 18px">De volledige cursus heeft 30 lessen, races, proefexamens en een diploma. ' + PRIJS_ZIN() + ', geen abonnement. Heb je al een toegangscode? Log dan in als ouder.</p>' +
     '<div class="row" style="justify-content:center"><button class="btn" id="lk-login">Inloggen als ouder</button><a class="btn yellow" href="index.html#prijs">Bekijk de cursus</a></div>');
   $('#lk-login').onclick = openParents;
 }

@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/menu.css">
-<link rel="stylesheet" href="assets/css/site.css?v=5">
+<link rel="stylesheet" href="assets/css/site.css?v=7">
 <link rel="stylesheet" href="assets/css/minidemo.css?v=8">
 <script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js?v=0.160.0"}}</script>
 </head>
@@ -93,15 +93,7 @@
       <p><b>Elke les een blind-rondje.</b> In de tunnel verdwijnt het toetsenbord van het scherm. Zo leert je kind typen zonder te kijken.</p>
       <p><b>Tien minuten, en het voelt als een spel.</b> Races tegen Flits en munten voor een eigen kart. Na 12 minuten oefenen is de dag af.</p>
       <p><b>Jij ziet wat je kind doet.</b> Elke zondag krijg je een mail met de lessen en minuten van die week.</p>
-      <p><b>Geen risico.</b> Eenmalig €49, geen abonnement. Niet tevreden? Binnen 30 dagen je geld terug. En haalt je kind het diploma niet terwijl het alle lessen deed, dan ook.</p>
-    </div>
-    <div class="wn-nu" id="wn-nu">
-      <div class="wn-vraag">
-        <p><b>In welke groep zit je kind?</b></p>
-        <div class="wn-groepen" role="group" aria-label="Groep van je kind"><button type="button" data-groep="6">Groep 6</button><button type="button" data-groep="7">Groep 7</button><button type="button" data-groep="8">Groep 8</button></div>
-        <p class="wn-uitkomst" id="wn-uitkomst" aria-live="polite">Wie vijf dagen per week tien minuten oefent, is in 8 tot 12 weken klaar.</p>
-      </div>
-      <a class="btn desk-only" href="cursus.html" data-gc="waarom-proefles">Start de gratis proefles</a><a class="btn phone-only" href="proefles-aanvragen.html" data-gc="waarom-proefles-tel">Vraag de gratis proefles aan</a>
+      <p><b>Geen risico.</b> <span data-normaal="Eenmalig €49">Tot en met 5 december eenmalig €24,95 in plaats van €49 (bijna 50% korting)</span>, geen abonnement. Niet tevreden? Binnen 30 dagen je geld terug. En haalt je kind het diploma niet terwijl het alle lessen deed, dan ook.</p>
     </div>
   </div>
 </section>
@@ -170,8 +162,11 @@
       </div>
       <div class="buy">
         <h3>Flitsvingers typecursus</h3>
-        <div class="amount"><b>€49</b><span>eenmalig</span></div>
-        <p class="fine" style="margin:0">Per kind, inclusief btw. Dat is ongeveer €1,63 per les.</p>
+        <p class="aanb aanb-label">Sinterklaasaanbieding: bijna 50% korting</p>
+        <div class="amount"><s class="aanb" aria-label="Normaal €49">€49</s><b data-normaal="€49">€24,95</b><span>eenmalig</span></div>
+        <p class="aanb aanb-dagen" data-aftellen>Tot en met 5 december</p>
+        <p class="fine" style="margin:0" data-normaal="Per kind, inclusief btw. Dat is ongeveer €1,63 per les.">Per kind, inclusief btw. Ongeveer €0,83 per les. Daarna weer €49.</p>
+        <p class="aanb fine aanb-cadeau"><b>Cadeau voor in de schoen?</b> Na het kopen print je zelf een <a href="cadeaubon.html">cadeaubon</a>.</p>
         <p class="garantie"><b>Niet tevreden? Geld terug.</b> Binnen 30 dagen na de aankoop krijg je je geld helemaal terug. Een mail naar <a href="mailto:info@flitsvingers.nl">info@flitsvingers.nl</a> is genoeg, je hoeft niets uit te leggen.</p>
         <p class="garantie"><b>Diploma-garantie.</b> Heeft je kind binnen een jaar alle lessen gedaan en minstens vijf keer het proefexamen geprobeerd, maar haalt het het diploma niet? Dan krijg je je geld ook terug. <a href="voorwaarden.html#diploma-garantie">Zo werkt het</a>.</p>
         <button class="btn" id="koop" type="button">Koop de cursus</button>
@@ -269,7 +264,8 @@
    "offers": {
     "@type": "Offer",
     "category": "Paid",
-    "price": "49.00",
+    "price": "24.95",
+    "priceValidUntil": "2026-12-05",
     "priceCurrency": "EUR",
     "availability": "https://schema.org/InStock",
     "url": "https://flitsvingers.nl/prijs.html"
@@ -288,7 +284,7 @@
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
 <script src="assets/js/minidemo.js?v=11" defer></script>
-<script src="assets/js/site.js?v=3" defer></script>
+<script src="assets/js/site.js?v=5" defer></script>
 <script src="assets/js/menu.js" defer></script>
 </body>
 </html>

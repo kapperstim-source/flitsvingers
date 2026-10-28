@@ -144,6 +144,16 @@ section{padding:var(--ruimte) 0}
 .amount{display:flex;align-items:baseline;gap:10px;margin:6px 0 2px}
 .amount b{font-family:var(--head);font-weight:600;font-size:60px;color:var(--ink);letter-spacing:-.01em;line-height:1}
 .amount span{font-weight:700;color:var(--muted)}
+/* Sinterklaasaanbieding (28-10-2026, t/m 5 december) */
+.aanb-label{display:inline-block;margin:6px 0 0;background:var(--yellow);color:var(--ink);font-weight:800;font-size:14px;border-radius:10px;padding:5px 12px}
+.aanb-dagen{margin:6px 0 2px;font-weight:800;font-size:17px;color:var(--coral)}
+.aanb-cadeau{margin-top:10px!important}
+.sint-balk{background:var(--ink);color:#fff;text-align:center;font-weight:700;font-size:15px;line-height:1.35;padding:9px 16px;text-shadow:none}
+.sint-balk b{color:var(--yellow)}
+.sint-balk a{color:#fff;text-decoration:underline;font-weight:800;white-space:nowrap}
+.sint-kort{display:none}
+@media (max-width:700px){.sint-lang{display:none}.sint-kort{display:inline}.sint-balk{font-size:14px;padding:8px 12px}}
+.amount s{font-family:var(--head);font-weight:600;font-size:30px;color:var(--muted);text-decoration-thickness:3px}
 .buy .btn{width:100%;margin-top:12px}
 .buy .btn:first-of-type{margin-top:24px}
 .fine{font-size:14px;color:var(--muted)}

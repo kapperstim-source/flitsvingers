@@ -1,8 +1,16 @@
 /* Flitsvingers: gedeeld script voor alle sitepagina's (homepage, hoe-het-werkt, voor-ouders, prijs, vragen).
    Elk onderdeel draait alleen als het op de pagina staat. Sinds 12-10-2026 (opgesplitst uit index.html). */
 
-/* Instellingen: de Stripe-betaallink van €49. Leeg = knop toont "De verkoop start binnenkort". */
+/* Instellingen: de Stripe-betaallink (normaal €49). Leeg = knop toont "De verkoop start binnenkort". */
 const BETAAL_URL = 'https://buy.stripe.com/aFa5kC6bweSc1Np8Y51wY01';
+/* Sinterklaasaanbieding (Tim, 28-10-2026): €24,95 in plaats van €49 ("bijna 50% korting": het is 49,1%, dus niet
+   "50%" schrijven), tot en met 5 december 2026. Geen kortingscode (Tims keuze): een aparte Stripe-betaallink van €24,95
+   (url hieronder; ook in STRIPE_LINK van Code.gs). Bovenaan elke pagina een balk met de dagen die nog over zijn.
+   Na de einddatum gaat de koopknop weer naar BETAAL_URL en zet dit script de prijzen terug ([data-normaal] krijgt die
+   tekst, .aanb en de balk verdwijnen). Zet daarna de €24,95-link in Stripe uit en haal de aanbieding uit de HTML (prijs.html titel,
+   JSON-LD op index.html, voorwaarden, cadeaubon, scholen, gratis-typecursus). */
+const AANBIEDING = { url: 'https://buy.stripe.com/eVqfZg0RceSc9fR1vD1wY03', tot: new Date('2026-12-06T00:00:00+01:00') };
+const aanbiedingLoopt = () => Date.now() < AANBIEDING.tot.getTime();
 const API_URL = 'https://script.google.com/macros/s/AKfycbycENGI2KDXQ3h3RY18VuHf2OJqUb3tOQLntwotXfBFQfLvYowDPKpwLaDtOiopKdM/exec';
 const telGC = (path, title) => { try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path, title, event: true }); } catch (e) {} };
 
@@ -14,12 +22,30 @@ const telGC = (path, title) => { try { if (window.goatcounter && window.goatcoun
   if (naar[location.hash]) location.replace(naar[location.hash]);
 })();
 
+/* aanbieding: balk bovenaan + aftellen (GoatCounter 'sint-balk'); voorbij: normale prijs tonen */
+(() => {
+  if (aanbiedingLoopt()) {
+    const vandaag = new Date(); vandaag.setHours(0, 0, 0, 0);
+    const dagen = Math.round((new Date(2026, 11, 5) - vandaag) / 864e5) + 1;   // 5 december telt mee
+    const nog = dagen <= 1 ? 'vandaag de laatste dag' : 'nog ' + dagen + ' dagen';
+    const balk = document.createElement('div');
+    balk.className = 'sint-balk';
+    balk.innerHTML = '<span class="sint-lang">Sinterklaasaanbieding: <b>bijna 50% korting</b> op de typecursus, ' + nog + ' (t/m 5 december) · <a href="prijs.html" data-gc="sint-balk">Bekijk de prijs</a></span>' +
+      '<span class="sint-kort">Sinterklaas: <b>bijna 50% korting</b>, ' + nog + ' · <a href="prijs.html" data-gc="sint-balk">Bekijk</a></span>';
+    document.body.prepend(balk);
+    document.querySelectorAll('[data-aftellen]').forEach(e => { e.textContent = nog.charAt(0).toUpperCase() + nog.slice(1) + ', tot en met 5 december'; });
+    return;
+  }
+  document.querySelectorAll('.aanb').forEach(e => e.remove());
+  document.querySelectorAll('[data-normaal]').forEach(e => { e.textContent = e.dataset.normaal; });
+})();
+
 /* koopknop (GoatCounter: 'koopknop') */
 (() => {
   const modal = document.getElementById('modal');
   document.querySelectorAll('#koop,[data-koop]').forEach(b => b.addEventListener('click', () => {
     telGC(b.dataset.koop || 'koopknop', 'Klik op kopen');
-    if (BETAAL_URL) { setTimeout(() => { location.href = BETAAL_URL; }, 200); return; }
+    if (BETAAL_URL) { setTimeout(() => { location.href = aanbiedingLoopt() ? AANBIEDING.url : BETAAL_URL; }, 200); return; }
     if (modal) modal.hidden = false;
   }));
   if (!modal) return;
