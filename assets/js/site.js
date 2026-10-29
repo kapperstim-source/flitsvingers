@@ -126,8 +126,8 @@ document.querySelectorAll('[data-gc]').forEach(a => a.addEventListener('click', 
     if (window.goatcounter && window.goatcounter.count) { wacht.splice(0).forEach(([p, t]) => tel(p, t)); }
     if (++pogingen > 30) clearInterval(spoel);
   }, 500);
-  const delen = [['.facts', 'scroll-1-voorbij-start'], ['#meer', 'scroll-2-meer-lezen'], ['#maker', 'scroll-4b-wie-maakt-dit'],
-                 ['#prijs', 'scroll-5-prijs'], ['.cta', 'scroll-7-einde']];
+  const delen = [['.ikonen,.facts', 'scroll-1-voorbij-start'], ['#meer', 'scroll-2-meer-lezen'], ['#maker', 'scroll-4b-wie-maakt-dit'],
+                 ['#prijs', 'scroll-5-prijs'], ['.slot,.cta', 'scroll-7-einde']];   // .ikonen en .slot: nieuwe homepage (29-10-2026)
   const io = new IntersectionObserver(items => items.forEach(it => {
     if (!it.isIntersecting) return;
     io.unobserve(it.target);

@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://flitsvingers.nl/">
 <meta property="og:locale" content="nl_NL">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#fff7ec">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" href="/favicon.ico?v=2" sizes="48x48">
 <link rel="icon" href="/favicon-192.png?v=2" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
@@ -23,13 +23,14 @@
 <link rel="stylesheet" href="assets/css/menu.css">
 <link rel="stylesheet" href="assets/css/site.css?v=9">
 <link rel="stylesheet" href="assets/css/minidemo.css?v=8">
+<link rel="stylesheet" href="assets/css/home.css?v=1">
 <script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js?v=0.160.0"}}</script>
 </head>
-<body class="home">
+<body class="home nieuw">
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="index.html"><img class="logo" src="assets/img/flits_logo.webp" alt="" width="40" height="40">flitsvingers</a>
+    <a class="brand" href="index.html"><span class="vaart" aria-hidden="true"><i></i><i></i><i></i></span><span class="wm">Flitsvingers</span></a>
     <div class="links"><a href="hoe-het-werkt.html">Hoe het werkt</a><a href="voor-ouders.html">Voor ouders</a><a href="prijs.html">Prijs</a><a href="vragen.html">Vragen</a><a href="scholen.html">Voor scholen</a></div>
     <div class="spacer"></div>
     <a class="login" href="cursus.html?login=1">Inloggen</a>
@@ -40,21 +41,70 @@
 </nav>
 
 <main id="top">
-<div class="wrap">
-  <div class="hero">
-    <div>
-      <p class="kicker">Typt je kind nog met <span class="krul">twee vingers</span>?</p>
-      <div class="over">Typecursus voor groep 6, 7 en 8</div>
-      <h1>Leer je kind blind typen met <span class="markeer">tien vingers</span>.</h1>
-      <p class="lead">Op de middelbare school typt je kind werkstukken, verslagen en presentaties. Leer het nu goed, met korte lessen van tien minuten die voelen als een spel en een diploma aan het eind.</p>
-      <p class="tel-lead">Op de middelbare school typt je kind werkstukken en verslagen. Leer het nu goed, in lessen van 10 minuten die voelen als een spel.</p>
+<section class="held">
+  <div class="wrap held-grid">
+    <div class="held-flits">
+      <p class="ballon" aria-hidden="true">Hallo, ik ben Flits!</p>
+      <img src="assets/img/flits_zwaai.webp" alt="Flits, het jachtluipaard van Flitsvingers, zwaait" width="432" height="640" fetchpriority="high">
+    </div>
+    <div class="held-tekst">
+      <p class="over">Typecursus voor groep 6, 7 en 8</p>
+      <h1>Leer je kind blind typen met <span class="onderstreep">tien vingers!</span></h1>
+      <p class="lead lead-lang">Op de middelbare school typt je kind werkstukken, verslagen en presentaties. Leer het nu goed, met korte lessen van tien minuten die voelen als een spel en een diploma aan het eind.</p>
+      <p class="lead lead-kort">Op de middelbare school typt je kind werkstukken en verslagen. Leer het nu goed, in lessen van 10 minuten die voelen als een spel.</p>
       <div class="row">
-        <a class="btn desk-only" href="cursus.html">Start de gratis proefles</a>
+        <a class="btn groot desk-only" href="cursus.html">Start de gratis proefles</a>
+        <a class="btn groot phone-only" href="proefles-aanvragen.html">Vraag de gratis proefles aan</a>
         <a class="arrow" href="#prijs">Bekijk de prijs <span aria-hidden="true">→</span></a>
       </div>
-      <a class="btn tel-knop phone-only" href="proefles-aanvragen.html">Vraag de gratis proefles aan</a>
+      <p class="onder">Of probeer eerst <a href="#minidemo">een stukje van les 1</a>, hier op de pagina.</p>
       <p class="tel-knop-onder">Les 1 t/m 3 gratis · je krijgt de link voor op de laptop</p>
     </div>
+    <p class="gratis">De eerste <b>3 lessen</b> zijn gratis!</p>
+  </div>
+  <svg class="golf onder-held" viewBox="0 0 1440 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 28 C 240 56 480 0 720 22 S 1200 52 1440 18 V56 H0 Z"/></svg>
+</section>
+
+<section class="ikonen">
+  <div class="wrap">
+    <div class="ik-grid">
+      <div class="ik"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10a5 5 0 0 1 5 5v1.5a2.5 2.5 0 0 1-4.4 1.6L16 14H8l-1.6 2.1A2.5 2.5 0 0 1 2 14.5V13a5 5 0 0 1 5-5z"/><path d="M7.5 10.5v3M6 12h3"/><path d="M15.5 11h.01M17.5 13h.01"/></svg></i><h3>Voelt als een spel</h3><p>Races tegen Flits, munten verdienen en je eigen kart bouwen.</p></div>
+      <div class="ik"><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></svg></i><h3>10 minuten per les</h3><p>30 lessen. Na 12 minuten oefenen is de dag af.</p></div>
+      <div class="ik"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v5.5c0 4.6-3.3 8.5-8 9.5-4.7-1-8-4.9-8-9.5V6z"/><path d="M13.2 7.5 10 12.5h4l-3.2 5"/></svg></i><h3>Veilig, zonder reclame</h3><p>Alles wordt voorgelezen. Met dyslexie-modus en rustige modus.</p></div>
+      <div class="ik"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3l3 6.5M16 3l-3 6.5"/><circle cx="12" cy="15" r="5.5"/><path d="M12 12.5v5M10.5 13.5 12 12.5"/></svg></i><h3>Diploma met QR-code</h3><p>Bij 100 aanslagen per minuut, of 75 met de dyslexie-modus.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="raceweekend" class="stappen vlak">
+  <svg class="golf boven" viewBox="0 0 1440 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 28 C 240 56 480 0 720 22 S 1200 52 1440 18 V56 H0 Z"/></svg>
+  <div class="wrap">
+    <div class="kop-midden">
+      <span class="klein-kop">Zo werkt het</span>
+      <h2>Elke les is een raceweekend</h2>
+      <p>Vier stappen, elke les opnieuw. Met echte beelden uit de cursus.</p>
+    </div>
+    <div class="st-grid">
+      <div class="st"><span class="st-nr">1</span><div class="st-beeld"><img src="assets/img/site_garage.webp?v=2" alt="De garage met een eigen kart" loading="lazy"></div><h3>Kart klaarmaken</h3><p>In de garage koop je met je munten lak, een helm en een spoiler.</p></div>
+      <div class="st"><span class="st-nr">2</span><div class="st-beeld"><img src="assets/img/shot_les.webp?v=4" alt="Een oefening met de woorden bovenin en het toetsenbord onderin" loading="lazy"></div><h3>Trainen</h3><p>Nieuwe letters oefenen. Flits leest alles voor en fouten maken mag.</p></div>
+      <div class="st"><span class="st-nr">3</span><div class="st-beeld"><img class="flits" src="assets/img/flits_blind.webp" alt="Flits met een blinddoek" loading="lazy"></div><h3>Blind door de tunnel</h3><p>In de tunnel verdwijnt het toetsenbord van het scherm. Zo leer je typen zonder te kijken.</p></div>
+      <div class="st"><span class="st-nr">4</span><div class="st-beeld"><img src="assets/img/site_race.webp?v=2" alt="Race tegen Flits op het Kampioenscircuit" loading="lazy"></div><h3>Race tegen Flits</h3><p>Elke les eindigt met een race tegen Flits, Vlam en Hop. Daarna volgt het podium.</p></div>
+    </div>
+  </div>
+  <svg class="golf onder" viewBox="0 0 1440 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 28 C 240 56 480 0 720 22 S 1200 52 1440 18 V56 H0 Z"/></svg>
+</section>
+
+<section class="wereld">
+  <div class="wrap wr-grid">
+    <div class="wr-tekst">
+      <span class="klein-kop">Probeer het zelf</span>
+      <h2>Een wereld vol avontuur</h2>
+      <p>Van het Thuisrij-dorp via het Onderrij-strand en de Hoofdletterbergen naar het Kampioenscircuit. Elke wereld hoort bij een nieuw stuk van het toetsenbord. Met elk woord dat je kind goed typt, schiet de kart vooruit.</p>
+      <p>Speel hier meteen een stukje van les 1. Zet je geluid aan.</p>
+      <figure class="wr-werelden"><img src="assets/img/site_werelden.webp?v=2" alt="De vier werelden: het Thuisrij-dorp, het Onderrij-strand, de Hoofdletterbergen en het Kampioenscircuit" width="1200" height="750" loading="lazy"></figure>
+    </div>
+    <div class="wr-demo">
+      <p class="spel" aria-hidden="true">Typen, maar dan als een spel!</p>
     <!-- MINIDEMO-BEGIN (gemaakt met tools/minidemo_html.py) -->
     <section class="md" id="minidemo" aria-label="Probeer het zelf, met Flits">
       <div class="md-kop"><img src="assets/img/flits_typen.webp" alt="" width="64" height="64"><div><h2>Probeer het zelf, met Flits</h2><p>Een stukje uit les 1. Zet je geluid aan.</p></div><button class="md-geluid" type="button">geluid uit</button></div>
@@ -65,59 +115,32 @@
       <p class="md-uitleg"><span class="md-laptop">Leg je vingers op de thuisrij en typ op je eigen toetsenbord.</span><span class="md-tel">Op de telefoon tik je de toetsen aan. Echt blind typen oefen je op de laptop.</span></p>
     </section>
     <!-- MINIDEMO-EINDE -->
+    </div>
   </div>
+</section>
 
-  <div class="facts">
-    <div><b>30 lessen</b><span>Van de thuisrij tot hoofdletters, cijfers en leestekens</span></div>
-    <div><b>10 minuten</b><span>per les. Na 12 minuten oefenen is de dag af</span></div>
-    <div><b>100</b><span>aanslagen per minuut voor het diploma (75 met dyslexie-modus)</span></div>
-    <div><b>1 jaar</b><span>toegang, ook nadat je kind het diploma heeft</span></div>
-  </div>
-</div>
-
-<!-- WAAROM NU (sinds 24-10-2026): de reden om te kopen. Bronnen: Aalto-universiteit 2016 (Feit e.a., CHI), Russell 1999 (Education Policy Analysis Archives 7(20)); zie marketing/kernboodschap.md -->
-<section id="waarom" class="waarom-s">
+<!-- WAAROM NU (sinds 24-10-2026, ingekort 29-10-2026): de reden om te kopen. Bronnen: Aalto-universiteit 2016 (Feit e.a., CHI), Russell 1999 (Education Policy Analysis Archives 7(20)); zie marketing/kernboodschap.md -->
+<section id="waarom" class="waarom2">
   <div class="wrap">
-    <div class="head">
-      <div class="over">Waarom nu?</div>
+    <div class="kop-midden">
+      <span class="klein-kop">Waarom nu?</span>
       <h2>Weet jij hoe je kind typt?</h2>
-      <p>Kijk vanavond even mee als je kind iets typt. Kijkt het naar het scherm, of naar de toetsen? Op de middelbare school typt je kind werkstukken, verslagen en presentaties. Wie typen niet leert, leert het zichzelf aan. En die gewoonte blijft vaak.</p>
+      <p>Kijk vanavond even mee als je kind iets typt. Kijkt het naar het scherm, of naar de toetsen? Wie typen niet leert, leert het zichzelf aan. En die gewoonte blijft vaak.</p>
     </div>
     <div class="wn-grid">
       <div class="wn-kaart"><b>1</b><h3>Kijken naar de toetsen</h3><p>Volgens onderzoekers van de Aalto-universiteit kijkt wie zichzelf leert typen ongeveer twee keer zo veel naar de vingers in plaats van naar het scherm. Een fout zie je dan pas later.</p></div>
       <div class="wn-kaart"><b>2</b><h3>Cijfers op de laptop</h3><p>Op de middelbare school maakt je kind steeds vaker toetsen op de computer. Volgens onderzoeker Russell scoren leerlingen die langzaam typen dan lager op open vragen. Snelle typers juist hoger.</p></div>
       <div class="wn-kaart"><b>3</b><h3>Groep 6 tot 8 is het moment</h3><p>De handen zijn groot genoeg voor het toetsenbord, en je kind typt nog niet elke dag. Hoe korter een gewoonte bestaat, hoe makkelijker je hem verandert.</p></div>
     </div>
-    <h3 class="wn-sub">Waarom bij Flitsvingers?</h3>
-    <div class="wn-ons">
-      <p><b>Elke les een blind-rondje.</b> In de tunnel verdwijnt het toetsenbord van het scherm. Zo leert je kind typen zonder te kijken.</p>
-      <p><b>Tien minuten, en het voelt als een spel.</b> Races tegen Flits en munten voor een eigen kart. Na 12 minuten oefenen is de dag af.</p>
-      <p><b>Jij ziet wat je kind doet.</b> Elke zondag krijg je een mail met de lessen en minuten van die week.</p>
-      <p><b>Geen risico.</b> <span data-normaal="Eenmalig €49">Tot en met 5 december eenmalig €24,95 in plaats van €49 (bijna 50% korting)</span>, geen abonnement. Niet tevreden? Binnen 30 dagen je geld terug. En haalt je kind het diploma niet terwijl het alle lessen deed, dan ook.</p>
-    </div>
   </div>
 </section>
 
-<section id="raceweekend" class="rw-s">
+<section id="meer" class="band vlak">
+  <svg class="golf boven" viewBox="0 0 1440 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 28 C 240 56 480 0 720 22 S 1200 52 1440 18 V56 H0 Z"/></svg>
   <div class="wrap">
-    <div class="head">
-      <h2>Elke les is een raceweekend</h2>
-      <p>Eerst je kart klaarmaken in de garage, dan trainen, blind door de tunnel en als laatste de race. Zo ziet het eruit, met echte beelden uit de cursus.</p>
-    </div>
-    <div class="rw-grid">
-      <figure class="rw-kaart"><img src="assets/img/site_boost.webp?v=1" alt="Een kart op de racebaan aan zee, met een turbovlam uit de uitlaat" width="1200" height="750" loading="lazy"><figcaption><h3>Typ een woord, je kart schiet vooruit</h3><p>Elk woord dat je goed typt, geeft je kart een zetje en levert munten op. Een woord zonder fout levert de meeste munten op.</p></figcaption></figure>
-      <figure class="rw-kaart"><img src="assets/img/site_race.webp?v=2" alt="Race bij zonsondergang op het Kampioenscircuit: de kart van Sam naast Flits en Vlam" width="1200" height="750" loading="lazy"><figcaption><h3>Race tegen Flits, Vlam en Hop</h3><p>Elke les eindigt met een race. Flits rijdt net iets sneller dan jij in de training, dus het blijft spannend. Na de finish volgt het podium.</p></figcaption></figure>
-      <figure class="rw-kaart"><img src="assets/img/site_garage.webp?v=2" alt="De garage: een eigen kart met vlammen, een grote spoiler en neon velgen" width="1200" height="750" loading="lazy"><figcaption><h3>Bouw je eigen kart</h3><p>Met je munten koop je in de garage lak, een helm, een spoiler en meer. Netjes typen levert de meeste munten op.</p></figcaption></figure>
-      <figure class="rw-kaart"><img src="assets/img/site_werelden.webp?v=2" alt="De vier werelden: het Thuisrij-dorp, het Onderrij-strand, de Hoofdletterbergen in de sneeuw en het Kampioenscircuit bij zonsondergang" width="1200" height="750" loading="lazy"><figcaption><h3>Vier werelden, op weg naar het kampioenschap</h3><p>Van het Thuisrij-dorp via het strand en de bergen naar het Kampioenscircuit. Elke wereld heeft een eigen baan en hoort bij een nieuw stuk van het toetsenbord.</p></figcaption></figure>
-    </div>
-  </div>
-</section>
-
-<section id="meer">
-  <div class="wrap">
-    <div class="head">
-      <h2>Zo werkt Flitsvingers</h2>
-      <p>Korte lessen die voelen als een spel, met een coach die alles voorleest. Lees hoe een les eruitziet, wat je als ouder meekrijgt en wat het diploma betekent.</p>
+    <div class="kop-midden">
+      <h2>Wat je als ouder wilt weten</h2>
+      <p>Je kind oefent zelfstandig. Jij krijgt elke zondag een mail met de lessen en minuten van die week.</p>
     </div>
     <div class="teasers">
       <a class="teaser" href="hoe-het-werkt.html"><img src="assets/img/shot_les.webp?v=4" alt="Een oefening op de racebaan: de woorden staan bovenin, het toetsenbord en de handen onderin, en een fout wordt rood" width="1600" height="1013" loading="lazy"><h3>Hoe het werkt</h3><p>Lessen van ongeveer tien minuten, races tegen Flits en fouten maken mag. Probeer het meteen op de laptop.</p><span class="arrow">Lees meer <span aria-hidden="true">→</span></span></a>
@@ -125,9 +148,10 @@
       <a class="teaser" href="voor-ouders.html#diploma"><img src="assets/img/shot_diploma.webp?v=2" alt="Voorbeeld van een Flitsvingers-diploma met QR-code" width="1400" height="991" loading="lazy"><h3>Het diploma</h3><p>Een openbare eis: 5 minuten typen met 100 aanslagen per minuut en maximaal 3% fouten. Met een QR-code om te controleren.</p><span class="arrow">Lees meer <span aria-hidden="true">→</span></span></a>
     </div>
   </div>
+  <svg class="golf onder" viewBox="0 0 1440 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 28 C 240 56 480 0 720 22 S 1200 52 1440 18 V56 H0 Z"/></svg>
 </section>
 
-<section id="maker" class="maker-s">
+<section id="maker" class="maker-s2">
   <div class="wrap">
     <div class="maker">
       <div class="m-hoi" aria-hidden="true">Hoi!</div>
@@ -141,9 +165,10 @@
   </div>
 </section>
 
-<section id="prijs">
+<section id="prijs" class="prijs2">
   <div class="wrap">
-    <div class="head">
+    <div class="kop-midden">
+      <span class="klein-kop">Prijs</span>
       <h2>Wat het kost</h2>
       <p>Eén prijs per kind, en alles zit erin. Geen abonnement en niets dat je later nog moet bijkopen.</p>
     </div>
@@ -177,24 +202,24 @@
   </div>
 </section>
 
-<section style="padding-bottom:0">
-  <div class="wrap">
-    <div class="cta">
-      <div class="t">
-        <h2>Begin vandaag met les 1</h2>
-        <p>Gratis, zonder account en in een paar minuten gespeeld.</p>
-        <a class="btn white desk-only" href="cursus.html">Start de gratis proefles</a><a class="btn white phone-only" href="proefles-aanvragen.html">Vraag de gratis proefles aan</a>
-      </div>
-      <img src="assets/img/flits_juich.webp" alt="" width="497" height="640" loading="lazy">
+<section class="slot vlak">
+  <svg class="golf boven" viewBox="0 0 1440 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 28 C 240 56 480 0 720 22 S 1200 52 1440 18 V56 H0 Z"/></svg>
+  <div class="wrap slot-grid">
+    <div class="t">
+      <h2>Begin vandaag met les 1</h2>
+      <p>Gratis, zonder account en in een paar minuten gespeeld.</p>
+      <a class="btn navy groot desk-only" href="cursus.html">Start de gratis proefles</a><a class="btn navy groot phone-only" href="proefles-aanvragen.html">Vraag de gratis proefles aan</a>
     </div>
+    <img src="assets/img/flits_juich.webp" alt="" width="497" height="640" loading="lazy">
   </div>
 </section>
 </main>
 
 <footer>
+  <svg class="golf boven" viewBox="0 0 1440 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 28 C 240 56 480 0 720 22 S 1200 52 1440 18 V56 H0 Z"/></svg>
   <div class="wrap">
     <div class="fgrid">
-      <div><a class="brand" href="index.html"><img class="logo" src="assets/img/flits_logo.webp" alt="" width="40" height="40">flitsvingers</a><p class="about">Online typecursus voor kinderen uit groep 6, 7 en 8.</p></div>
+      <div><a class="brand" href="index.html"><span class="vaart" aria-hidden="true"><i></i><i></i><i></i></span><span class="wm">Flitsvingers</span></a><p class="about">Online typecursus voor kinderen uit groep 6, 7 en 8.</p></div>
       <div><h4>Cursus</h4><ul><li><a href="cursus.html">Gratis proefles</a></li><li><a href="hoe-het-werkt.html">Hoe het werkt</a></li><li><a href="prijs.html">Prijs</a></li><li><a href="cursus.html?login=1">Inloggen voor ouders</a></li></ul></div>
       <div><h4>Informatie</h4><ul><li><a href="voor-ouders.html">Voor ouders</a></li><li><a href="vragen.html">Veelgestelde vragen</a></li><li><a href="scholen.html">Voor scholen</a></li><li><a href="voorwaarden.html">Algemene voorwaarden</a></li><li><a href="privacy.html">Privacy</a></li></ul></div>
       <div><h4>Tips voor ouders</h4><ul><li><a href="blind-leren-typen.html">Blind leren typen (+ vingerplaat)</a></li><li><a href="vanaf-welke-leeftijd-typen.html">Vanaf welke leeftijd?</a></li><li><a href="typecursus-dyslexie.html">Typecursus bij dyslexie</a></li><li><a href="gratis-typecursus.html">Gratis typecursus?</a></li></ul></div>
@@ -283,7 +308,7 @@
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
 <script src="assets/js/minidemo.js?v=11" defer></script>
-<script src="assets/js/site.js?v=6" defer></script>
+<script src="assets/js/site.js?v=7" defer></script>
 <script src="assets/js/menu.js" defer></script>
 </body>
 </html>

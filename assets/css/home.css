@@ -1,0 +1,229 @@
+/* Nieuwe homepage (Tim, 29-10-2026: "de layout van het ontwerp overnemen, met onze dingen erin").
+   Opbouw van het ontwerp: Flits groot in de bovenkant, donkerblauw met geel, een rij met icoontjes, "Zo werkt het" in
+   vier stappen op lichtblauw, een donkerblauwe band en een gele afsluiter met golvende overgangen.
+   Bewust anders dan het ontwerp: geen verzonnen reviews (verboden), geen handschriftletter (Tim 28-10: niet te veel
+   lettertypes), en de inhoud blijft die van de huidige site (prijs, proefles, mini-les, garanties, wie maakt het).
+   Alles hangt onder body.nieuw, zodat de andere pagina's niet veranderen. */
+.nieuw{--navy:#17245a;--navy-d:#0d1640;--geel:#ffc93c;--geel-d:#d9a21b;--lucht:#e6f3ff;--wit:#fffefb;--zacht:#4a5578}
+body.nieuw{background:var(--wit);color:var(--zacht)}
+.nieuw h1,.nieuw h2,.nieuw h3{color:var(--navy)}
+.nieuw .sint-balk{background:var(--navy-d)}
+
+/* knoppen: geel met een rand eronder, zoals in het spel */
+.nieuw .btn{background:var(--geel);color:var(--navy);border:0;border-radius:999px;box-shadow:0 4px 0 var(--geel-d);transition:background .15s,transform .08s,box-shadow .08s}
+.nieuw .btn:hover{background:#ffd666}
+.nieuw .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--geel-d)}
+.nieuw .btn:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+.nieuw .btn.line{background:#fff;color:var(--navy);border:2px solid var(--navy);box-shadow:0 4px 0 var(--navy)}
+.nieuw .btn.line:hover{background:#f3f6ff}
+.nieuw .btn.navy{background:var(--navy);color:#fff;box-shadow:0 4px 0 var(--navy-d)}
+.nieuw .btn.navy:hover{background:#22327a}
+.nieuw .btn.groot{padding:16px 30px;font-size:18px}
+.nieuw .arrow{color:var(--navy)}
+
+/* menubalk: FLITSVINGERS met gele snelheidsstreepjes */
+.nieuw nav{background:rgba(255,255,255,.97);border-bottom:0;box-shadow:0 2px 0 rgba(23,36,90,.07)}
+.nieuw nav .wrap{height:72px}
+.nieuw .brand{gap:10px;color:var(--navy);text-transform:uppercase;letter-spacing:.05em;font-size:23px}
+.nieuw .brand .wm{display:inline-block;transform:skewX(-8deg)}
+.nieuw .vaart{display:inline-flex;flex-direction:column;align-items:flex-end;gap:4px}
+.nieuw .vaart i{display:block;height:4px;border-radius:2px;background:var(--geel)}
+.nieuw .vaart i:nth-child(1){width:16px}.nieuw .vaart i:nth-child(2){width:26px}.nieuw .vaart i:nth-child(3){width:12px}
+.nieuw .links a,.nieuw .login{color:var(--navy)}
+.nieuw .links a:hover,.nieuw .login:hover{color:#3a5bff}
+.nieuw .menu-knop{border:2px solid var(--navy);background:#fff;color:var(--navy)}
+.nieuw nav .btn{white-space:nowrap}
+@media (max-width:520px){.nieuw .brand{font-size:18px;gap:7px}.nieuw .vaart i:nth-child(2){width:20px}.nieuw .vaart i:nth-child(1){width:12px}.nieuw .vaart i:nth-child(3){width:9px}}
+
+/* golvende overgangen tussen de blokken */
+.nieuw .vlak{position:relative;z-index:1}
+.nieuw .golf{position:absolute;left:0;width:100%;height:56px;display:block;pointer-events:none;color:var(--wit)}
+.nieuw .golf path{fill:currentColor}
+.nieuw .golf.boven{bottom:100%;margin-bottom:-1px}
+.nieuw .golf.onder{top:100%;margin-top:-1px;transform:scaleY(-1)}
+@media (max-width:700px){.nieuw .golf{height:30px}}
+
+/* bovenkant: Flits groot links, de kop rechts, op de route naar het Kampioenscircuit uit de cursus */
+.held{position:relative;overflow:hidden;background:#bfe6ff url(../img/route.webp) 50% 100%/cover no-repeat}
+.held::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.08) 30%,rgba(255,255,255,.84) 48%,rgba(255,255,255,.93) 100%)}
+.held .golf{top:auto;bottom:-1px}
+.held-grid{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6.2fr);gap:36px;min-height:620px}
+.held-flits{position:relative;align-self:end;padding-bottom:20px}
+.held-flits img{width:min(100%,370px);margin:0 0 0 auto;filter:drop-shadow(0 18px 16px rgba(13,22,64,.28))}
+.ballon{position:absolute;z-index:2;top:64px;left:0;margin:0;background:#fff;color:var(--navy);font-family:var(--head);font-weight:600;font-size:21px;line-height:1.15;
+  border:3px solid var(--navy);border-radius:18px;padding:10px 16px;box-shadow:0 4px 0 var(--navy);transform:rotate(-4deg)}
+.ballon::after{content:"";position:absolute;right:26px;bottom:-14px;width:20px;height:20px;background:#fff;border-right:3px solid var(--navy);border-bottom:3px solid var(--navy);transform:rotate(45deg) skew(8deg,8deg);border-bottom-right-radius:4px}
+.held-tekst{align-self:center;padding:56px 0 100px}
+.nieuw .over{display:inline-block;background:var(--navy);color:#fff;font-size:14.5px;border-radius:999px;padding:6px 15px;line-height:1.3}
+.held h1{font-size:clamp(38px,4.7vw,62px);line-height:1.08;margin:18px 0 18px;max-width:600px}
+.onderstreep{position:relative;display:inline-block;white-space:nowrap;isolation:isolate}
+.onderstreep::after{content:"";position:absolute;left:-3%;right:-3%;bottom:-.06em;height:.3em;z-index:-1;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M4 13 C 50 5, 120 4, 196 9' fill='none' stroke='%23ffc93c' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat 0 0/100% 100%}
+.held .lead{font-size:clamp(17px,1.5vw,19.5px);max-width:540px;color:var(--zacht)}
+.held .lead-kort{display:none}
+.held .row{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin-top:30px}
+.held .onder{margin-top:18px;font-size:15.5px;color:var(--zacht)}
+.held .onder a{color:var(--navy);font-weight:700}
+.held .tel-knop-onder{display:none}
+/* sticker: de eerste drie lessen zijn gratis */
+.gratis{position:absolute;left:1%;bottom:92px;z-index:3;width:128px;height:128px;border-radius:50%;background:var(--geel);color:var(--navy);display:grid;place-items:center;text-align:center;
+  font-family:var(--head);font-weight:600;font-size:16px;line-height:1.12;padding:14px;box-shadow:0 5px 0 var(--geel-d),0 10px 22px rgba(13,22,64,.2);transform:rotate(-10deg)}
+.gratis::before{content:"";position:absolute;inset:7px;border-radius:50%;border:2px dashed rgba(23,36,90,.45)}
+.gratis b{display:block;font-size:25px;font-weight:600}
+
+/* icoontjesrij */
+.ikonen{padding:30px 0 78px}
+.ik-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.ik{text-align:center}
+.ik i{width:74px;height:74px;border-radius:50%;background:var(--geel);display:grid;place-items:center;margin:0 auto 14px;box-shadow:0 4px 0 var(--geel-d)}
+.ik svg{width:36px;height:36px;fill:none;stroke:var(--navy);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ik h3{font-size:19px}
+.ik p{font-size:15.5px;margin-top:5px;line-height:1.5}
+
+/* koppen in het midden */
+.kop-midden{text-align:center;max-width:700px;margin:0 auto}
+.kop-midden p{margin-top:12px;font-size:18px}
+.nieuw .klein-kop{display:inline-block;font-family:var(--head);font-weight:600;font-size:15px;color:var(--navy);background:var(--geel);border-radius:999px;padding:4px 14px;margin-bottom:12px}
+
+/* zo werkt een les: vier stappen op lichtblauw */
+.stappen{background:var(--lucht);padding:44px 0 56px}
+.stappen .golf{color:var(--lucht)}
+.st-grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:44px}
+.st-grid::before{content:"";position:absolute;top:78px;left:12%;right:12%;border-top:3px dashed rgba(23,36,90,.28)}
+.st{position:relative;text-align:center}
+.st-beeld{position:relative;width:156px;height:156px;margin:0 auto;border-radius:50%;overflow:hidden;border:4px solid #fff;background:#fff;box-shadow:0 0 0 3px var(--navy),0 7px 0 3px var(--navy)}
+.st-beeld img{width:100%;height:100%;object-fit:cover}
+.st-beeld img.flits{object-fit:contain;object-position:50% 10%;padding-top:10px;background:#fff6dc}
+.st-nr{position:absolute;top:-4px;left:calc(50% - 92px);z-index:2;width:42px;height:42px;border-radius:50%;background:var(--geel);border:3px solid var(--navy);display:grid;place-items:center;
+  font-family:var(--head);font-weight:600;font-size:20px;color:var(--navy)}
+.st h3{margin-top:22px;font-size:20px}
+.st p{font-size:15.5px;margin-top:6px}
+
+/* een wereld vol avontuur: tekst links, de mini-les rechts */
+.wereld{padding:96px 0 72px}
+.wr-grid{display:grid;grid-template-columns:minmax(0,4.4fr) minmax(0,6.6fr);gap:52px;align-items:center}
+.wr-tekst h2{font-size:clamp(30px,3.4vw,42px)}
+.wr-tekst p{margin-top:14px;font-size:17.5px}
+.wr-werelden{margin:24px 0 0;border-radius:18px;overflow:hidden;border:3px solid var(--navy);box-shadow:0 6px 0 var(--navy)}
+.wr-werelden img{width:100%}
+.wr-demo{position:relative}
+.wr-demo .md{margin:0;max-width:none}
+.spel{position:absolute;top:-24px;right:-12px;z-index:6;margin:0;background:var(--geel);color:var(--navy);font-family:var(--head);font-weight:600;font-size:18px;line-height:1.15;
+  border:3px solid var(--navy);border-radius:16px;padding:9px 15px;box-shadow:0 4px 0 var(--navy);transform:rotate(5deg)}
+
+/* waarom nu, in kaarten */
+.waarom2{padding:40px 0 96px}
+.nieuw .wn-grid{gap:22px;margin-top:36px}
+.nieuw .wn-kaart{background:#fff;border:2.5px solid var(--navy);border-radius:20px;box-shadow:0 5px 0 var(--navy);padding:24px 22px 22px}
+.nieuw .wn-kaart b{width:40px;height:40px;border:2.5px solid var(--navy);font-size:19px}
+.nieuw .wn-kaart h3{font-size:20px}
+.nieuw .wn-kaart p{font-size:16px}
+
+/* donkerblauwe band */
+.band{background:var(--navy);color:#d9e0ff;padding:40px 0 48px}
+.band .golf{color:var(--navy)}
+.band h2{color:#fff}
+.band .kop-midden p{color:#c9d2f5}
+.nieuw .band .teasers{margin-top:36px}
+.nieuw .band .teaser{background:#fff;border:0;border-radius:20px;box-shadow:0 6px 0 var(--navy-d)}
+.nieuw .band .teaser:hover{transform:translateY(-3px)}
+.nieuw .band .teaser h3{color:var(--navy)}
+.nieuw .band .teaser .arrow{color:var(--navy)}
+
+/* wie maakt het */
+.maker-s2{padding:104px 0 40px}
+.nieuw .maker{background:#fff;border:2.5px solid var(--navy);border-radius:22px;box-shadow:0 6px 0 var(--navy)}
+.nieuw .maker a{color:var(--navy)}
+.nieuw .m-hoi{border:2.5px solid var(--navy);box-shadow:0 3px 0 var(--navy)}
+
+/* prijs */
+.prijs2{padding:56px 0 110px}
+.nieuw .price{border:2.5px solid var(--navy);border-radius:24px;box-shadow:0 8px 0 var(--navy);margin-top:36px}
+.nieuw .price .buy{background:#fff8e2;border-left:2.5px solid var(--navy)}
+.nieuw .amount b{color:var(--navy)}
+.nieuw .aanb-label{border:2px solid var(--navy)}
+.nieuw .buy .fine a,.nieuw .verder a{color:var(--navy)}
+.nieuw .verder{text-align:center}
+@media (max-width:860px){.nieuw .price .buy{border-left:0;border-top:2.5px solid var(--navy)}}
+
+/* gele afsluiter */
+.slot{background:var(--geel);padding:24px 0 0}
+.slot .golf{color:var(--geel)}
+.slot-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:end}
+.slot-grid .t{padding:20px 0 64px}
+.slot h2{font-size:clamp(30px,3.6vw,46px)}
+.slot p{margin:12px 0 26px;font-size:19px;color:var(--navy)}
+.slot img{width:230px;margin-right:40px}
+
+/* voettekst op donkerblauw */
+.nieuw footer{position:relative;background:var(--navy);color:#c3cbee;border-top:0;margin-top:0;padding:56px 0 36px}
+.nieuw footer .golf{color:var(--navy)}
+.nieuw footer h4{color:var(--geel)}
+.nieuw footer a{color:#e3e8ff}
+.nieuw footer a:hover{color:var(--geel)}
+.nieuw footer .brand{color:#fff}
+.nieuw footer .about,.nieuw footer li[style]{color:#aab4e0!important}
+.nieuw .legal{border-top:1px solid rgba(255,255,255,.15);color:#aab4e0}
+
+/* tablet */
+@media (max-width:980px){
+  .held-grid{grid-template-columns:minmax(0,4fr) minmax(0,6fr);min-height:540px}
+  .ballon{font-size:17px;top:24px}
+  .ik-grid{grid-template-columns:repeat(2,1fr);gap:30px 20px}
+  .st-grid{grid-template-columns:repeat(2,1fr);gap:40px 20px}
+  .st-grid::before{display:none}
+  .wr-grid{grid-template-columns:1fr;gap:44px}
+  .wr-tekst{max-width:680px}
+}
+
+/* telefoon: Flits naast de kop, alles onder elkaar */
+@media (max-width:700px){
+  .held{background-position:20% 100%}
+  .held::before{background:rgba(255,255,255,.86)}
+  .held-grid{grid-template-columns:minmax(0,1fr) 112px;grid-template-areas:"over over" "kop flits" "lead lead" "knop knop" "onder onder" "gratis gratis";
+    gap:0 8px;min-height:0;padding:20px 16px 64px;align-items:start}
+  .held-tekst{display:contents}
+  .held .over{grid-area:over;justify-self:start;font-size:13px}
+  .held h1{grid-area:kop;font-size:31px;margin:14px 0 14px}
+  .held-flits{grid-area:flits;align-self:start;padding:8px 0 0}
+  .held-flits img{width:112px}
+  .ballon{display:none}
+  .held .lead{grid-area:lead}
+  .held .row{grid-area:knop;margin-top:20px}
+  .held .row .arrow{display:none}
+  .held .onder{grid-area:onder;margin-top:12px;font-size:14.5px}
+  .gratis{grid-area:gratis;position:relative;left:auto;top:auto;bottom:auto;justify-self:center;width:auto;height:auto;border-radius:999px;padding:9px 20px;margin-top:20px;font-size:15px;transform:rotate(-2deg)}
+  .gratis::before{inset:4px;border-radius:999px}
+  .gratis b{display:inline;font-size:15px}
+  .ikonen{padding:22px 0 64px}
+  .ik i{width:62px;height:62px}.ik svg{width:30px;height:30px}
+  .ik h3{font-size:17px}.ik p{font-size:14.5px}
+  .stappen{padding:28px 0 40px}
+  .st-grid{gap:34px 14px;margin-top:30px}
+  .st-beeld{width:118px;height:118px}
+  .st-nr{width:36px;height:36px;font-size:17px;left:calc(50% - 72px)}
+  .st h3{font-size:17px;margin-top:16px}.st p{font-size:14.5px}
+  .wereld{padding:64px 0 52px}
+  .spel{display:none}
+  body.nieuw{padding-bottom:0}.nieuw footer{padding-bottom:104px}   /* ruimte voor de vaste knop, op donkerblauw */
+  .waarom2{padding:24px 0 72px}
+  .band{padding:24px 0 34px}
+  .maker-s2{padding:72px 0 30px}
+  .prijs2{padding:40px 0 84px}
+  .slot-grid{grid-template-columns:1fr;gap:0}
+  .slot-grid .t{padding:16px 0 0}
+  .slot img{width:150px;justify-self:end;margin:-10px 10px 0 0}
+  .slot .btn{width:100%}
+}
+/* telefoon met touchscherm: de knop gaat naar "Vraag de gratis proefles aan", met de zin eronder */
+@media (pointer:coarse) and (max-width:820px){
+  .held .lead-lang{display:none}.held .lead-kort{display:block}
+  .held .row .btn{width:100%}
+  .held .tel-knop-onder{display:block;grid-area:onder;margin-top:8px;text-align:center;font-size:14px;color:var(--zacht);font-weight:700}
+  .held .onder{display:none}
+  .wr-demo .md{padding:12px;border-radius:18px}
+  .wr-demo .md-kop{gap:10px;margin:0 0 8px}.wr-demo .md-kop img{width:44px;height:44px}
+  .wr-demo .md-kop h2{font-size:17px}.wr-demo .md-kop p{font-size:13px;margin:0}
+  .wr-demo .md-uitleg{font-size:12.5px;margin:8px 0 0;line-height:1.35}
+}
+@media (prefers-reduced-motion:reduce){.nieuw .btn,.nieuw .band .teaser{transition:none}}
