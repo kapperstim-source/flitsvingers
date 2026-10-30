@@ -160,7 +160,7 @@
   .ts-waarom{margin:8px auto 0;max-width:460px;font-size:15.5px;line-height:1.45;color:var(--zacht)}
   .ts-bewijs{margin:12px auto 0;max-width:460px;text-align:left;font-size:13.5px;line-height:1.45;color:var(--navy);background:#fff;border-left:4px solid var(--geel);border-radius:10px;padding:9px 12px}
   .ts-beeld{margin:14px 0 0;border-radius:18px;overflow:hidden;border:2.5px solid var(--navy);box-shadow:0 5px 0 var(--navy)}
-  .ts-beeld img{width:100%;aspect-ratio:16/9;object-fit:cover}
+  .ts-beeld img{width:100%;height:auto}
   .ts-sub{margin:18px 0 0;font-family:var(--head);font-weight:600;font-size:21px;color:var(--navy)}
   .tel-start .mailmij{margin:10px auto 0;max-width:460px;text-align:left}
   .tel-start .mailmij label[for]{font-size:14.5px;color:var(--zacht);font-weight:600;margin-bottom:6px}
