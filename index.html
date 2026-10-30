@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="assets/css/site.css?v=9">
 <link rel="stylesheet" href="assets/css/minidemo.css?v=8">
 <link rel="stylesheet" href="assets/css/nieuw.css?v=1">
-<link rel="stylesheet" href="assets/css/home.css?v=2">
+<link rel="stylesheet" href="assets/css/home.css?v=3">
 <script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js?v=0.160.0"}}</script>
 </head>
 <body class="home nieuw">
@@ -42,6 +42,27 @@
 </nav>
 
 <main id="top">
+<!-- TELEFOON-START (Tim, 30-10-2026): op een telefoon staat het mailformulier meteen bovenaan, zonder eerst door te klikken.
+     Zelfde formulier als op proefles-aanvragen.html (site.js); de gewone bovenkant (.held) is dan verborgen. -->
+<section class="tel-start" id="tel-start">
+  <div class="wrap">
+    <p class="ts-label">Gratis proefles · groep 6, 7 en 8</p>
+    <p class="ts-kop">Blind leren typen, stap voor stap én met plezier!</p>
+    <p class="ts-intro">Met Flitsvingers leert je kind op een leuke en speelse manier blind typen. Door interactieve oefeningen en een eigen 3D-racegame wordt oefenen een stuk leuker.</p>
+    <figure class="ts-beeld"><img src="assets/img/site_race.webp?v=2" alt="Race tegen Flits op het Kampioenscircuit, uit de cursus" width="1200" height="750" fetchpriority="high"></figure>
+    <p class="ts-sub">Probeer de eerste 3 lessen gratis</p>
+    <form class="mailmij" id="mailmij" novalidate>
+      <label for="mm-mail">Vul je e-mailadres in, dan mailen we je de link</label>
+      <div class="mm-rij"><input type="email" id="mm-mail" name="email" autocomplete="email" inputmode="email" placeholder="jouw@email.nl" required><button class="btn groot" type="submit">Mail mij de gratis lessen</button></div>
+      <input type="text" id="mm-hp" name="website" class="mm-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="mm-status" id="mm-status" role="status" aria-live="polite"></p>
+      <p class="mm-klein">Typen oefen je op een laptop of Chromebook. Open de mail daar, dan begint je kind met één klik. Geen account en geen abonnement. <a href="privacy.html">Privacy</a></p>
+    </form>
+    <ul class="ts-chips"><li>3 lessen gratis</li><li>10 minuten per dag</li><li>Voelt als een racespel</li></ul>
+  </div>
+  <svg class="golf" viewBox="0 0 1440 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 28 C 240 56 480 0 720 22 S 1200 52 1440 18 V56 H0 Z"/></svg>
+</section>
+
 <section class="held">
   <div class="wrap held-grid">
     <div class="held-flits">
@@ -194,7 +215,7 @@
         <p class="fine" style="margin:0" data-normaal="Per kind, inclusief btw. Dat is ongeveer €1,63 per les.">Per kind, inclusief btw. Daarna weer €49.</p>
         <div class="garantie"><p><b>Niet tevreden?</b> Binnen 30 dagen je geld terug. Een mail naar <a href="mailto:info@flitsvingers.nl">info@flitsvingers.nl</a> is genoeg.</p><p><b>Diploma-garantie.</b> Haalt je kind binnen een jaar het diploma niet, terwijl het alle lessen deed en vijf keer het proefexamen probeerde? Ook dan je geld terug. <a href="voorwaarden.html#diploma-garantie">Zo werkt het</a>.</p></div>
         <button class="btn" id="koop" type="button">Koop de cursus</button>
-        <a class="btn line desk-only" href="cursus.html">Eerst gratis proberen</a><a class="btn line phone-only" href="proefles-aanvragen.html">Vraag de gratis proefles aan</a>
+        <a class="btn line desk-only" href="cursus.html">Eerst gratis proberen</a><a class="btn line phone-only" href="#tel-start">Vraag de gratis proefles aan</a>
         <p class="fine">Betalen met iDEAL | Wero, Bancontact of creditcard, veilig via Stripe. Na het betalen krijg je per mail een inlogcode. Door te betalen ga je akkoord met de <a href="voorwaarden.html">algemene voorwaarden</a>.</p>
         <p class="aanb fine aanb-cadeau"><b>Cadeau voor in de schoen?</b> Na het kopen print je zelf een <a href="cadeaubon.html">cadeaubon</a>.</p>
       </div>
@@ -209,7 +230,7 @@
     <div class="t">
       <h2>Begin vandaag met les 1</h2>
       <p>Gratis, zonder account en in een paar minuten gespeeld.</p>
-      <a class="btn navy groot desk-only" href="cursus.html">Start de gratis proefles</a><a class="btn navy groot phone-only" href="proefles-aanvragen.html">Vraag de gratis proefles aan</a>
+      <a class="btn navy groot desk-only" href="cursus.html">Start de gratis proefles</a><a class="btn navy groot phone-only" href="#tel-start">Vraag de gratis proefles aan</a>
     </div>
     <img src="assets/img/flits_juich.webp" alt="" width="497" height="640" loading="lazy">
   </div>
@@ -230,7 +251,7 @@
   </div>
 </footer>
 
-<div class="sticky" id="sticky"><a class="btn desk-only" href="cursus.html">Start de gratis proefles</a><a class="btn phone-only" href="proefles-aanvragen.html">Vraag de gratis proefles aan</a></div>
+<div class="sticky" id="sticky"><a class="btn desk-only" href="cursus.html">Start de gratis proefles</a><a class="btn phone-only" href="#tel-start">Vraag de gratis proefles aan</a></div>
 
 <div class="modal" id="modal" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modal-h">
   <img src="assets/img/flits_wijs.webp" alt="">
@@ -309,7 +330,7 @@
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
 <script src="assets/js/minidemo.js?v=11" defer></script>
-<script src="assets/js/site.js?v=7" defer></script>
+<script src="assets/js/site.js?v=8" defer></script>
 <script src="assets/js/menu.js" defer></script>
 </body>
 </html>

@@ -104,6 +104,7 @@ document.querySelectorAll('[data-gc]').forEach(a => a.addEventListener('click', 
       if (r.ok) {
         mmMeld('Verstuurd! Kijk in je mail (soms staat hij bij Reclame of Spam).', 'ok'); mmMail.value = '';
         telGC('link-gemaild', 'Link gemaild');
+        if (document.body.classList.contains('home')) telGC('link-gemaild-home', 'Link gemaild vanaf de homepage');   // formulier bovenaan op de telefoon (30-10-2026)
         if (herinner) { telGC('link-gemaild-herinnering', 'Link gemaild met herinneringen'); vink.checked = false; }
       } else {
         mmMeld(r.error === 'druk' ? 'Het is even druk. Probeer het over een paar minuten nog eens.' : 'Dat lukte niet. Controleer je e-mailadres en probeer het nog eens.', 'fout');
@@ -126,8 +127,10 @@ document.querySelectorAll('[data-gc]').forEach(a => a.addEventListener('click', 
     if (window.goatcounter && window.goatcounter.count) { wacht.splice(0).forEach(([p, t]) => tel(p, t)); }
     if (++pogingen > 30) clearInterval(spoel);
   }, 500);
-  const delen = [['.ikonen,.facts', 'scroll-1-voorbij-start'], ['#meer', 'scroll-2-meer-lezen'], ['#maker', 'scroll-4b-wie-maakt-dit'],
-                 ['#prijs', 'scroll-5-prijs'], ['.slot,.cta', 'scroll-7-einde']];   // .ikonen en .slot: nieuwe homepage (29-10-2026)
+  // .ikonen en .slot: nieuwe homepage (29-10-2026); 1b t/m 1d: de drie nieuwe blokken tussen de bovenkant en 'Wat je als ouder wilt weten'
+  const delen = [['.ikonen,.facts', 'scroll-1-voorbij-start'], ['#raceweekend', 'scroll-1b-zo-werkt-het'], ['.wereld', 'scroll-1c-mini-les'],
+                 ['#waarom', 'scroll-1d-waarom-nu'], ['#meer', 'scroll-2-meer-lezen'], ['#maker', 'scroll-4b-wie-maakt-dit'],
+                 ['#prijs', 'scroll-5-prijs'], ['.slot,.cta', 'scroll-7-einde']];
   const io = new IntersectionObserver(items => items.forEach(it => {
     if (!it.isIntersecting) return;
     io.unobserve(it.target);
