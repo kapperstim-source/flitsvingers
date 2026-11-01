@@ -9,6 +9,8 @@
 <link rel="icon" href="/favicon-192.png?v=2" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/typrapport.css?v=2">
+<link rel="stylesheet" href="assets/css/resultaat.css?v=1">
 <link rel="preload" href="assets/data/lessen.json" as="fetch" crossorigin>
 <link rel="preload" href="assets/data/teksten.json" as="fetch" crossorigin>
 <script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js?v=0.160.0"}}</script>
@@ -566,6 +568,7 @@ body.calm *{animation:none!important;transition:none!important}
             <button class="btn" id="btn-continue">Verder</button>
             <button class="btn ghost small" id="btn-proef" hidden>Proefexamen</button>
             <button class="btn ghost small" id="btn-garage">Jouw garage</button>
+            <button class="btn ghost small" id="btn-rapport" hidden>Typrapport</button>
           </div>
         </div>
         <img src="assets/img/flits_zwaai.webp" alt="Flits de jachtluipaard" id="hello-img" width="432" height="640">
@@ -704,13 +707,24 @@ body.calm *{animation:none!important;transition:none!important}
 
   <!-- RESULTAAT -->
   <section class="screen" id="s-result"><div class="card result" id="result"></div></section>
+
+  <!-- TYPRAPPORT (na de typ-check, voor ouders; sinds 1-11-2026, assets/js/typrapport.js) -->
+  <section class="screen" id="s-rapport">
+    <div class="exhead">
+      <button class="iconbtn" data-go="map"><svg viewBox="0 0 24 24" class="i"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Route</button>
+      <div class="spacer"></div>
+      <button class="iconbtn" id="rapport-print"><svg viewBox="0 0 24 24" class="i"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Printen</button>
+    </div>
+    <div id="rapport"></div>
+  </section>
 </main>
 
 <div class="modal" id="modal" hidden><div class="sheet" role="dialog" aria-modal="true"><button class="x" id="modal-x" aria-label="Sluiten">×</button><div id="modal-body"></div></div></div>
 <div id="toast" role="status"></div>
 
 <script src="assets/js/config.js"></script>
-<script src="assets/js/app.js?v=22"></script>
+<script src="assets/js/typrapport.js?v=1"></script>
+<script src="assets/js/app.js?v=23"></script>
 <script>window.goatcounter = { path: function () { return location.pathname }, endpoint: 'https://flitsvingers.goatcounter.com/count' };
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>

@@ -1,0 +1,73 @@
+/* Typrapport na de typ-check (1-11-2026, variant A "het briefje"; zie assets/js/typrapport.js).
+   Zonder blokken (Tim, 1-11-2026): één vel papier, geen kaarten, tegels, vakjes of bolletjes; het toetsenbord is alleen letters
+   met getekende lussen en golflijntjes, de keuzes zijn onderstreepte woorden. */
+.tr-vel{--tr-navy:#17245a;--tr-zacht:#4a5578;--tr-oranje:#f08a2a;--tr-geel:#e0a400;--tr-lijn:#cfd6ea;
+  max-width:720px;margin:6px auto 30px;background:#fff;padding:38px 46px 34px;color:var(--tr-zacht);font-size:17px;line-height:1.65;
+  box-shadow:0 1px 2px rgba(23,36,90,.08),0 12px 30px -18px rgba(23,36,90,.35)}
+@media (max-width:620px){.tr-vel{margin:0 -14px 20px;padding:24px 20px 28px;box-shadow:none}}
+.tr-vel h1,.tr-vel h2{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--tr-navy);line-height:1.15;margin:0;letter-spacing:0}
+.tr-vel h1{font-size:clamp(27px,5.4vw,36px);margin-bottom:14px}
+.tr-vel h2{font-size:21px;margin:34px 0 8px;display:flex;gap:10px;align-items:baseline}
+.tr-vel p{margin:0 0 12px}
+.tr-vel b{color:var(--tr-navy)}
+.tr-nr{font-size:15px;color:#8a93b0}
+.tr-kopregel{display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:3px double var(--tr-navy);margin-bottom:26px;font-size:14px;flex-wrap:wrap}
+.tr-kopregel img{width:30px;height:30px}
+.tr-merk{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--tr-navy);letter-spacing:.05em;text-transform:uppercase;font-size:16px}
+.tr-sp{flex:1}
+
+/* toetsenbord: alleen letters */
+.tr-vel .kb-svg{display:block;width:100%;height:auto;margin:4px 0 2px;overflow:visible}
+.kb-svg .t .hit{fill:transparent}
+.kb-svg .t[data-c]{cursor:pointer}
+.kb-svg .l{font:600 24px 'Fredoka',sans-serif;fill:var(--tr-navy)}
+.kb-svg .t.leeg .l{fill:#bcc3d6}
+.kb-svg .t.gekozen .l{fill:#3a5bff}
+.kb-svg .s{font:700 12px 'Nunito',sans-serif;fill:var(--tr-zacht)}
+.kb-svg .t.zoekt .s{fill:#b65a0a}
+.kb-svg .lus{fill:none;stroke:var(--tr-oranje);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.kb-svg .golf{fill:none;stroke:var(--tr-geel);stroke-width:2.6;stroke-linecap:round}
+.kb-svg .boog{fill:none;stroke:var(--tr-navy);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.kb-svg .boog-label{font:600 15px 'Fredoka',sans-serif;fill:var(--tr-navy)}
+.kb-svg .spatie{stroke:var(--tr-lijn);stroke-width:3;stroke-linecap:round}
+@media (max-width:600px){.kb-svg .l{font-size:30px;transform:translateY(5px)}.kb-svg .golf{transform:translateY(7px)}.kb-svg .s{display:none}.kb-svg .boog-label{font-size:22px}}
+.tr-sleutel{font-size:14.5px;margin:0 0 8px}
+.tr-detail{font-size:15px;min-height:26px}
+
+/* ritme van één zin */
+.tr-vel .rit-svg{display:block;width:100%;height:auto;margin:4px 0}
+.rit-svg .balk{fill:#9aa6c9}.rit-svg .balk.begin{fill:var(--tr-oranje)}.rit-svg .balk.spatie{fill:#dfe4f1}
+.rit-svg .lijn{stroke:#b9c3df;stroke-width:1.5;stroke-dasharray:5 5}
+.rit-svg .basis{stroke:var(--tr-navy);stroke-width:2}
+.rit-svg .lijn-label{font:700 12px 'Nunito',sans-serif;fill:#8a93b0}
+.rit-svg .letter{font:500 14px 'JetBrains Mono',monospace;fill:var(--tr-navy)}
+@media (max-width:600px){.rit-svg .letter{font-size:22px}.rit-svg .lijn-label{font-size:18px}}
+
+/* plan van Flits en de meting na les 3: regels met een stippellijn ertussen */
+ol.tr-plan{list-style:none;padding:0;margin:8px 0 14px}
+ol.tr-plan li{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:9px 0;border-top:1px dotted var(--tr-lijn)}
+ol.tr-plan li:last-child{border-bottom:1px dotted var(--tr-lijn)}
+.tr-wanneer{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--tr-navy)}
+@media (max-width:420px){ol.tr-plan li{grid-template-columns:1fr;gap:0}}
+.tr-na3{display:grid;grid-template-columns:40px 1fr 1fr;margin:4px 0 14px;font-size:15.5px}
+.tr-na3 span{padding:6px 0;border-top:1px dotted var(--tr-lijn)}
+.tr-na3 .tr-l{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--tr-navy)}
+.tr-groet{display:flex;align-items:center;gap:10px;margin-top:16px}
+.tr-groet img{width:44px;height:44px}
+.tr-groet span{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--tr-navy);font-size:20px}
+
+/* meekijken: onderstreepte woorden in plaats van knoppen */
+.tr-kies{display:flex;flex-wrap:wrap;gap:6px 24px;margin:6px 0 8px}
+.tr-kies button{font:600 18px 'Fredoka',sans-serif;color:var(--tr-navy);background:none;border:0;border-bottom:3px solid var(--tr-lijn);border-radius:0;padding:3px 0;cursor:pointer;box-shadow:none}
+.tr-kies button:hover{border-bottom-color:#9aa6c9}
+.tr-kies button.aan{border-bottom-color:var(--tr-oranje)}
+.tr-antwoord{font-weight:700;color:var(--tr-navy);min-height:26px}
+.tr-klein{font-size:13.5px;color:#6b7392;margin-top:30px;padding-top:12px;border-top:1px solid var(--tr-lijn)}
+
+/* boven het vel: Route en Printen als gewone tekstlinks */
+#s-rapport .exhead .iconbtn{border:0;background:none;box-shadow:none;padding:6px 0;font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;text-decoration-color:var(--line2)}
+
+/* tijdens de typ-check: geen toetsenbord, handjes of hint op het scherm (het kind typt op de eigen manier) */
+#s-ex.checkmode .visual,#s-ex.checkmode .hint{display:none}
+
+@media print{header.top,#s-rapport .exhead{display:none!important}.tr-vel{box-shadow:none;margin:0;max-width:none}}

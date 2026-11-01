@@ -1,0 +1,18 @@
+/* Resultaatschermen zonder blokken (1-11-2026, Tim: "geen ontwerpen in blokken"): na een les en na de typ-check.
+   Geen kaart, geen tegels en geen omlijnde vakken; Flits links, daarnaast gewone zinnen met de cijfers erin.
+   Eén hoofdknop, de rest als tekstlinks. Het examenresultaat houdt zijn kaart (class "card result"). */
+.rv{display:grid;grid-template-columns:230px 1fr;gap:36px;align-items:center;max-width:920px;margin:16px auto 34px;padding:6px 4px}
+.rv-flits{width:230px;height:auto;display:block}
+.rv .stars .i{width:34px;height:34px}
+.rv h1{font-size:clamp(32px,5vw,46px);margin:6px 0 12px}
+.rv p{margin:0 0 10px;font-size:17px;line-height:1.6;color:var(--ink);max-width:620px}
+.rv p.rv-groot{font-size:19.5px}
+.rv b{font-weight:800}
+.rv p.rv-dag{color:var(--mint-d);font-weight:800}
+.rv .res-teaser{background:none;border:0;border-top:1px solid var(--line2);border-radius:0;padding:12px 0 0;margin:16px 0 0;font-weight:500;max-width:620px}
+.rv-knop{margin-top:22px}
+.rv p.rv-links{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;color:var(--muted)}
+.rv-link{background:none;border:0;padding:2px 0;font:inherit;font-weight:800;color:var(--ink);cursor:pointer;
+  text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;text-decoration-color:var(--line2)}
+.rv-link:hover,.rv-link:focus-visible{text-decoration-color:var(--blue)}
+@media (max-width:700px){.rv{grid-template-columns:1fr;gap:4px;margin-top:4px}.rv-flits{width:130px}.rv p.rv-groot{font-size:18px}}

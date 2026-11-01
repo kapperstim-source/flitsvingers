@@ -9,7 +9,7 @@ const CFG = {
   FREE: 3,                           // gratis proeflessen
   TEST_HASH: 'fd100fe306a2c9538c203a2bbc4e30ae40698f4cfa53bdeb0b650ff09bc2cb95',  // sha-256 van de testcode van Tim (vóór de lancering verwijderen)
   DAY_GOAL: 12 * 60,
-  PROEF_SEC: 180, EXAM_SEC: 300,
+  PROEF_SEC: 180, EXAM_SEC: 300, CHECK_SEC: 120,
   NORM: 100, NORM_DYS: 75, MAX_FOUT: 3,
   PROEF_FROM: 24 /* proefexamen open na les 24: les 25 zegt "vanaf nu mag je het proefexamen proberen" */
 };
@@ -655,7 +655,9 @@ function renderMap() {
   const secs = S.days[today()] || 0, dayDone = secs >= CFG.DAY_GOAL;
   $('#hello-title').textContent = 'Hoi ' + S.nick + '!';
   let sub;
-  if (fo === 1) sub = 'Ik ben Flits. Samen leer je typen met tien vingers, zonder te kijken. Een les duurt ongeveer 10 minuten, en fouten maken mag.';
+  const eerstCheck = fo === 1 && !S.typcheck && !Object.keys(S.lessons).length;   // nieuw: eerst de typ-check (twee minuten)
+  if (eerstCheck) sub = 'Ik ben Flits. Eerst wil ik zien hoe jij nu typt: dat duurt twee minuten. Daarna beginnen we met les 1.';
+  else if (fo === 1) sub = 'Ik ben Flits. Samen leer je typen met tien vingers, zonder te kijken. Een les duurt ongeveer 10 minuten, en fouten maken mag.';
   else if (fo && !paidOk(fo)) sub = 'Je hebt de gratis proeflessen gedaan. Knap hoor! Met de volledige cursus leer je alle letters, en haal je je diploma.';
   else if (fo === 30) sub = 'Je bent klaar voor het examen! Oefen eerst met het proefexamen als je wilt.';
   else if (fo) sub = 'Lekker bezig! Klaar voor les ' + fo + '? Fouten maken mag: je hoeft nooit opnieuw te beginnen.';
@@ -663,13 +665,15 @@ function renderMap() {
   $('#hello-sub').textContent = sub;
   $('#hello-img').src = IMG(dayDone ? 'rust' : (S.diploma ? 'diploma' : 'zwaai'));
   const btn = $('#btn-continue');
-  if (fo && paidOk(fo)) { btn.innerHTML = (fo === 30 ? 'Naar het examen' : 'Verder met les ' + fo) + ' <span class="kbdhint">Enter</span>'; btn.onclick = () => openLesson(fo); }
+  if (eerstCheck) { btn.innerHTML = 'Start de typ-check <span class="kbdhint">Enter</span>'; btn.onclick = () => openTypcheck(); }
+  else if (fo && paidOk(fo)) { btn.innerHTML = (fo === 30 ? 'Naar het examen' : 'Verder met les ' + fo) + ' <span class="kbdhint">Enter</span>'; btn.onclick = () => openLesson(fo); }
   else if (fo) { btn.innerHTML = 'Ontgrendel de cursus'; btn.onclick = () => lockedModal(fo); }
   else { btn.innerHTML = 'Bekijk je diploma'; btn.onclick = () => openDiploma(); }
   const pb = $('#btn-proef');
   pb.hidden = !(paidOk(29) && reachable(29));
   pb.onclick = () => openLesson(29);
   $('#btn-garage').onclick = () => openGarage();
+  const rb = $('#btn-rapport'); rb.hidden = !S.typcheck; rb.onclick = () => openRapport();
   $('#dayring').style.setProperty('--p', Math.min(100, secs / CFG.DAY_GOAL * 100));
   $('#daymin').textContent = Math.floor(secs / 60);
   $('#day-msg').textContent = dayDone ? 'Je dag is af! Extra oefenen mag, maar hoeft niet. Morgen verder.' : '12 minuten per dag is genoeg. Daarna is je dag af.';
@@ -745,7 +749,7 @@ function openLesson(id) {
   $('#intro-text').textContent = L.intro;
   const exl = $('#intro-exlist');
   const examLike = L.soort === 'proef' || L.soort === 'examen';
-  exl.innerHTML = examLike ? '' : weekendPlan(L).map((p, i) => '<span>' + (i + 1) + '. ' + (p.fase === 'race' ? '' : FASENAAM[p.fase] + ': ') + H(p.spec.label) + '</span>').join('');
+  exl.innerHTML = examLike ? '' : lesPlan(L).map((p, i) => '<span>' + (i + 1) + '. ' + (p.fase === 'race' ? '' : FASENAAM[p.fase] + ': ') + H(p.spec.label) + '</span>').join('');
   $('#intro-visual').hidden = examLike;
   const prep = $('#exam-prep');
   prep.hidden = !examLike;
@@ -822,6 +826,191 @@ sink.addEventListener('keydown', e => {
 });
 
 function stopTimers() { if (R) { clearInterval(R.tick); R.tick = null; (R.timers || []).forEach(clearTimeout); R.timers = []; R.wachtGo = false; } const a = $('#w-aftel'); if (a) a.innerHTML = ''; }
+
+/* ================= meting per toets (sinds 1-11-2026) =================
+   Per letter: hoe vaak getypt, hoe vaak eerst een andere toets, en de zoektijd (van de vorige goede toets tot de eerste druk
+   op deze plek). Pauzes langer dan 5 s tellen niet mee (dan was het kind even weg). In S.meting: [n, fout, msSom, msN];
+   bij n >= 200 halveren we alles, zodat de meting over de laatste lessen gaat. In S.wissel: 'rt' = moest R, typte T. */
+const ZOEK_MAX = 5000;
+function meetToets(doel, zoek, fouten, mis) {
+  if (R.check) {   // de typ-check bewaart alles per plek, voor het rapport
+    R.chk.zoek[R.pos] = zoek; R.chk.fout[R.pos] = fouten;
+    mis.forEach(c => { if (/[a-z]/.test(c) && /[a-z]/.test(doel)) R.chk.w[doel + c] = (R.chk.w[doel + c] || 0) + 1; });
+    return;
+  }
+  if (R.drill || !/^[a-z ]$/.test(doel)) return;
+  if (zoek != null) { const lz = R.lesZoek[doel] || (R.lesZoek[doel] = [0, 0]); lz[0] += zoek; lz[1]++; }   // voor de tip van Flits na de les
+  mis.forEach(c => { if (/[a-z]/.test(c) && doel !== ' ') R.lesWissel[doel + c] = (R.lesWissel[doel + c] || 0) + 1; });
+  S.meting = S.meting || {}; S.wissel = S.wissel || {};
+  const m = S.meting[doel] || (S.meting[doel] = [0, 0, 0, 0]);
+  m[0]++; if (fouten) m[1]++;
+  if (zoek != null) { m[2] += Math.round(zoek); m[3]++; }
+  if (m[0] >= 200) S.meting[doel] = m.map(x => Math.round(x / 2));
+  mis.forEach(c => { if (/[a-z]/.test(c) && doel !== ' ') S.wissel[doel + c] = (S.wissel[doel + c] || 0) + 1; });
+}
+
+/* ================= aanpassen per kind (sinds 1-11-2026) =================
+   Wat het typrapport belooft, gebeurt hier: (1) zag de ouder het kind naar de handen kijken, dan krijgen les 2 en 3 een extra
+   blind-rondje; (2) zoekletters uit de typ-check krijgen een extra blind-rondje in de les waarin ze erbij komen; (3) letters die
+   door elkaar gaan krijgen extra woorden zodra het kind ze allebei kent (die les en de twee lessen erna). Hooguit twee extra's per
+   les, zodat een les rond de tien minuten blijft. Het opwarmen kiest de zwakste letters uit de meting van alle lessen. */
+function zoekLettersCheck() {
+  const tc = S.typcheck; if (!tc || !tc.l || !window.FVRapport) return [];
+  return Object.keys(tc.l).filter(c => window.FVRapport.soort(tc.l[c]) === 'zoekt');
+}
+function wisselParen() {   // [a, b]-paren die door elkaar gaan, sterkste eerst (typ-check en lessen samen)
+  const m = {};
+  [(S.typcheck || {}).w || {}, S.wissel || {}].forEach(w => Object.entries(w).forEach(([k, n]) => {
+    if (!/^[a-z]{2}$/.test(k)) return; const key = [k[0], k[1]].sort().join(''); m[key] = (m[key] || 0) + n;
+  }));
+  return Object.entries(m).filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).map(([k]) => [k[0], k[1]]);
+}
+function paarTekst(a, b, al) {
+  const w = shuffle(WORDS.filter(x => x.length <= 9 && okChars(x, al) && x.includes(a) && x.includes(b)));
+  if (w.length >= 4) return w.slice(0, 8).join(' ');
+  const een = shuffle(WORDS.filter(x => x.length <= 8 && okChars(x, al) && (x.includes(a) || x.includes(b))));
+  return [a + b, b + a, a + a + b, b + b + a, ...w, ...een.slice(0, 5 - w.length)].join(' ');
+}
+function letterTekst(c, al) {
+  const w = shuffle(WORDS.filter(x => x.length <= 9 && okChars(x, al) && x.includes(c)));
+  return w.length >= 3 ? w.slice(0, 6).join(' ') : makeDrill([c]);
+}
+function extrasVoor(L) {
+  if (!L || !L.oefeningen || !L.oefeningen.length) return [];
+  const uit = [], al = allowedFor(L.id), lv = lesVanLetter(), tc = S.typcheck;
+  if (tc && (tc.kijkt === 'handen' || tc.kijkt === 'allebei') && (L.id === 2 || L.id === 3))
+    uit.push({ spec: { label: 'Extra blind-rondje', extra: genWords(L, al, 6), blind: true }, fase: 'tunnel' });
+  zoekLettersCheck().filter(c => lv[c] === L.id).forEach(c =>
+    uit.push({ spec: { label: 'Extra blind-rondje: de ' + c.toUpperCase(), extra: letterTekst(c, al), blind: true }, fase: 'tunnel' }));
+  wisselParen().forEach(([a, b]) => {
+    const vanaf = Math.max(lv[a] || 99, lv[b] || 99);
+    if (L.id >= vanaf && L.id <= vanaf + 2 && al.set.has(a) && al.set.has(b))
+      uit.push({ spec: { label: 'Extra: de ' + a.toUpperCase() + ' en de ' + b.toUpperCase() + ' uit elkaar', extra: paarTekst(a, b, al) }, fase: 'training' });
+  });
+  return uit.slice(0, 2);
+}
+/* het raceweekend van deze les, met de extra's van dit kind erin: training-extra's na de training, blind-extra's na de tunnel */
+function lesPlan(L) {
+  const plan = weekendPlan(L);
+  extrasVoor(L).forEach(x => {
+    const na = x.fase === 'training' ? ['garage', 'training'] : ['garage', 'training', 'tunnel'];
+    let i = 0; plan.forEach((p, j) => { if (na.includes(p.fase)) i = j + 1; });
+    plan.splice(i, 0, x);
+  });
+  return plan;
+}
+/* zwakste letters uit de meting van alle lessen: foutkans plus aarzelen (boven 0,45 s) */
+function zwaksteLetters(al, nieuw) {
+  const m = S.meting || {};
+  return Object.entries(m).filter(([c, x]) => /[a-z]/.test(c) && al.set.has(c) && !nieuw.includes(c) && x[0] >= 8)
+    .map(([c, x]) => [c, x[1] / x[0] + Math.max(0, (x[3] ? x[2] / x[3] : 0) - 450) / 1500])
+    .filter(([, s]) => s >= 0.12).sort((a, b) => b[1] - a[1]).map(([c]) => c);
+}
+/* tip van Flits na de les (vaste regels): eerst een letter die het kind door een andere vervangt, anders een letter die het zoekt */
+function tipVanFlits() {
+  const fn = c => FNAME[FMAP[c]] || 'vinger', U = c => c.toUpperCase();
+  const w = Object.entries(R.lesWissel || {}).filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1])[0];
+  if (w) {
+    const [a, b] = w[0];
+    return 'Je drukte ' + w[1] + ' keer de ' + U(b) + ' als je de ' + U(a) + ' bedoelde. ' +
+      (fn(a) === fn(b) ? 'Ze horen allebei bij je ' + fn(a) + ': let goed op welke kant je vinger op gaat.' : 'De ' + U(a) + ' is voor je ' + fn(a) + ', de ' + U(b) + ' voor je ' + fn(b) + '.');
+  }
+  const z = Object.entries(R.lesZoek || {}).filter(([c, x]) => /[a-z]/.test(c) && x[1] >= 3).map(([c, x]) => [c, x[0] / x[1]]).sort((a, b) => b[1] - a[1])[0];
+  if (z && z[1] > 1000) return 'De ' + U(z[0]) + ' zoek je nog even. Die hoort bij je ' + fn(z[0]) + '. Laat je vingers op de thuisrij liggen en voel de weg naar de ' + U(z[0]) + '.';
+  return '';
+}
+/* nieuwe meting na les 3 (de laatste gratis les): per letter uit de lessen, en de score in de tunnel */
+function naMeting(id) {
+  const al = allowedFor(id), m = S.meting || {}, l = {};
+  al.set.forEach(c => { const x = m[c]; if (/[a-z]/.test(c) && x && x[0] >= 5) l[c] = { n: x[0], fout: Math.round(x[1] / x[0] * 1000) / 10, ms: x[3] ? Math.round(x[2] / x[3]) : 0 }; });
+  let g = 0, f = 0; Object.values(S.blind || {}).forEach(b => { g += b.g; f += b.f; });
+  return { d: today(), les: id, l, blind: g + f >= 20 ? Math.floor(g / (g + f) * 100) : null };
+}
+
+/* ================= typ-check (sinds 1-11-2026) =================
+   Vóór les 1: twee minuten typen op de eigen manier, zonder toetsenbord op het scherm. Daarna een rapport voor de ouder
+   (assets/js/typrapport.js). De eerste vier zinnen bevatten samen alle 26 letters. */
+const TYPCHECK = ['de zebra en de yak eten pizza', 'wij gaan met de taxi naar de quiz', 'de clown in het circus valt', 'mijn opa heeft een gele fiets',
+  'max de boxer doet elke dag yoga', 'de vis in het aquarium is blij', 'de hond van de buren blaft heel hard', 'wij kijken een film over een walvis'];   // in de eerste zes zinnen staat elke letter minstens twee keer
+const CHECK_LES = { id: 0, titel: 'Typ-check', soort: 'check', nieuw: [], oefeningen: [] };
+function openTypcheck() {
+  tel('typcheck-uitleg', 'Typ-check uitleg');
+  openModal('<img class="welcomeimg" src="' + IMG('wijs') + '" alt="">' +
+    '<h2 style="text-align:center">Eerst de typ-check</h2>' +
+    '<p style="margin:8px 0 6px">Ik wil zien hoe jij nu typt. Typ twee minuten de zinnen die je ziet, <b>op jouw eigen manier</b>. Het toetsenbord op het scherm is even weg.</p>' +
+    '<p style="margin:0 0 6px">Fouten maken mag: druk dan gewoon de goede toets. Na twee minuten stopt het vanzelf.</p>' +
+    '<p style="margin:0 0 16px;font-size:14px">Daarna is er een rapport voor je ouder: zo weet die waar ik met je aan ga werken.</p>' +
+    '<button class="btn" id="tc-go" style="width:100%">Start de typ-check</button>' +
+    '<p style="text-align:center;margin-top:12px;font-size:14px"><a href="#" id="tc-skip">Overslaan, meteen naar les 1</a></p>');
+  $('#tc-go').onclick = () => { closeModal(); startTypcheck(); };
+  $('#tc-skip').onclick = e => { e.preventDefault(); closeModal(); openLesson(1); };
+}
+function startTypcheck() {
+  stopAudio(); ac(); stopTimers();
+  tel('typcheck-gestart', 'Typ-check gestart');
+  curLesson = CHECK_LES;
+  R = { lesson: CHECK_LES, idx: 0, results: [], lessonErrs: {}, shortenNext: false, examLike: true, check: true, dipName: '', dys: !!S.settings.dys,
+        plan: [], words: [], trainApm: [], delen: 0, combo: 0, timers: [], munten: 0, woordNr: 0, woordFout: false,
+        chk: { zoek: [], fout: [], w: {} } };
+  renderKeyboard($('#kbd-ex')); renderHands($('#hands-ex'));
+  show('ex');
+  startExercise();
+}
+function finishTypcheck(apm, fout) {
+  const text = R.text, n = R.pos, l = {}, z = R.chk.zoek, f = R.chk.fout;
+  let ws = 0, wsn = 0, iw = 0, iwn = 0;
+  const begin = i => i === 0 || text[i - 1] === ' ';
+  for (let i = 0; i < n; i++) {
+    if (!/[a-z]/.test(text[i]) || z[i] == null) continue;
+    if (begin(i)) { ws += z[i]; wsn++; } else { iw += z[i]; iwn++; }
+  }
+  /* per letter: de vaste pauze aan het begin van een woord gaat er eerst af, anders lijkt elke beginletter (de d van "de") een zoekletter */
+  const extra = wsn && iwn ? Math.max(0, ws / wsn - iw / iwn) : 0, tijden = {};
+  for (let i = 0; i < n; i++) {
+    const c = text[i]; if (!/[a-z]/.test(c)) continue;
+    const x = l[c] || (l[c] = { n: 0, f: 0, ms: 0, mn: 0 }); x.n++; if (f[i]) x.f++;
+    if (z[i] != null) (tijden[c] = tijden[c] || []).push(begin(i) ? Math.max(0, z[i] - extra) : z[i]);
+  }
+  Object.keys(l).forEach(c => { const s = tijden[c] || []; l[c].mn = s.length; l[c].ms = s.length ? Math.round(s.reduce((a, b) => a + b, 0) / s.length) : 0; });
+  /* zin voor het ritme: liefst "mijn opa heeft een gele fiets", anders de laatste zin die helemaal af is */
+  let start = 0, gekozen = null;
+  TYPCHECK.forEach((t, k) => { const eind = start + t.length; if (eind <= n && (k === 3 || !gekozen || gekozen.k !== 3)) gekozen = { k, start, t }; start = eind + 1; });
+  const zin = gekozen ? { t: gekozen.t, ms: [...gekozen.t].map((_, j) => Math.round(z[gekozen.start + j] || 0)) } : null;
+  S.typcheck = { v: 1, d: today(), sec: Math.round(elapsedMin() * 60), apm, fout, n, l, w: R.chk.w,
+    ws: wsn ? Math.round(ws / wsn) : 0, wsn, iw: iwn ? Math.round(iw / iwn) : 0, iwn, zin, kijkt: (S.typcheck || {}).kijkt || null };
+  save();
+  tel('typcheck-klaar', 'Typ-check klaar');
+  R.waiting = true;
+  $('#result').className = 'rv';
+  $('#result').innerHTML =
+    '<img class="rv-flits" src="' + IMG('juich') + '" alt="Flits juicht">' +
+    '<div class="rv-tekst"><h1>Typ-check klaar!</h1>' +
+    '<p class="rv-groot">Dank je, ' + H(S.nick) + '! Nu weet ik hoe jij typt. Je haalde <b>' + apm + ' aanslagen per minuut</b>. ' +
+    'Nu ga je leren typen zonder te kijken.</p>' +
+    '<p>Laat het rapport aan je ouder zien. Daar staat precies in waar we mee aan de slag gaan.</p>' +
+    '<div class="rv-knop"><button class="btn" id="tc-rapport">Rapport voor je ouder</button></div>' +
+    '<p class="rv-links"><button class="rv-link" id="tc-les1">Begin met les 1</button></p></div>';
+  show('result');
+  $('#tc-rapport').onclick = () => openRapport();
+  $('#tc-les1').onclick = () => { R = null; openLesson(1); };
+  sfx('win');
+}
+/* letter -> les waarin hij erbij komt, en letter -> vinger (voor het rapport) */
+function lesVanLetter() { const m = {}; LES.forEach(L => L.nieuw.forEach(k => { if (/^[a-z]$/.test(k) && !m[k]) m[k] = L.id; })); return m; }
+function openRapport() {
+  if (!S.typcheck) return openTypcheck();
+  tel('typrapport-bekeken', 'Typrapport bekeken');
+  R = null;
+  const d = new Date(S.typcheck.d + 'T12:00:00');
+  window.FVRapport.toon($('#rapport'), S.typcheck, {
+    naam: S.nick, datum: d.getDate() + ' ' + ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'][d.getMonth()],
+    les: lesVanLetter(), vinger: c => FNAME[FMAP[c]] || 'vinger', norm: S.settings.dys ? CFG.NORM_DYS : CFG.NORM, volgende: firstOpen() || 30,
+    opKijk: v => { S.typcheck.kijkt = v; save(); tel('typrapport-meegekeken-' + v, 'Ouder keek mee: ' + v); }
+  });
+  show('rapport');
+}
+$('#rapport-print').onclick = () => window.print();
+
 function startLesson() {
   if (!curLesson) return;
   stopAudio(); ac();
@@ -829,13 +1018,13 @@ function startLesson() {
   const examLike = L.soort === 'proef' || L.soort === 'examen';
   if (examLike && L.soort === 'examen' && !$('#parentok').checked) return;
   const dipName = examLike && $('#dipname') ? $('#dipname').value.trim().slice(0, 30) : '';
-  const plan = weekendPlan(L);
-  /* opwarmen: elke les begint (na de garage) met de lastige letters van de vorige les, als het kind die al kent */
+  const plan = examLike ? [] : lesPlan(L);
+  /* opwarmen: elke les begint (na de garage) met de lastige letters van de vorige les en de zwakste letters uit de meting, als het kind die al kent */
   const al = allowedFor(L.id);
-  const warm = examLike ? [] : (S.lastTricky || []).filter(c => okChars(makeDrill([c]), al)).slice(0, 2);
+  const warm = examLike ? [] : [...new Set([...(S.lastTricky || []), ...zwaksteLetters(al, L.nieuw)])].filter(c => okChars(makeDrill([c]), al)).slice(0, 2);
   if (warm.length && plan.length) plan.splice(plan.filter(q => q.fase === 'garage').length, 0, { spec: { label: 'Opwarmen: je lastige letters', warm }, fase: 'training' });
   R = { lesson: L, idx: 0, results: [], lessonErrs: {}, shortenNext: false, examLike, dipName, dys: !!S.settings.dys,
-        plan, words: [], trainApm: [], delen: 0, combo: 0, timers: [], munten: 0, woordNr: 0, woordFout: false };
+        plan, words: [], trainApm: [], delen: 0, combo: 0, timers: [], munten: 0, woordNr: 0, woordFout: false, lesZoek: {}, lesWissel: {} };
   if (!examLike && world()) { W.naam(S.nick); W.uiterlijk(kartLook()); W.gebied((zoneVan(L.id) || {}).id || 'dorp'); R.delen = plan.length && plan[0].fase === 'garage' ? 0 : 4; W.delen(R.delen); }
   renderKeyboard($('#kbd-ex')); renderHands($('#hands-ex'));
   const touch = (navigator.maxTouchPoints || 0) > 0 && !matchMedia('(pointer: fine)').matches;
@@ -850,8 +1039,10 @@ function startExercise(drillText) {
   let ex;
   R.item = drillText || R.examLike ? null : R.plan[R.idx];
   if (drillText) ex = { label: 'Herhaal-rondje', text: drillText, kind: 'normal' };
+  else if (R.check) ex = { label: 'Typ-check: typ zoals jij nu typt', kind: 'exam', seconds: CFG.CHECK_SEC, text: TYPCHECK.join(' '), long: true };
   else if (R.examLike) ex = buildExam(L.soort);
   else if (R.item.spec.warm) ex = { label: R.item.spec.label, kind: 'normal', text: makeDrill(R.item.spec.warm) };
+  else if (R.item.spec.extra) ex = { label: R.item.spec.label, kind: 'normal', blind: !!R.item.spec.blind, text: R.item.spec.extra };   // extra's van dit kind (lesPlan)
   else if (R.item.spec.eigen) ex = { label: R.item.spec.label, blind: false, kind: 'race', tempo: 40, text: eigenRaceTekst(L) };
   else ex = buildExercise(L, R.item.spec);
   if (ex.kind === 'race' && !drillText) ex.tempo = raceTempo(ex.tempo);
@@ -860,10 +1051,11 @@ function startExercise(drillText) {
   let text = ex.text.replace(/\s+/g, ' ').trim();
   if (!drillText && R.shortenNext && ex.kind === 'normal' && !ex.long) text = shorten(text);
   if (!drillText && !R.examLike && ex.kind !== 'race') R.words.push(...text.split(' '));
-  Object.assign(R, { ex, text, pos: 0, errors: 0, errAt: new Set(), consec: 0, active: 0, lastT: 0, waiting: false, spans: [], t0: 0, flitsDone: false, flitsVoor: undefined, roepT: 0, laatsteStuk: false, spook: 0, combo: 0, woordNr: 0, woordFout: false, muntOpBaan: false });
+  Object.assign(R, { ex, text, pos: 0, errors: 0, errAt: new Set(), consec: 0, active: 0, lastT: 0, waiting: false, spans: [], t0: 0, flitsDone: false, flitsVoor: undefined, roepT: 0, laatsteStuk: false, spook: 0, combo: 0, woordNr: 0, woordFout: false, muntOpBaan: false,
+    prevOk: 0, posEerst: null, posFout: 0, posMis: [] });
   stopTimers();
   $('#ex-title').textContent = R.examLike ? L.titel : 'Les ' + L.id + ': ' + L.titel;
-  $('#ex-sub').textContent = drillText ? 'Extra: alleen de lastige letters' : R.examLike ? 'Typ zo netjes mogelijk. De tijd start bij je eerste toets.' : 'Oefening ' + (R.idx + 1) + ' van ' + R.plan.length + ' · ' + FASENAAM[R.item.fase] + (R.shortenNext ? ' · iets korter, rustig aan' : '');
+  $('#ex-sub').textContent = drillText ? 'Extra: alleen de lastige letters' : R.check ? 'Typ op jouw eigen manier. Fouten maken mag. De tijd start bij je eerste toets.' : R.examLike ? 'Typ zo netjes mogelijk. De tijd start bij je eerste toets.' : 'Oefening ' + (R.idx + 1) + ' van ' + R.plan.length + ' · ' + FASENAAM[R.item.fase] + (R.shortenNext ? ' · iets korter, rustig aan' : '');
   R.shortenNext = false;
   $('#ex-dots').innerHTML = '';
   renderFasen();
@@ -871,6 +1063,7 @@ function startExercise(drillText) {
   lab.className = 'exlabel' + (ex.blind ? ' blind' : '');
   lab.innerHTML = (ex.blind ? ICON.eyeoff : ex.kind === 'race' ? ICON.flag : (ex.kind === 'speed' || ex.kind === 'exam') ? ICON.clock : ICON.target) + H(ex.label);
   $('#s-ex').classList.toggle('blindmode', !!ex.blind);
+  $('#s-ex').classList.toggle('checkmode', !!R.check);   // typ-check: geen toetsenbord, handjes of hint op het scherm
   $('#ex-panel').classList.remove('on');
   $('#capswarn').classList.remove('on');
   const timed = ex.kind === 'speed' || ex.kind === 'exam';
@@ -914,7 +1107,7 @@ function startExercise(drillText) {
   else if (R.w3 && fase === 'garage') setFlits('wijs', 'Elke goede toets is een onderdeel voor je kart!');
   else if (R.w3 && eersteVan('training')) { setFlits('typen', 'Rij in je eigen tempo. Netjes gaat voor snel.'); play('rw_training_1'); W.start(); }
   else { setFlits('typen', R.idx === 0 && !drillText ? 'Jij kunt dit!' : 'Lekker bezig!'); if (R.w3) W.start(); }
-  if (ex.kind === 'exam') setFlits('typen', 'Rustig ademen. Je kunt dit!');
+  if (ex.kind === 'exam') setFlits('typen', R.check ? 'Typ zoals je altijd doet!' : 'Rustig ademen. Je kunt dit!');
   focusSink();
   $('#typebox').classList.remove('unfocused');
 }
@@ -1010,6 +1203,7 @@ function typeChar(ch) {
   if (ch === '\n' || ch === '\r') return;
   const target = R.text[R.pos];
   const now = performance.now();
+  if (R.posEerst == null) R.posEerst = now;   // zoektijd: van de vorige goede toets tot de eerste druk op deze plek
   if (!R.t0) startClock();
   if (R.lastT) { const gap = (now - R.lastT) / 1000; if (gap < 8) { R.active += gap; addSeconds(gap); } }
   R.lastT = now;
@@ -1019,8 +1213,10 @@ function typeChar(ch) {
     flashKey(kb, keyOf(ch).key, 'hit');
     const s = R.spans[R.pos];
     s.classList.remove('cur', 'err'); s.classList.add('done'); if (R.errAt.has(R.pos)) s.classList.add('had');
+    meetToets(target, R.prevOk && R.posEerst - R.prevOk < ZOEK_MAX ? R.posEerst - R.prevOk : null, R.posFout, R.posMis);
+    R.prevOk = now; R.posEerst = null; R.posFout = 0; R.posMis = [];
     R.pos++; R.consec = 0; R.combo++;
-    sfx('tick'); telVinger(target, true);
+    sfx('tick'); if (!R.check) telVinger(target, true);
     if (R.w3) {
       if (R.item && R.item.fase === 'garage') {   // elke kwart van de garage-oefening = een nieuw onderdeel voor de kart
         const moet = Math.min(4, Math.floor(R.pos / R.text.length * 4 + 1e-9));
@@ -1033,16 +1229,17 @@ function typeChar(ch) {
     if (!R.examLike && target !== ' ' && (R.text[R.pos] === ' ' || R.pos >= R.text.length)) muntVoorWoord();   // woord af = munt
     if (R.ex.kind === 'race') $('#run-me').style.left = (12 + R.pos / R.text.length * 80) + '%';
     if (R.pos >= R.text.length) {
-      if (R.ex.kind === 'speed' || R.ex.kind === 'exam') { appendMore(); }
+      if ((R.ex.kind === 'speed' || R.ex.kind === 'exam') && !R.check) { appendMore(); }
       else { updateStats(); finishExercise(); return; }
     }
     R.spans[R.pos].classList.add('cur');
     keepVisible();
     updateHint();
   } else {
-    R.errors++; R.errAt.add(R.pos); R.consec++; R.combo = 0; R.woordFout = true; telVinger(target, false);
+    R.errors++; R.errAt.add(R.pos); R.consec++; R.combo = 0; R.woordFout = true; R.posFout++; R.posMis.push(ch);
+    if (!R.check) telVinger(target, false);
     if (R.w3) { W.fout(); comboShow(); }
-    if (target !== ' ') { S.errs[target] = (S.errs[target] || 0) + 1; R.lessonErrs[target] = (R.lessonErrs[target] || 0) + 1; }
+    if (target !== ' ' && !R.check) { S.errs[target] = (S.errs[target] || 0) + 1; R.lessonErrs[target] = (R.lessonErrs[target] || 0) + 1; }
     sfx('err');
     flashKey(kb, keyOf(ch).key, 'wrong');
     const s = R.spans[R.pos];
@@ -1073,6 +1270,7 @@ function finishExercise() {
   const apm = Math.round(correct / mins);
   const fout = correct + R.errors ? Math.round(R.errors / (correct + R.errors) * 1000) / 10 : 0;
   try { sink.blur(); } catch (e) {}
+  if (R.check) return finishTypcheck(apm, fout);
   if (ex.kind === 'exam') { save(); return showExamResult({ apm, fout, acc, kind: ex.exam }); }
   const stars = acc >= 95 ? 3 : acc >= 85 ? 2 : 1;
   if (!R.drill) R.results.push({ acc, stars, apm, kind: ex.kind });
@@ -1166,9 +1364,10 @@ function finishLesson() {
   S.lessons[L.id] = { done: true, stars: Math.max(stars, prev ? prev.stars || 0 : 0), acc: Math.max(acc, prev ? prev.acc || 0 : 0), apm, date: today() };
   const tricky = Object.entries(R.lessonErrs).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([c]) => c);
   S.lastTricky = tricky;   // de volgende les begint hiermee (opwarmen)
+  if (L.id === CFG.FREE && S.typcheck && !S.typcheck.na3) S.typcheck.na3 = naMeting(L.id);   // het typrapport laat nu de vooruitgang zien
   const bonus = stars * 5; S.munten += bonus;
   const nieuw = prev && prev.done ? [] : WINKEL.filter(it => it[4] === L.id).map(it => it[2]);
-  R.lastResult = { L, acc, stars, apm, gained, tricky, munten: R.munten + bonus, nieuw };
+  R.lastResult = { L, acc, stars, apm, gained, tricky, munten: R.munten + bonus, nieuw, tip: tipVanFlits() };
   checkBadges(); save();
   if (L.id <= 3) tel('les-' + L.id + '-afgerond', 'Les ' + L.id + ' afgerond');
   sfx('win'); confetti();
@@ -1203,31 +1402,31 @@ function teaserHTML(L, next) {
 }
 function showResult(res) {
   R.waiting = true;
-  const { L, acc, stars, apm, gained, tricky, munten = 0, nieuw = [] } = res;
+  const { L, acc, stars, apm, tricky, munten = 0, nieuw = [], tip = '' } = res;
   const secs = S.days[today()] || 0;
   const next = firstOpen();
+  /* zonder blokken (Tim, 1-11-2026): geen kaart en geen tegels, maar gewone zinnen met de cijfers erin; één hoofdknop, de rest als tekstlinks */
+  const en = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' en ' + a[a.length - 1];
+  const toetsen = L.nieuw.map(k => k === 'SHIFT' ? 'Shift' : CHARNAME[k] || k.toUpperCase());
+  $('#result').className = 'rv';
   $('#result').innerHTML =
-    '<img src="' + IMG(secs >= CFG.DAY_GOAL ? 'rust' : 'juich') + '" alt="Flits juicht">' +
-    '<div>' + starsHTML(stars) +
-    '<h1 style="margin-top:10px">Les ' + L.id + ' klaar!</h1>' +
-    '<p style="font-size:17px;margin-top:6px">' + (stars === 3 ? 'Heel netjes getypt. Zo leer je het echt.' : stars === 2 ? 'Goed gedaan! Met een herhaal-rondje wordt het nog strakker.' : 'Knap dat je hebt doorgezet. Herhalen helpt echt.') + '</p>' +
-    '<div class="grid4">' +
-      '<div class="stat"><b>' + acc + '%</b><span>nauwkeurig</span></div>' +
-      (S.settings.dys ? '<div class="stat"><b>' + Math.floor(secs / 60) + ' min</b><span>vandaag geoefend</span></div>' : '<div class="stat"><b>' + apm + '</b><span>aanslagen per minuut</span></div>') +
-      '<div class="stat"><b>+' + munten + '</b><span>munten</span></div>' +
-      '<div class="stat"><b>' + (L.nieuw.length ? L.nieuw.map(k => k === 'SHIFT' ? 'Shift' : k.toUpperCase()).join(' ') : Object.keys(S.badges).length) + '</b><span>' + (L.nieuw.length ? 'nieuwe toetsen' : 'stickers') + '</span></div>' +
-    '</div>' +
-    (tricky.length ? '<div class="muted" style="font-size:14px;font-weight:800">Lastige toetsen vandaag:</div><div class="tricky">' + tricky.map(c => '<span>' + H(CHARNAME[c] || c.toUpperCase()) + '</span>').join('') + '</div>' : '') +
-    (nieuw.length ? '<p class="res-nieuw">' + MUNT_ICON + '<span><b>Nieuw in je garage:</b> ' + H(nieuw.join(', ')) + '</span></p>' : '') +
-    (secs >= CFG.DAY_GOAL ? '<p style="color:var(--mint);font-weight:800;margin-top:8px">Je dag is af! Extra oefenen mag, maar hoeft niet.</p>' : '') +
+    '<img class="rv-flits" src="' + IMG(secs >= CFG.DAY_GOAL ? 'rust' : 'juich') + '" alt="Flits juicht">' +
+    '<div class="rv-tekst">' + starsHTML(stars) +
+    '<h1>Les ' + L.id + ' klaar!</h1>' +
+    '<p class="rv-groot">' + (stars === 3 ? 'Heel netjes getypt: ' : stars === 2 ? 'Goed gedaan: ' : 'Knap dat je hebt doorgezet: ') + '<b>' + acc + '%</b> goed' +
+      (S.settings.dys ? ', en je oefende vandaag <b>' + Math.floor(secs / 60) + ' minuten</b>.' : ', met <b>' + apm + ' aanslagen per minuut</b>.') +
+      (toetsen.length ? ' Je kent nu ook de <b>' + H(en(toetsen)) + '</b>.' : '') + '</p>' +
+    '<p>Je verdiende <b>' + munten + ' munten</b>.' + (nieuw.length ? ' Nieuw in je garage: ' + H(en(nieuw.map(x => x.charAt(0).toLowerCase() + x.slice(1)))) + '.' : '') + '</p>' +
+    (tricky.length ? '<p>Lastig vandaag: ' + en(tricky.map(c => 'de <b>' + H(CHARNAME[c] || c.toUpperCase()) + '</b>')) + '.' + (stars < 3 ? ' Met een herhaal-rondje wordt het nog strakker.' : '') + '</p>' : '') +
+    (tip ? '<p><b>Tip van Flits:</b> ' + H(tip) + '</p>' : '') +
+    (secs >= CFG.DAY_GOAL ? '<p class="rv-dag">Je dag is af! Extra oefenen mag, maar hoeft niet.</p>' : '') +
     teaserHTML(L, next) +
-    '<div class="row" style="margin-top:18px">' +
+    '<div class="rv-knop">' +
       (next && paidOk(next) ? '<button class="btn" id="res-next">' + (next === 30 ? 'Naar het examen' : 'Volgende les') + ' <span class="kbdhint">Enter</span></button>'
-        : next ? '<button class="btn yellow" id="res-unlock">Ontgrendel de volledige cursus</button>' : '') +
-      (tricky.length ? '<button class="btn ghost" id="res-drill">' + ICON.redo + 'Herhaal-rondje</button>' : '') +
-      '<button class="btn ghost" id="res-garage">' + MUNT_ICON + 'Naar je garage</button>' +
-      '<button class="btn ghost" id="res-map">Naar de route</button>' +
-    '</div></div>';
+        : next ? '<button class="btn yellow" id="res-unlock">Ontgrendel de volledige cursus</button>' : '') + '</div>' +
+    '<p class="rv-links">' + [tricky.length ? '<button class="rv-link" id="res-drill">Herhaal-rondje</button>' : '',
+      '<button class="rv-link" id="res-garage">Naar je garage</button>', '<button class="rv-link" id="res-map">Naar de route</button>'].filter(Boolean).join('<span aria-hidden="true">·</span>') + '</p>' +
+    '</div>';
   show('result');
   const d = $('#res-drill'); if (d) d.onclick = () => { R.lessonErrs = {}; show('ex'); startExercise(makeDrill(tricky)); };
   const n = $('#res-next'); if (n) n.onclick = () => openLesson(next);
@@ -1257,6 +1456,7 @@ function showExamResult({ apm, fout, acc, kind }) {
   const tips = [];
   if (apm < norm) tips.push('Je tempo was ' + apm + '. Oefen nog wat snelheidsrondes en races, dan komt je tempo vanzelf omhoog.');
   if (fout > CFG.MAX_FOUT) tips.push('Je had ' + String(fout).replace('.', ',') + '% fouten. Typ iets rustiger: nauwkeurig gaat voor snel.');
+  $('#result').className = 'card result';
   $('#result').innerHTML =
     '<img src="' + IMG(pass ? (kind === 'examen' ? 'diploma' : 'juich') : 'rustig') + '" alt="">' +
     '<div><h1>' + (kind === 'examen' ? (pass ? 'Geslaagd!' : close ? 'Bijna!' : 'Nog even oefenen') : (pass ? 'Proefexamen gehaald!' : 'Proefexamen klaar')) + '</h1>' +
@@ -1427,19 +1627,22 @@ function weekMailHTML(p) {
     (hard.length ? '<li>Lastigste toetsen: ' + H(hard.join(', ')) + '. Na een les met fouten kan je kind die extra oefenen met het herhaal-rondje.</li>' : '') +
     '</ul>Tip: een compliment werkt beter dan een herinnering. 10 tot 15 minuten per dag is genoeg.</div>';
 }
+/* knop naar het typrapport (alleen als dit kind de typ-check deed) */
+const rapportKnop = () => S && S.typcheck ? '<p style="margin:10px 0 0"><button class="btn ghost small" id="pr-rapport">Typrapport van ' + H(S.nick) + ' bekijken</button></p>' : '';
+function bindRapportKnop() { const b = $('#pr-rapport'); if (b) b.onclick = () => { closeModal(); openRapport(); }; }
 function openParents() {
   if (DB.session && DB.session.token) {
     const kids = Object.values(DB.profiles);
-    openModal('<h2>Voor ouders</h2><p style="margin-top:6px">Ingelogd als <b>' + H(DB.session.email) + '</b>.</p>' +
+    openModal('<h2>Voor ouders</h2><p style="margin-top:6px">Ingelogd als <b>' + H(DB.session.email) + '</b>.</p>' + rapportKnop() +
       kids.map(weekMailHTML).join('') +
       '<label class="toggle" style="margin-top:8px"><span><b>Wekelijkse mail</b><small>Elke zondagavond een korte update per kind.</small></span><span class="sw"><input type="checkbox" id="wm"' + (DB.session.mail !== false ? ' checked' : '') + '><span></span></span></label>' +
       '<div class="row" style="margin-top:14px"><button class="btn ghost" id="pl">Spelers beheren</button><button class="btn ghost" id="lo">Uitloggen</button></div>');
     $('#wm').onchange = async e => { DB.session.mail = e.target.checked; persist(); try { await api('setMail', { token: DB.session.token, mail: e.target.checked }); toast('Opgeslagen'); } catch (err) { toast('Opslaan lukte niet, probeer later opnieuw.'); } };
-    $('#pl').onclick = openPlayers;
+    $('#pl').onclick = openPlayers; bindRapportKnop();
     $('#lo').onclick = () => { if (confirm('Uitloggen op dit apparaat?')) { DB.session = null; persist(); closeModal(); renderMap(); } };
     return;
   }
-  openModal('<h2>Voor ouders</h2>' +
+  openModal('<h2>Voor ouders</h2>' + rapportKnop() +
     '<p style="margin-top:6px">Log in met het e-mailadres waarmee je hebt betaald en de toegangscode uit je mail. Dan staat de voortgang veilig in je account, op elk apparaat, en krijg je de wekelijkse update.</p>' +
     '<label class="fl" for="lg-mail">E-mailadres</label><input class="field" id="lg-mail" type="email" autocomplete="email" placeholder="naam@voorbeeld.nl">' +
     '<label class="fl" for="lg-code">Toegangscode</label><input class="field" id="lg-code" autocomplete="off" placeholder="FLITS-XXXX-XXXX" style="text-transform:uppercase">' +
@@ -1450,7 +1653,7 @@ function openParents() {
   const params = new URLSearchParams(location.search);
   if (params.get('email')) $('#lg-mail').value = params.get('email');
   if (params.get('code')) $('#lg-code').value = params.get('code');
-  $('#lg-go').onclick = doLogin;
+  $('#lg-go').onclick = doLogin; bindRapportKnop();
   $('#lg-code').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doLogin(); } });
 }
 $('#btn-parents').onclick = openParents;
@@ -1511,7 +1714,7 @@ document.addEventListener('keydown', e => {
     return;
   }
   if (screen === 'intro' && (e.key === ' ' || e.key === 'Enter') && !onControl) { e.preventDefault(); if (!$('#intro-start').disabled) startLesson(); return; }
-  if (screen === 'result' && e.key === 'Enter' && !onControl) { e.preventDefault(); const n = $('#res-next'); if (n) n.click(); return; }
+  if (screen === 'result' && e.key === 'Enter' && !onControl) { e.preventDefault(); const n = $('#res-next') || $('#tc-les1'); if (n) n.click(); return; }
   if (screen === 'map' && e.key === 'Enter' && !onControl) { e.preventDefault(); $('#btn-continue').click(); }
 });
 document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { stopTimers(); R = null; stopAudio(); renderMap(); show(b.dataset.go); }));
