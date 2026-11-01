@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="assets/css/site.css?v=9">
 <link rel="stylesheet" href="assets/css/minidemo.css?v=8">
 <link rel="stylesheet" href="assets/css/nieuw.css?v=1">
-<link rel="stylesheet" href="assets/css/home.css?v=4">
+<link rel="stylesheet" href="assets/css/home.css?v=5">
 <script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js?v=0.160.0"}}</script>
 </head>
 <body class="home nieuw">
@@ -50,7 +50,7 @@
     <p class="ts-kop">Blind leren typen, stap voor stap én met plezier!</p>
     <p class="ts-intro">Met Flitsvingers leert je kind op een leuke en speelse manier blind typen. Door interactieve oefeningen en een eigen 3D-racegame wordt oefenen een stuk leuker.</p>
     <figure class="ts-beeld"><img src="assets/img/shot_les.webp?v=4" alt="Een oefening uit de cursus op de racebaan: de woorden bovenin, het toetsenbord met de juiste vinger onderin" width="1600" height="1013" fetchpriority="high"></figure>
-    <p class="ts-sub">Probeer de eerste 3 lessen gratis</p>
+    <p class="ts-sub">Gratis: een typ-check met rapport voor jou, en de eerste 3 lessen</p>
     <form class="mailmij" id="mailmij" novalidate>
       <label for="mm-mail">Vul je e-mailadres in, dan mailen we je de link</label>
       <div class="mm-rij"><input type="email" id="mm-mail" name="email" autocomplete="email" inputmode="email" placeholder="jouw@email.nl" required><button class="btn groot" type="submit">Mail mij de gratis lessen</button></div>
@@ -154,6 +154,26 @@
       <div class="wn-kaart"><b>2</b><h3>Cijfers op de laptop</h3><p>Op de middelbare school maakt je kind steeds vaker toetsen op de computer. Volgens onderzoeker Russell scoren leerlingen die langzaam typen dan lager op open vragen. Snelle typers juist hoger.</p></div>
       <div class="wn-kaart"><b>3</b><h3>Groep 6 tot 8 is het moment</h3><p>De handen zijn groot genoeg voor het toetsenbord, en je kind typt nog niet elke dag. Hoe korter een gewoonte bestaat, hoe makkelijker je hem verandert.</p></div>
     </div>
+  </div>
+</section>
+
+<!-- TYP-CHECK (sinds 1-11-2026, Tim): het antwoord op "Weet jij hoe je kind typt?". Zonder blokken (Tims ontwerpregel): geen kaart en
+     geen pil, tekst links en een echt typrapport rechts (voorbeeldcijfers, gemaakt in de cursus). Meten: scroll-1e-typcheck,
+     cursus.html?ref=typcheck bij de knop, daarna typcheck-gestart/-klaar in de cursus; op de telefoon link-gemaild-home. -->
+<section id="typcheck" class="typcheck">
+  <div class="wrap tc-grid">
+    <div class="tc-tekst">
+      <p class="tc-boven">Gratis typ-check</p>
+      <h2>Of laat Flits het meten</h2>
+      <p>Je kind typt twee minuten op de eigen manier, nog zonder les. Flits meet elke toets: bij welke letters je kind zoekt, welke letters het door elkaar haalt en hoe vlot het typt.</p>
+      <p>Jij krijgt meteen een rapport, met wat Flits in de lessen extra gaat oefenen. Daarna begint je kind met les 1.</p>
+      <p class="tc-knop"><a class="btn groot desk-only" href="cursus.html?ref=typcheck">Doe de gratis typ-check</a><a class="btn groot phone-only" href="#tel-start">Mail mij de link voor de laptop</a></p>
+      <p class="tc-klein">De typ-check en les 1 tot en met 3 zijn gratis, zonder account.</p>
+    </div>
+    <figure class="tc-beeld">
+      <img src="assets/img/site_typrapport.webp?v=1" alt="Voorbeeld van een typrapport: Sam typt al vlot, maar zoekt bij vier letters de toets. Op het toetsenbord staat een oranje lus om de Q, Z, X en B." width="1200" height="1412" loading="lazy">
+      <figcaption>Voorbeeld van een typrapport, met verzonnen cijfers.</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -330,7 +350,7 @@
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
 <script src="assets/js/minidemo.js?v=11" defer></script>
-<script src="assets/js/site.js?v=8" defer></script>
+<script src="assets/js/site.js?v=9" defer></script>
 <script src="assets/js/menu.js" defer></script>
 </body>
 </html>

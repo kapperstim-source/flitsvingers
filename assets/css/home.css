@@ -73,6 +73,20 @@
 .nieuw .wn-kaart h3{font-size:20px}
 .nieuw .wn-kaart p{font-size:16px}
 
+/* typ-check (1-11-2026): zonder blokken (Tims ontwerpregel) - geen kaart en geen pil; tekst links, een echt typrapport rechts */
+.waarom2{padding-bottom:48px}
+.typcheck{padding:24px 0 96px}
+.tc-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:56px;align-items:center}
+.tc-boven{font-family:var(--head);font-weight:600;color:#b65a0a;letter-spacing:.06em;text-transform:uppercase;font-size:14px;margin:0 0 6px}
+.typcheck h2{font-size:clamp(30px,3.4vw,42px);margin:0 0 14px}
+.typcheck .tc-tekst p{font-size:18px;margin:0 0 12px;max-width:540px}
+.typcheck .tc-knop{margin-top:24px}
+.typcheck .tc-klein{font-size:14.5px;color:var(--zacht)}
+.tc-beeld{margin:0}
+.tc-beeld img{display:block;width:100%;height:auto;box-shadow:0 1px 2px rgba(23,36,90,.1),0 20px 44px -24px rgba(23,36,90,.5)}
+.tc-beeld figcaption{font-size:13.5px;color:var(--zacht);margin-top:10px}
+@media (max-width:860px){.tc-grid{grid-template-columns:1fr;gap:28px}.typcheck{padding:8px 0 72px}.waarom2{padding-bottom:32px}}
+
 /* donkerblauwe band */
 .band{background:var(--navy);color:#d9e0ff;padding:40px 0 48px}
 .band .golf{color:var(--navy)}

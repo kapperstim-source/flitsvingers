@@ -129,7 +129,7 @@ document.querySelectorAll('[data-gc]').forEach(a => a.addEventListener('click', 
   }, 500);
   // .ikonen en .slot: nieuwe homepage (29-10-2026); 1b t/m 1d: de drie nieuwe blokken tussen de bovenkant en 'Wat je als ouder wilt weten'
   const delen = [['.ikonen,.facts', 'scroll-1-voorbij-start'], ['#raceweekend', 'scroll-1b-zo-werkt-het'], ['.wereld', 'scroll-1c-mini-les'],
-                 ['#waarom', 'scroll-1d-waarom-nu'], ['#meer', 'scroll-2-meer-lezen'], ['#maker', 'scroll-4b-wie-maakt-dit'],
+                 ['#waarom', 'scroll-1d-waarom-nu'], ['#typcheck', 'scroll-1e-typcheck'], ['#meer', 'scroll-2-meer-lezen'], ['#maker', 'scroll-4b-wie-maakt-dit'],
                  ['#prijs', 'scroll-5-prijs'], ['.slot,.cta', 'scroll-7-einde']];
   const io = new IntersectionObserver(items => items.forEach(it => {
     if (!it.isIntersecting) return;
