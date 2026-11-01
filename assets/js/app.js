@@ -1005,11 +1005,32 @@ function openRapport() {
   window.FVRapport.toon($('#rapport'), S.typcheck, {
     naam: S.nick, datum: d.getDate() + ' ' + ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'][d.getMonth()],
     les: lesVanLetter(), vinger: c => FNAME[FMAP[c]] || 'vinger', norm: S.settings.dys ? CFG.NORM_DYS : CFG.NORM, volgende: firstOpen() || 30,
-    opKijk: v => { S.typcheck.kijkt = v; save(); tel('typrapport-meegekeken-' + v, 'Ouder keek mee: ' + v); }
+    opKijk: v => { S.typcheck.kijkt = v; save(); tel('typrapport-meegekeken-' + v, 'Ouder keek mee: ' + v); },
+    mail: rapportMailen
   });
   show('rapport');
 }
 $('#rapport-print').onclick = () => window.print();
+/* rapport mailen (sinds 1-11-2026): de server krijgt alleen de bijnaam, cijfers en letters en maakt zelf de tekst. Het adres
+   bewaren we alleen met vinkje, alleen op dit apparaat en los van het profiel (dat gaat met een ouderaccount naar de server),
+   tot de ene mail na les 3; daarna wissen we het */
+const RM = 'flitsvingers_rapportmail';
+function rmLees() { try { return JSON.parse(localStorage.getItem(RM)) || {}; } catch (e) { return {}; } }
+function rmZet(o) { try { localStorage.setItem(RM, JSON.stringify(o)); } catch (e) {} }
+async function rapportMailen(email, vervolg, hp) {
+  const sv = window.FVRapport.samenvatting(S.typcheck);
+  await api('rapportMail', { email, hp, nick: S.nick, apm: S.typcheck.apm, fout: S.typcheck.fout, zoek: sv.zoek, paren: sv.paren, stotter: sv.stotter, vervolg: !!vervolg });
+  tel('typrapport-gemaild', 'Typrapport gemaild');
+  if (vervolg) { const m = rmLees(); m[S.id] = { email }; rmZet(m); tel('typrapport-vervolg-aan', 'Mail na les 3 aangezet'); }
+}
+function vervolgMailen() {
+  const m = rmLees(), x = m[S.id], tc = S.typcheck;
+  if (!x || !x.email || !tc || !tc.na3) return;
+  const letters = Object.keys(tc.na3.l).filter(c => tc.l && tc.l[c] && tc.l[c].mn).map(c => ({ c, voor: tc.l[c].ms, nu: tc.na3.l[c].ms }));
+  api('vervolgMail', { email: x.email, nick: S.nick, letters, blind: tc.na3.blind })
+    .then(() => { delete m[S.id]; rmZet(m); tel('typrapport-vervolgmail', 'Mail na les 3 verstuurd'); })
+    .catch(() => {});   // lukt het niet, dan probeert de volgende les het opnieuw
+}
 
 function startLesson() {
   if (!curLesson) return;
@@ -1365,6 +1386,7 @@ function finishLesson() {
   const tricky = Object.entries(R.lessonErrs).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([c]) => c);
   S.lastTricky = tricky;   // de volgende les begint hiermee (opwarmen)
   if (L.id === CFG.FREE && S.typcheck && !S.typcheck.na3) S.typcheck.na3 = naMeting(L.id);   // het typrapport laat nu de vooruitgang zien
+  if (S.typcheck && S.typcheck.na3) vervolgMailen();   // de ene mail na les 3, als de ouder daarom vroeg (anders gebeurt er niets)
   const bonus = stars * 5; S.munten += bonus;
   const nieuw = prev && prev.done ? [] : WINKEL.filter(it => it[4] === L.id).map(it => it[2]);
   R.lastResult = { L, acc, stars, apm, gained, tricky, munten: R.munten + bonus, nieuw, tip: tipVanFlits() };

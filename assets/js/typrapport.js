@@ -163,6 +163,14 @@ window.FVRapport = (() => {
       '<div class="tr-kies">' + Object.entries(kk).map(([v, x]) => '<button type="button" data-kijk="' + v + '"' + (tc.kijkt === v ? ' class="aan"' : '') + '>' + x + '</button>').join('') + '</div>' +
       '<p class="tr-antwoord" id="tr-antwoord">' + (tc.kijkt ? antwoord(tc.kijkt, naam, o.volgende) : '') + '</p>' +
       '<p>Na les 3 meet Flits opnieuw. Dan zie je op deze plek of ' + naam + ' minder zoekt.</p>';
+    /* rapport mailen (alleen in de cursus, die geeft o.mail mee) */
+    if (o.mail) t += '<div class="tr-mail"><p><b>Mail dit rapport naar jezelf</b>, dan heb je het ook op je telefoon.</p>' +
+      '<form class="tr-mailrij" id="tr-mailform" novalidate><label class="tr-verborgen" for="tr-mailadres">Je e-mailadres</label>' +
+      '<input type="email" id="tr-mailadres" autocomplete="email" inputmode="email" placeholder="jouw@email.nl" required>' +
+      '<input type="text" id="tr-mailhp" class="tr-verborgen" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+      '<button type="submit" class="tr-mailknop">Mail mij het rapport</button></form>' +
+      '<label class="tr-vinkje"><input type="checkbox" id="tr-vervolg"> Stuur me na les 3 één mail met hoe het dan gaat</label>' +
+      '<p class="tr-mailstatus" id="tr-mailstatus" role="status" aria-live="polite"></p></div>';
     t +=
       '<p class="tr-klein">Zo meten we: alleen welke toets ' + naam + ' indrukt en hoeveel tijd er tussen twee toetsen zit. Bij de tijd per letter tellen we de pauze aan het begin van een woord niet mee. "Zoekt" betekent dat ' + naam + ' langer over een toets deed dan gemiddeld. ' +
       'Dat kan door kijken komen, maar ook door nadenken over de spelling.</p></div>';
@@ -204,11 +212,27 @@ window.FVRapport = (() => {
         (x.f ? ', ' + x.f + ' keer eerst een andere toets' + (vaak ? ', meestal de ' + U(vaak[0][1]) : '') : '') +
         '. Hoort bij de ' + H((o.vinger || (() => 'vinger'))(c)) + (o.les && o.les[c] ? ' en komt aan de beurt in les ' + o.les[c] : '') + '.';
     }));
+    const mf = el.querySelector('#tr-mailform');
+    if (mf) mf.addEventListener('submit', e => {
+      e.preventDefault();
+      const adres = el.querySelector('#tr-mailadres').value.trim(), st = el.querySelector('#tr-mailstatus'), knop = mf.querySelector('button');
+      if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(adres)) { st.textContent = 'Vul een geldig e-mailadres in.'; return; }
+      knop.disabled = true; st.textContent = 'Even geduld...';
+      o.mail(adres, el.querySelector('#tr-vervolg').checked, el.querySelector('#tr-mailhp').value)
+        .then(() => { st.textContent = 'Verstuurd! Kijk in je mailbox, en anders even bij de spam.'; })
+        .catch(() => { knop.disabled = false; st.textContent = 'Versturen lukte nu niet. Probeer het later nog eens.'; });
+    });
     el.querySelectorAll('[data-kijk]').forEach(b => b.addEventListener('click', () => {
       el.querySelectorAll('[data-kijk]').forEach(x => x.classList.toggle('aan', x === b));
       el.querySelector('#tr-antwoord').textContent = antwoord(b.dataset.kijk, o.naam || 'je kind', o.volgende);
       if (o.opKijk) o.opKijk(b.dataset.kijk);
     }));
   }
-  return { toon, html, soort };
+  /* korte samenvatting voor de mail: alleen letters en een vlag, de server maakt er zelf tekst van */
+  function samenvatting(tc) {
+    const l = tc.l || {}, zoek = Object.keys(l).filter(c => /^[a-z]$/.test(c) && soort(l[c]) === 'zoekt').sort((a, b) => l[b].ms - l[a].ms);
+    const stotter = !!(tc.iw && tc.wsn >= 3 && tc.iwn >= 10 && tc.ws / tc.iw >= 2);
+    return { zoek: zoek.slice(0, 8), paren: paren(tc.w).slice(0, 2).map(p => [p.a, p.b]), stotter };
+  }
+  return { toon, html, soort, samenvatting };
 })();
