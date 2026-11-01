@@ -11,6 +11,20 @@ const BETAAL_URL = 'https://buy.stripe.com/aFa5kC6bweSc1Np8Y51wY01';
    JSON-LD op index.html, voorwaarden, cadeaubon, scholen, gratis-typecursus). */
 const AANBIEDING = { url: 'https://buy.stripe.com/eVqfZg0RceSc9fR1vD1wY03', tot: new Date('2026-12-06T00:00:00+01:00') };
 const aanbiedingLoopt = () => Date.now() < AANBIEDING.tot.getTime();
+/* Code EERSTE50 voor wie via de Facebook-advertentie komt (Tim, 1-11-2026): de advertentie belooft "Code EERSTE50: €9,95 in plaats
+   van €24,95", dus dat moet na de klik ook op de site staan. Stripe-kortingsbon: €15 van de €24,95-link, max 50 keer, t/m 5 december.
+   Een ref uit ACTIE.refs wordt onthouden in localStorage (het kind doet vaak eerst de typ-check en de gratis lessen, de ouder koopt
+   later); daarna ziet die bezoeker de code in de balk, bovenaan de homepage en bij de prijs, en staat hij bij Stripe al ingevuld
+   (prefilled_promo_code). Andere bezoekers zien niets anders. Teller: koopknop-eerste50. */
+const ACTIE = { code: 'EERSTE50', refs: /^fb-advertentie$/ };
+const actieActief = (() => {
+  if (!aanbiedingLoopt()) return false;
+  const viaLink = ACTIE.refs.test((new URLSearchParams(location.search).get('ref') || '').toLowerCase());
+  try {
+    if (viaLink) localStorage.setItem('flitsvingers_actie', ACTIE.code);
+    return viaLink || localStorage.getItem('flitsvingers_actie') === ACTIE.code;
+  } catch (e) { return viaLink; }
+})();
 const API_URL = 'https://script.google.com/macros/s/AKfycbycENGI2KDXQ3h3RY18VuHf2OJqUb3tOQLntwotXfBFQfLvYowDPKpwLaDtOiopKdM/exec';
 const telGC = (path, title) => { try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path, title, event: true }); } catch (e) {} };
 
@@ -30,8 +44,11 @@ const telGC = (path, title) => { try { if (window.goatcounter && window.goatcoun
     const nog = dagen <= 1 ? 'vandaag de laatste dag' : 'nog ' + dagen + ' dagen';
     const balk = document.createElement('div');
     balk.className = 'sint-balk';
-    balk.innerHTML = '<span class="sint-lang">Sinterklaasaanbieding: <b>bijna 50% korting</b> op de typecursus, ' + nog + ' (t/m 5 december) · <a href="prijs.html" data-gc="sint-balk">Bekijk de prijs</a></span>' +
-      '<span class="sint-kort">Sinterklaas: <b>bijna 50% korting</b>, ' + nog + ' · <a href="prijs.html" data-gc="sint-balk">Bekijk</a></span>';
+    balk.innerHTML = actieActief
+      ? '<span class="sint-lang">Code <b>' + ACTIE.code + '</b>: €9,95 in plaats van €24,95, voor de eerste 50 gezinnen, ' + nog + ' (t/m 5 december) · <a href="prijs.html" data-gc="sint-balk">Bekijk de prijs</a></span>' +
+        '<span class="sint-kort">Code <b>' + ACTIE.code + '</b>: €9,95, ' + nog + ' · <a href="prijs.html" data-gc="sint-balk">Bekijk</a></span>'
+      : '<span class="sint-lang">Sinterklaasaanbieding: <b>bijna 50% korting</b> op de typecursus, ' + nog + ' (t/m 5 december) · <a href="prijs.html" data-gc="sint-balk">Bekijk de prijs</a></span>' +
+        '<span class="sint-kort">Sinterklaas: <b>bijna 50% korting</b>, ' + nog + ' · <a href="prijs.html" data-gc="sint-balk">Bekijk</a></span>';
     // in de vaste menubalk (nav is sticky), zodat de balk meebeweegt bij het scrollen (Tim, 28-10-2026)
     const nav = document.querySelector('nav');
     if (nav) { nav.prepend(balk); document.documentElement.style.scrollPaddingTop = (nav.offsetHeight + 10) + 'px'; }
@@ -43,12 +60,35 @@ const telGC = (path, title) => { try { if (window.goatcounter && window.goatcoun
   document.querySelectorAll('[data-normaal]').forEach(e => { e.textContent = e.dataset.normaal; });
 })();
 
+/* code EERSTE50 (zie ACTIE): één zin onder de knoppen bovenaan de homepage en één onder de prijs */
+(() => {
+  if (!actieActief) return;
+  const regel = (cls, html) => { const p = document.createElement('p'); p.className = cls; p.innerHTML = html; return p; };
+  // wie bovenaan koopt, slaat het prijsblok over: zeg hier wat je krijgt en dat je je geld terugkrijgt (Tim, 1-11-2026: "ja, allebei")
+  document.querySelectorAll('.held .row').forEach(r => r.after(regel('actie-regel',
+    'Met de code <b>' + ACTIE.code + '</b>: 30 lessen, proefexamens en een diploma voor €9,95 in plaats van €24,95. <b>Niet tevreden?</b> Binnen 30 dagen je geld terug.')));
+  /* meteen kopen vanaf de bovenkant (Tim, 1-11-2026: "je kan nu nergens meteen afrekenen"): het pijltje "Bekijk de prijs"
+     gaat dan rechtstreeks naar Stripe, met de code ingevuld. Teller: koopknop-boven (+ koopknop-eerste50) */
+  document.querySelectorAll('.held .row a.arrow[href="#prijs"]').forEach(a => {
+    a.textContent = 'Koop de cursus voor €9,95';   // zelfde woorden als de knop bij de prijs (Tim: "meteen afrekenen" is een rare tekst)
+    a.className = 'btn groot';                      // een echte, gele knop (Tim: "alleen tekst, geen knop"; "de linker wit en de rechter geel")
+    a.href = AANBIEDING.url + '?prefilled_promo_code=' + ACTIE.code;
+    a.dataset.koop = 'koopknop-boven';
+    a.addEventListener('click', e => e.preventDefault());   // de koopknop hieronder telt eerst en stuurt dan door
+    a.closest('.row').querySelectorAll('.btn.desk-only').forEach(k => k.classList.add('line'));   // de typ-check-knop ernaast wordt wit
+  });
+  document.querySelectorAll('.buy .amount').forEach(a => a.after(regel('actie-prijs',
+    'Met de code <b>' + ACTIE.code + '</b> betaal je <b>€9,95</b>. Bij het betalen staat de code al ingevuld.')));
+})();
+
 /* koopknop (GoatCounter: 'koopknop') */
 (() => {
   const modal = document.getElementById('modal');
   document.querySelectorAll('#koop,[data-koop]').forEach(b => b.addEventListener('click', () => {
     telGC(b.dataset.koop || 'koopknop', 'Klik op kopen');
-    if (BETAAL_URL) { setTimeout(() => { location.href = aanbiedingLoopt() ? AANBIEDING.url : BETAAL_URL; }, 200); return; }
+    if (actieActief) telGC('koopknop-eerste50', 'Klik op kopen met de code EERSTE50');
+    const aanbUrl = AANBIEDING.url + (actieActief ? '?prefilled_promo_code=' + ACTIE.code : '');
+    if (BETAAL_URL) { setTimeout(() => { location.href = aanbiedingLoopt() ? aanbUrl : BETAAL_URL; }, 200); return; }
     if (modal) modal.hidden = false;
   }));
   if (!modal) return;
@@ -145,7 +185,10 @@ document.querySelectorAll('[data-gc]').forEach(a => a.addEventListener('click', 
      (campagne.py publiceer-thema). Het bestand wordt alleen opgehaald als er een thema in de link kan staan; tot dan
      houdt de klasse "bh" (inline in index.html) de kop even onzichtbaar, zodat hij niet zichtbaar wisselt. */
   if (!document.body.classList.contains('home')) return;
-  const q = new URLSearchParams(location.search), b = (q.get('b') || '').toLowerCase(), ref = (q.get('ref') || '').toLowerCase();
+  const q = new URLSearchParams(location.search), ref = (q.get('ref') || '').toLowerCase();
+  // Facebook-advertentie EERSTE50: de video begint met "Kijkt jouw kind nog naar de toetsen?", dus thema "kijken", ook al staat
+  // er b=typcheck in de link (Tim, 1-11-2026; de link in de advertentie blijft zo, anders moet Meta hem opnieuw keuren)
+  const b = ACTIE.refs.test(ref) && aanbiedingLoopt() ? 'kijken' : (q.get('b') || '').toLowerCase();
   const klaar = () => document.documentElement.classList.remove('bh');
   if (!b && !ref) return klaar();
   fetch('assets/data/boodschappen.json', { cache: 'no-cache' }).then(r => r.json()).then(data => {
