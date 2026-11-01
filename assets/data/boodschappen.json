@@ -1,0 +1,37 @@
+{
+ "uitleg": "Thema's voor de bovenkant van de homepage (Tim, 1-11-2026): ?b=<thema> of een themawoord in ?ref=. kop: het stuk na | wordt onderstreept. Nieuwe thema's komen alleen via de campagne-crew (campagne.py publiceer-thema), na Tims 'verstuur'.",
+ "themas": {
+  "typcheck": {
+   "kop": "Weet jij bij welke letters je kind |zoekt?",
+   "zin": "Doe de gratis typ-check: je kind typt twee minuten op de eigen manier, en jij krijgt meteen een rapport met wat Flits in de lessen extra gaat oefenen.",
+   "knop": "Doe de gratis typ-check",
+   "woorden": "typ-?check|typrapport",
+   "sinds": "2026-11-01"
+  },
+  "dyslexie": {
+   "kop": "Blind leren typen, |ook met dyslexie",
+   "zin": "Flits leest de uitleg voor, en de dyslexie-modus zit er standaard in, zonder meerprijs: een rustiger lettertype, geen tempo in beeld en een eis van 75 in plaats van 100 aanslagen per minuut.",
+   "woorden": "dyslex",
+   "sinds": "2026-11-01"
+  },
+  "brugklas": {
+   "kop": "Je kind gaat naar de brugklas. |Kan het al typen?",
+   "zin": "Op de middelbare school typt je kind werkstukken, verslagen en presentaties. Wie het niet leert, leert het zichzelf aan, met de ogen op de toetsen. Leer het nu goed, in lessen van tien minuten die voelen als een spel.",
+   "woorden": "brugklas|groep-?8",
+   "sinds": "2026-11-01"
+  },
+  "kijken": {
+   "kop": "Kijkt je kind naar het scherm, |of naar de toetsen?",
+   "zin": "Wie typen niet leert, leert het zichzelf aan, met de ogen op de toetsen. In de tunnel van Flitsvingers verdwijnt het toetsenbord van het scherm. Zo leert je kind typen zonder te kijken.",
+   "woorden": "kijk|ogen",
+   "sinds": "2026-11-01"
+  },
+  "sint": {
+   "kop": "Een cadeau met nut, |voor in de schoen",
+   "zin": "Tot en met 5 december kost de cursus €24,95 in plaats van €49 (bijna 50% korting). Na het kopen print je zelf een cadeaubon met de inlogcode.",
+   "woorden": "sint|cadeau|schoen|pakjes",
+   "tot": "2026-12-06",
+   "sinds": "2026-11-01"
+  }
+ }
+}

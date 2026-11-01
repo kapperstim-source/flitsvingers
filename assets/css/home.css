@@ -73,6 +73,9 @@
 .nieuw .wn-kaart h3{font-size:20px}
 .nieuw .wn-kaart p{font-size:16px}
 
+/* thema uit de advertentielink (site.js, assets/data/boodschappen.json): kop en eerste zin even onzichtbaar tot ze zijn ingevuld */
+.bh .held h1,.bh .held .lead,.bh .held .btn.desk-only,.bh .ts-kop,.bh .ts-intro{visibility:hidden}
+
 /* typ-check (1-11-2026): zonder blokken (Tims ontwerpregel) - geen kaart en geen pil; tekst links, een echt typrapport rechts */
 .waarom2{padding-bottom:48px}
 .typcheck{padding:24px 0 96px}

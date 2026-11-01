@@ -140,34 +140,32 @@ document.querySelectorAll('[data-gc]').forEach(a => a.addEventListener('click', 
 
   /* Aansluiten op de advertentie (Tim, 1-11-2026, "message match"): wie via een advertentie of post met een thema komt, ziet bovenaan
      de kop en eerste zin die bij die advertentie passen. Thema uit ?b=<thema>, anders een themawoord in ?ref=. Zonder thema verandert
-     er niets. Alleen zinnen die ook elders op de site of in marketing/kernboodschap.md staan. Teller: boodschap-<thema>. */
+     er niets. Alleen zinnen die ook elders op de site of in marketing/kernboodschap.md staan. Teller: boodschap-<thema>.
+     De thema's staan in assets/data/boodschappen.json; de campagne-crew voegt er na Tims "verstuur" nieuwe aan toe
+     (campagne.py publiceer-thema). Het bestand wordt alleen opgehaald als er een thema in de link kan staan; tot dan
+     houdt de klasse "bh" (inline in index.html) de kop even onzichtbaar, zodat hij niet zichtbaar wisselt. */
   if (!document.body.classList.contains('home')) return;
-  const THEMA = {
-    typcheck: { kop: 'Weet jij bij welke letters je kind <span class="onderstreep">zoekt?</span>',
-      zin: 'Doe de gratis typ-check: je kind typt twee minuten op de eigen manier, en jij krijgt meteen een rapport met wat Flits in de lessen extra gaat oefenen.',
-      knop: 'Doe de gratis typ-check' },
-    dyslexie: { kop: 'Blind leren typen, <span class="onderstreep">ook met dyslexie</span>',
-      zin: 'Flits leest de uitleg voor, en de dyslexie-modus zit er standaard in, zonder meerprijs: een rustiger lettertype, geen tempo in beeld en een eis van 75 in plaats van 100 aanslagen per minuut.' },
-    brugklas: { kop: 'Je kind gaat naar de brugklas. <span class="onderstreep">Kan het al typen?</span>',
-      zin: 'Op de middelbare school typt je kind werkstukken, verslagen en presentaties. Wie het niet leert, leert het zichzelf aan, met de ogen op de toetsen. Leer het nu goed, in lessen van tien minuten die voelen als een spel.' },
-    kijken: { kop: 'Kijkt je kind naar het scherm, <span class="onderstreep">of naar de toetsen?</span>',
-      zin: 'Wie typen niet leert, leert het zichzelf aan, met de ogen op de toetsen. In de tunnel van Flitsvingers verdwijnt het toetsenbord van het scherm. Zo leert je kind typen zonder te kijken.' },
-    sint: { kop: 'Een cadeau met nut, <span class="onderstreep">voor in de schoen</span>', tot: '2026-12-06',
-      zin: 'Tot en met 5 december kost de cursus €24,95 in plaats van €49 (bijna 50% korting). Na het kopen print je zelf een cadeaubon met de inlogcode.' }
-  };
-  const WOORD = { typcheck: /typ-?check|typrapport/, dyslexie: /dyslex/, brugklas: /brugklas|groep-?8/, kijken: /kijk|ogen/, sint: /sint|cadeau|schoen|pakjes/ };
   const q = new URLSearchParams(location.search), b = (q.get('b') || '').toLowerCase(), ref = (q.get('ref') || '').toLowerCase();
-  const thema = THEMA[b] ? b : Object.keys(WOORD).find(k => WOORD[k].test(ref));
-  const v = thema && THEMA[thema];
-  if (!v || (v.tot && Date.now() >= new Date(v.tot + 'T00:00:00+01:00').getTime())) return;
-  const zet = (sel, f) => document.querySelectorAll(sel).forEach(f);
-  zet('.held h1', el => { el.innerHTML = v.kop; });                       // laptop: de gewone bovenkant
-  zet('.held .lead-lang, .held .lead-kort', el => { el.textContent = v.zin; });
-  if (v.knop) zet('.held .btn.desk-only', el => { el.textContent = v.knop; });
-  zet('.ts-kop', el => { el.innerHTML = v.kop.replace(/<[^>]+>/g, ''); });   // telefoon: het mailformulier bovenaan
-  zet('.ts-intro', el => { el.textContent = v.zin; });
-  document.body.dataset.boodschap = thema;
-  tel('boodschap-' + thema, 'Boodschap bij advertentie: ' + thema);
+  const klaar = () => document.documentElement.classList.remove('bh');
+  if (!b && !ref) return klaar();
+  fetch('assets/data/boodschappen.json', { cache: 'no-cache' }).then(r => r.json()).then(data => {
+    const T = data.themas || {};
+    const geldig = k => T[k] && !(T[k].tot && Date.now() >= new Date(T[k].tot + 'T00:00:00+01:00').getTime());
+    const thema = geldig(b) ? b : Object.keys(T).find(k => geldig(k) && T[k].woorden && new RegExp(T[k].woorden).test(ref));
+    const v = thema && T[thema];
+    if (!v) return;
+    const [voor, onder] = String(v.kop).split('|');
+    const kop = document.createDocumentFragment(); kop.append(voor);
+    if (onder) { const s = document.createElement('span'); s.className = 'onderstreep'; s.textContent = onder; kop.append(s); }
+    const zet = (sel, f) => document.querySelectorAll(sel).forEach(f);
+    zet('.held h1', el => { el.replaceChildren(kop.cloneNode(true)); });     // laptop: de gewone bovenkant
+    zet('.held .lead-lang, .held .lead-kort', el => { el.textContent = v.zin; });
+    if (v.knop) zet('.held .btn.desk-only', el => { el.textContent = v.knop; });
+    zet('.ts-kop', el => { el.textContent = String(v.kop).replace('|', ''); });   // telefoon: het mailformulier bovenaan
+    zet('.ts-intro', el => { el.textContent = v.zin; });
+    document.body.dataset.boodschap = thema;
+    tel('boodschap-' + thema, 'Boodschap bij advertentie: ' + thema);
+  }).catch(() => {}).finally(klaar);
 })();
 
 /* telefoon: de echte opname van de race bovenaan. Alleen op telefoons (desktop laadt niets),

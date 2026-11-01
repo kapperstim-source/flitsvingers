@@ -24,7 +24,9 @@
 <link rel="stylesheet" href="assets/css/site.css?v=9">
 <link rel="stylesheet" href="assets/css/minidemo.css?v=8">
 <link rel="stylesheet" href="assets/css/nieuw.css?v=1">
-<link rel="stylesheet" href="assets/css/home.css?v=5">
+<link rel="stylesheet" href="assets/css/home.css?v=6">
+<!-- thema uit de advertentielink (site.js): kop even onzichtbaar tot het thema is ingevuld, hooguit 1,5 s -->
+<script>if(/[?&](b|ref)=/.test(location.search)){document.documentElement.classList.add('bh');setTimeout(function(){document.documentElement.classList.remove('bh')},1500)}</script>
 <script type="importmap">{"imports":{"three":"./assets/vendor/three.module.min.js?v=0.160.0"}}</script>
 </head>
 <body class="home nieuw">
@@ -350,7 +352,7 @@
 // count.js stuurt ook het ?-deel van de link mee: bij een e-mailadres, code of naam in de link tellen we niet
 if (!/[?&](email|code|id|l|nick|test|done|session_id)=/i.test(location.search)) { var gcs = document.createElement('script'); gcs.async = true; gcs.src = 'https://gc.zgo.at/count.js'; gcs.setAttribute('data-goatcounter', 'https://flitsvingers.goatcounter.com/count'); document.head.appendChild(gcs); }</script>
 <script src="assets/js/minidemo.js?v=11" defer></script>
-<script src="assets/js/site.js?v=10" defer></script>
+<script src="assets/js/site.js?v=11" defer></script>
 <script src="assets/js/menu.js" defer></script>
 </body>
 </html>
