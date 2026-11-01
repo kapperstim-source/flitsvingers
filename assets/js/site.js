@@ -137,6 +137,37 @@ document.querySelectorAll('[data-gc]').forEach(a => a.addEventListener('click', 
     tel(it.target.dataset.tel, 'Gelezen tot: ' + it.target.dataset.tel.replace(/^scroll-\w+?-/, ''));
   }), { rootMargin: '0px 0px -50% 0px' });
   delen.forEach(([sel, naam]) => { const el = document.querySelector(sel); if (el) { el.dataset.tel = naam; io.observe(el); } });
+
+  /* Aansluiten op de advertentie (Tim, 1-11-2026, "message match"): wie via een advertentie of post met een thema komt, ziet bovenaan
+     de kop en eerste zin die bij die advertentie passen. Thema uit ?b=<thema>, anders een themawoord in ?ref=. Zonder thema verandert
+     er niets. Alleen zinnen die ook elders op de site of in marketing/kernboodschap.md staan. Teller: boodschap-<thema>. */
+  if (!document.body.classList.contains('home')) return;
+  const THEMA = {
+    typcheck: { kop: 'Weet jij bij welke letters je kind <span class="onderstreep">zoekt?</span>',
+      zin: 'Doe de gratis typ-check: je kind typt twee minuten op de eigen manier, en jij krijgt meteen een rapport met wat Flits in de lessen extra gaat oefenen.',
+      knop: 'Doe de gratis typ-check' },
+    dyslexie: { kop: 'Blind leren typen, <span class="onderstreep">ook met dyslexie</span>',
+      zin: 'Flits leest de uitleg voor, en de dyslexie-modus zit er standaard in, zonder meerprijs: een rustiger lettertype, geen tempo in beeld en een eis van 75 in plaats van 100 aanslagen per minuut.' },
+    brugklas: { kop: 'Je kind gaat naar de brugklas. <span class="onderstreep">Kan het al typen?</span>',
+      zin: 'Op de middelbare school typt je kind werkstukken, verslagen en presentaties. Wie het niet leert, leert het zichzelf aan, met de ogen op de toetsen. Leer het nu goed, in lessen van tien minuten die voelen als een spel.' },
+    kijken: { kop: 'Kijkt je kind naar het scherm, <span class="onderstreep">of naar de toetsen?</span>',
+      zin: 'Wie typen niet leert, leert het zichzelf aan, met de ogen op de toetsen. In de tunnel van Flitsvingers verdwijnt het toetsenbord van het scherm. Zo leert je kind typen zonder te kijken.' },
+    sint: { kop: 'Een cadeau met nut, <span class="onderstreep">voor in de schoen</span>', tot: '2026-12-06',
+      zin: 'Tot en met 5 december kost de cursus €24,95 in plaats van €49 (bijna 50% korting). Na het kopen print je zelf een cadeaubon met de inlogcode.' }
+  };
+  const WOORD = { typcheck: /typ-?check|typrapport/, dyslexie: /dyslex/, brugklas: /brugklas|groep-?8/, kijken: /kijk|ogen/, sint: /sint|cadeau|schoen|pakjes/ };
+  const q = new URLSearchParams(location.search), b = (q.get('b') || '').toLowerCase(), ref = (q.get('ref') || '').toLowerCase();
+  const thema = THEMA[b] ? b : Object.keys(WOORD).find(k => WOORD[k].test(ref));
+  const v = thema && THEMA[thema];
+  if (!v || (v.tot && Date.now() >= new Date(v.tot + 'T00:00:00+01:00').getTime())) return;
+  const zet = (sel, f) => document.querySelectorAll(sel).forEach(f);
+  zet('.held h1', el => { el.innerHTML = v.kop; });                       // laptop: de gewone bovenkant
+  zet('.held .lead-lang, .held .lead-kort', el => { el.textContent = v.zin; });
+  if (v.knop) zet('.held .btn.desk-only', el => { el.textContent = v.knop; });
+  zet('.ts-kop', el => { el.innerHTML = v.kop.replace(/<[^>]+>/g, ''); });   // telefoon: het mailformulier bovenaan
+  zet('.ts-intro', el => { el.textContent = v.zin; });
+  document.body.dataset.boodschap = thema;
+  tel('boodschap-' + thema, 'Boodschap bij advertentie: ' + thema);
 })();
 
 /* telefoon: de echte opname van de race bovenaan. Alleen op telefoons (desktop laadt niets),
