@@ -141,7 +141,9 @@ document.querySelectorAll('[data-gc]').forEach(a => a.addEventListener('click', 
     try {
       const r = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ action: 'linkMail', email, hp: document.getElementById('mm-hp').value, herinnering: herinner }) }).then(r => r.json());
-      if (r.ok) {
+      if (r.ok && r.alVerstuurd) {   // zelfde adres binnen 5 minuten: de server stuurt geen tweede mail (7-11-2026), dus ook niet tellen
+        mmMeld('We hebben je de link net al gemaild. Kijk ook even bij Reclame of Spam. Niet gekregen? Over 5 minuten kun je hem opnieuw aanvragen.', 'ok'); mmMail.value = '';
+      } else if (r.ok) {
         mmMeld('Verstuurd! Kijk in je mail (soms staat hij bij Reclame of Spam).', 'ok'); mmMail.value = '';
         telGC('link-gemaild', 'Link gemaild');
         if (document.body.classList.contains('home')) telGC('link-gemaild-home', 'Link gemaild vanaf de homepage');   // formulier bovenaan op de telefoon (30-10-2026)
